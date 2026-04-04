@@ -1,3 +1,4 @@
 {
+  "$schema": "./queue.schema.json",
   "tasks": []
 }

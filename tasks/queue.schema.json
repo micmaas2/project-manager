@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tasks/queue.schema.json",
+  "title": "Task Queue",
+  "description": "Schema for tasks/queue.json — validated by ProjectManager before any agent reads a task",
+  "type": "object",
+  "required": ["tasks"],
+  "additionalProperties": false,
+  "properties": {
+    "tasks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/task" }
+    }
+  },
+  "$defs": {
+    "task": {
+      "type": "object",
+      "required": ["id", "title", "project", "assigned_to", "status", "artefact_path", "created", "updated", "mvp_template"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^task_[a-z0-9_-]+$",
+          "description": "Unique task identifier, e.g. task_001"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 200
+        },
+        "project": {
+          "type": "string",
+          "enum": ["pensieve", "ccas", "pi-homelab", "project_manager", "other"]
+        },
+        "assigned_to": {
+          "type": "string",
+          "enum": ["manager", "builder", "reviewer", "tester"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "paused", "review", "test", "done", "failed"]
+        },
+        "artefact_path": {
+          "type": "string",
+          "pattern": "^artefacts/[a-zA-Z0-9_-]+/$",
+          "description": "Must stay within artefacts/ to prevent path traversal"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "token_estimate": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "resume_from": {
+          "type": ["string", "null"],
+          "maxLength": 100,
+          "description": "Step name to resume from after a rate-limit pause; null if not paused"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Free-text context for agents. Keep concise — long text is an injection risk."
+        },
+        "mvp_template": {
+          "type": "object",
+          "required": ["doel", "niet_in_scope", "acceptatiecriteria", "security_arch_impact", "tests", "definition_of_done", "rollback_plan", "incident_owner"],
+          "additionalProperties": false,
+          "properties": {
+            "doel": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 300,
+              "description": "Single-sentence goal for this task"
+            },
+            "niet_in_scope": {
+              "type": "array",
+              "items": { "type": "string", "maxLength": 200 },
+              "minItems": 1,
+              "description": "Explicit exclusions to prevent scope creep"
+            },
+            "acceptatiecriteria": {
+              "type": "array",
+              "items": { "type": "string", "maxLength": 300 },
+              "minItems": 3,
+              "maxItems": 5,
+              "description": "Measurable acceptance criteria (3–5 items)"
+            },
+            "security_arch_impact": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "tests": {
+              "type": "string",
+              "maxLength": 500,
+              "description": "Test types required: unit/integration/regression"
+            },
+            "definition_of_done": {
+              "type": "array",
+              "items": { "type": "string", "maxLength": 200 },
+              "minItems": 1
+            },
+            "rollback_plan": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "incident_owner": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        }
+      }
+    }
+  }
+}

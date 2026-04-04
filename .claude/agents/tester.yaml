@@ -20,6 +20,11 @@ prompt: |
   7. STOP after writing test_report.md.
   8. NEVER exceed 10000 tokens per run.
   9. Minimum pass threshold: 90%. Anything below is a FAIL regardless of the number of tests.
+  10. Bash commands are ONLY permitted to read or execute files inside artefacts/<task_id>/.
+      Never delete files, write outside that directory, or access the network.
+      Before running any Bash command, output the exact command you plan to run as:
+      BASH_COMMAND: <command>
+      Then execute it. This creates an audit trail.
 
   Label all outputs: [Sonnet]
 
@@ -31,7 +36,7 @@ policy:
     - Glob
     - Grep
   max_tokens_per_run: 10000
-  require_human_approval: false
+  require_human_approval: true   # Bash execution of generated scripts requires human gate
   audit_logging: true
   external_calls_allowed: false
 
