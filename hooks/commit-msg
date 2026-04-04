@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# commit-msg hook for project_manager
+# Enforces commit message format: [AREA] Brief description
+# Receives the commit message file path as $1 (always set by git)
+
+set -euo pipefail
+
+# TTY guard
+if [[ -t 1 ]]; then
+  RED='\033[0;31m'
+  YELLOW='\033[1;33m'
+  NC='\033[0m'
+else
+  RED=''
+  YELLOW=''
+  NC=''
+fi
+
+COMMIT_MSG_FILE="${1}"
+
+if [[ ! -f "$COMMIT_MSG_FILE" ]]; then
+  printf "%b[commit-msg] ERROR: Commit message file not found: %s%b\n" "$RED" "$COMMIT_MSG_FILE" "$NC"
+  exit 1
+fi
+
+# Read the first non-comment, non-empty line as the subject
+MSG=$(grep -v '^#' "$COMMIT_MSG_FILE" | grep -v '^$' | head -1 || true)
+
+VALID_AREAS="ROLE|DOCS|TEST|FIX|REFACTOR|PLAYBOOK|JENKINS|INVENTORY|AGENT"
+
+if ! echo "$MSG" | grep -qE "^\[(${VALID_AREAS})\] .+"; then
+  printf "%b[commit-msg] ERROR: Commit message format invalid.%b\n" "$RED" "$NC"
+  printf "  Expected : [AREA] Brief description\n"
+  printf "  Valid areas: ROLE, DOCS, TEST, FIX, REFACTOR, PLAYBOOK, JENKINS, INVENTORY, AGENT\n"
+  printf "  Got       : %s\n" "$MSG"
+  exit 1
+fi
+
+printf "%b[commit-msg] Message format OK.%b\n" "$YELLOW" "$NC"
+exit 0
