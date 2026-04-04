@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-This is a workspace context directory under `/opt/claude/`. It contains no source code of its own — it serves as the working directory for Claude Code sessions.
+This is the workspace for the multi-agent automation system. Structure: `.claude/agents/` (agent YAMLs), `tasks/` (queue + schema), `hooks/` (git hooks), `artefacts/` (agent outputs), `logs/` (audit + token logs).
 
 ---
 
@@ -46,6 +46,14 @@ feature/* (work)      ← New features, bug fixes, planned work
    git checkout main && git merge develop -m "Release: description"
    git tag -a v1.x.x -m "Release version 1.x.x" && git push origin main --tags
    ```
+
+**Git remote**: SSH-based (`git@github.com:micmaas2/project-manager.git`). Run `git remote -v` before adding — it already exists. HTTPS will fail.
+
+**Git hooks** (in `hooks/`, symlinked to `.git/hooks/`):
+- `pre-commit` — branch protection (blocks main/develop) + sensitive file detection
+- `commit-msg` — enforces `[AREA]` message format; receives commit file as `$1`
+
+NEVER put message-format validation in `pre-commit` — it does not receive `$1` reliably.
 
 **Pre-Commit Hooks**: ALWAYS active — NEVER use `git commit --no-verify`
 
@@ -94,7 +102,7 @@ Agent definitions live in `.claude/agents/[name].yaml`. Required fields: `name`,
 policy:
   allowed_tools: [...]
   max_tokens_per_run: 10000
-  require_human_approval: false
+  require_human_approval: false  # set to TRUE for any agent that has Bash in allowed_tools
   audit_logging: true
   external_calls_allowed: false
 owner: "Role Name"
@@ -214,6 +222,8 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 2. User waits for rate limit to reset
 3. User runs ProjectManager agent again
 4. ProjectManager reads queue, finds paused tasks, resumes from `resume_from` step
+
+**Queue validation**: `tasks/queue.schema.json` enforces all field types. Key constraint: `artefact_path` must match `^artefacts/[a-zA-Z0-9_-]+/$` — no path traversal. Validate with any JSON Schema tool before adding tasks manually.
 
 **Logs**:
 - `logs/audit.jsonl` — append-only, one JSON object per line: `{timestamp, agent, task_id, action, status}`
