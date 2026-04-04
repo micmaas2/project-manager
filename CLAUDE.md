@@ -58,7 +58,7 @@ feature/* (work)      ← New features, bug fixes, planned work
 - Detailed change 1
 - Detailed change 2
 ```
-Areas: `ROLE`, `DOCS`, `TEST`, `FIX`, `REFACTOR`, `PLAYBOOK`, `JENKINS`, `INVENTORY`
+Areas: `ROLE`, `DOCS`, `TEST`, `FIX`, `REFACTOR`, `PLAYBOOK`, `JENKINS`, `INVENTORY`, `AGENT`
 
 ---
 
@@ -172,3 +172,49 @@ Pipeline: Preflight → policy checks → unit/integration tests → canary → 
 Test types: unit (generated scripts), integration (tool interactions), regression (per agent update), adversarial (prompt injection / hallucination triggers), canary releases for production.
 
 **Release checklist**: policy field present; preflight token estimate done; security checklist green; tests pass; rollback plan defined.
+
+---
+
+## Task Queue & Resume
+
+All agent work is tracked in `tasks/queue.json`. Schema:
+
+```json
+{
+  "tasks": [
+    {
+      "id": "task_001",
+      "title": "...",
+      "project": "pensieve|ccas|pi-homelab|other",
+      "assigned_to": "builder|reviewer|tester",
+      "status": "pending|in_progress|paused|review|test|done|failed",
+      "artefact_path": "artefacts/task_001/",
+      "created": "ISO8601",
+      "updated": "ISO8601",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": "",
+      "mvp_template": {
+        "doel": "",
+        "niet_in_scope": [],
+        "acceptatiecriteria": [],
+        "security_arch_impact": "",
+        "tests": "",
+        "definition_of_done": [],
+        "rollback_plan": "",
+        "incident_owner": ""
+      }
+    }
+  ]
+}
+```
+
+**Rate limit / resume flow**:
+1. Agent hits rate limit → sets `status: "paused"`, `resume_from: "<step_name>"` → stops
+2. User waits for rate limit to reset
+3. User runs ProjectManager agent again
+4. ProjectManager reads queue, finds paused tasks, resumes from `resume_from` step
+
+**Logs**:
+- `logs/audit.jsonl` — append-only, one JSON object per line: `{timestamp, agent, task_id, action, status}`
+- `logs/token_log.jsonl` — per-run token accounting: `{timestamp, agent, task_id, token_estimate}`
