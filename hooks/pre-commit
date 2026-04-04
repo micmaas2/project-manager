@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Pre-commit hook for project_manager
+# Checks: branch protection, commit message format, secret file detection
+
+set -euo pipefail
+
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null || echo "")
+
+# 1. Block direct commits to main or develop
+if [[ "$BRANCH" == "main" || "$BRANCH" == "develop" ]]; then
+  echo -e "${RED}[pre-commit] ERROR: Direct commits to '$BRANCH' are not allowed.${NC}"
+  echo "  Create a feature branch: git checkout -b feature/your-description"
+  exit 1
+fi
+
+# 2. Enforce commit message format: [AREA] Description
+# Read the commit message from COMMIT_EDITMSG if available, else skip
+COMMIT_MSG_FILE="${GIT_DIR:-$(git rev-parse --git-dir)}/COMMIT_EDITMSG"
+if [[ -f "$COMMIT_MSG_FILE" ]]; then
+  MSG=$(head -1 "$COMMIT_MSG_FILE")
+  VALID_AREAS="ROLE|DOCS|TEST|FIX|REFACTOR|PLAYBOOK|JENKINS|INVENTORY|AGENT"
+  if ! echo "$MSG" | grep -qE "^\[(${VALID_AREAS})\] .+"; then
+    echo -e "${RED}[pre-commit] ERROR: Commit message format invalid.${NC}"
+    echo "  Expected: [AREA] Brief description"
+    echo "  Valid areas: ROLE, DOCS, TEST, FIX, REFACTOR, PLAYBOOK, JENKINS, INVENTORY, AGENT"
+    echo "  Got: $MSG"
+    exit 1
+  fi
+fi
+
+# 3. Reject files matching secret patterns
+SECRET_PATTERNS=("*.env" "*secret*" "*credential*" "*token*" "*.pem" "*.key" "id_rsa*")
+STAGED=$(git diff --cached --name-only)
+
+for pattern in "${SECRET_PATTERNS[@]}"; do
+  # shellcheck disable=SC2053
+  while IFS= read -r file; do
+    if [[ "$file" == $pattern ]]; then
+      echo -e "${RED}[pre-commit] ERROR: Staged file matches secret pattern '$pattern': $file${NC}"
+      echo "  Remove it from staging: git reset HEAD \"$file\""
+      exit 1
+    fi
+  done <<< "$STAGED"
+done
+
+echo -e "${YELLOW}[pre-commit] All checks passed.${NC}"
+exit 0
