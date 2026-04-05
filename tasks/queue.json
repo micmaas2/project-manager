@@ -2,6 +2,44 @@
   "$schema": "./queue.schema.json",
   "tasks": [
     {
+      "id": "task-002",
+      "title": "Audit log summary script",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-002",
+      "story_id": "S-002-2",
+      "assigned_to": "builder",
+      "status": "done",
+      "artefact_path": "artefacts/task-002/",
+      "created": "2026-04-05",
+      "updated": "2026-04-05T11:00:00Z",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Build a bash script that reads logs/audit.jsonl and prints a summary of agent actions grouped by agent name and action type.",
+        "niet_in_scope": ["web UI", "email alerts", "live tail/watch mode", "colour output"],
+        "acceptatiecriteria": [
+          "Script exits 0 and prints action counts grouped by agent",
+          "Handles missing or empty audit.jsonl gracefully (zero counts, no errors)",
+          "Passes bash -n and shellcheck with no warnings"
+        ],
+        "security_arch_impact": "None — read-only, no secrets, no network calls",
+        "tests_required": "bash -n; shellcheck; run with missing file; run with empty file; run with seeded fixture",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS with >=90% pass rate",
+          "script exists in artefacts/task-002/",
+          "fixtures present in artefacts/task-002/fixtures/"
+        ],
+        "rollback_plan": "Delete artefacts/task-002/ — no system state changed",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No — no personal data processed",
+        "cost_estimate": "EUR 0",
+        "prerequisites": ["jq >= 1.6"]
+      }
+    },
+    {
       "id": "task-001",
       "title": "Queue status reporter script",
       "project": "project_manager",

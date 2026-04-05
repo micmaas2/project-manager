@@ -3,7 +3,7 @@
 Updated by ProjectManager after every task status change.
 Source of truth: `tasks/queue.json`. This board is a human-readable view.
 
-Last updated: 2026-04-05T00:05:00Z
+Last updated: 2026-04-05T11:00:00Z
 
 ---
 
@@ -50,6 +50,7 @@ _(empty)_
 ## Done
 _(status: done — pipeline complete, artefact delivered)_
 
+- **task-002** Audit log summary script — `artefacts/task-002/audit-summary.sh` [2026-04-05]
 - **task-001** Queue status reporter script — `artefacts/task-001/queue-status.sh` [2026-04-05]
 
 ---
