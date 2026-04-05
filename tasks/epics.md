@@ -20,7 +20,7 @@ Each story maps to one or more entries in `tasks/queue.json`.
 | S-001-2 | Task queue + schema | — | done |
 | S-001-3 | Git hooks (branch protection, commit-msg) | — | done |
 | S-001-4 | Tracking infrastructure (backlog, kanban, epics) | — | done |
-| S-001-5 | End-to-end pipeline validation (queue status reporter) | task-001 | planned |
+| S-001-5 | End-to-end pipeline validation (queue status reporter) | task-001 | done |
 
 ---
 

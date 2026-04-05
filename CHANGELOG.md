@@ -8,6 +8,12 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ## [Unreleased]
 
+### Added
+- `artefacts/task-001/queue-status.sh` — bash script that reads `tasks/queue.json`
+  and prints a formatted task count summary grouped by all 6 statuses (pending,
+  in_progress, paused, review, test, done). Accepts optional queue file path argument.
+  Requires `jq`. Passes `bash -n`; 100% test pass rate (5/5 tests).
+
 ## [0.1.0] — 2026-04-04
 
 ### Added
