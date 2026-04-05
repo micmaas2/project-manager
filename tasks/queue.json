@@ -2,6 +2,44 @@
   "$schema": "./queue.schema.json",
   "tasks": [
     {
+      "id": "task-003",
+      "title": "CCAS: Merge feature/hana-os-users into ccas-jenkins develop",
+      "project": "ccas",
+      "target_project_path": "/opt/claude/CCAS/ccas-jenkins",
+      "epic_id": "EPIC-003",
+      "story_id": "S-003-1",
+      "assigned_to": "builder",
+      "status": "done",
+      "artefact_path": "artefacts/task-003/",
+      "created": "2026-04-05",
+      "updated": "2026-04-05T12:00:00Z",
+      "token_estimate": 4000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Merge the feature/hana-os-users branch in ccas-jenkins into develop, resolving any conflicts, and verify the Jenkinsfile-HANA-OS-Users pipeline is present on develop.",
+        "niet_in_scope": ["running the Jenkins pipeline against live HANA hosts", "changes to ccas-core-infrastructure or ccas-inventory", "pipeline testing beyond syntax check"],
+        "acceptatiecriteria": [
+          "feature/hana-os-users merged to ccas-jenkins develop with no conflicts",
+          "Jenkinsfile-HANA-OS-Users and README-HANA-OS-Users.md present on ccas-jenkins develop",
+          "ccas-jenkins develop pushed to remote"
+        ],
+        "security_arch_impact": "None — merge only, no new code introduced",
+        "tests_required": "git log verify merge commit present; ls verify pipeline files present on develop",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "ccas-jenkins develop contains Jenkinsfile-HANA-OS-Users",
+          "feature/hana-os-users branch deleted"
+        ],
+        "rollback_plan": "git revert merge commit on ccas-jenkins develop",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No — no personal data",
+        "cost_estimate": "EUR 0",
+        "prerequisites": ["git >= 2.0"]
+      }
+    },
+    {
       "id": "task-002",
       "title": "Audit log summary script",
       "project": "project_manager",
