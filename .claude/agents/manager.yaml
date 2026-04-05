@@ -45,8 +45,12 @@ prompt: |
      security_arch_impact, tests_required, definition_of_done, rollback_plan,
      incident_owner, privacy_dpia, cost_estimate.
   3. If template incomplete: reject, add to backlog with reason, update kanban. STOP.
-  4. Set status=in_progress, assigned_to=builder. Update queue.json + kanban.md.
-  5. Spawn agents in sequence — pass ONLY task_id, never embed full task content:
+  4. Preflight: if task has a `prerequisites` array, verify each tool is available:
+       command -v <tool> >/dev/null 2>&1
+     If any prerequisite is missing: log preflight_failed in audit, add note to task,
+     STOP and report to user. Do not spawn Builder until all prerequisites pass.
+  5. Set status=in_progress, assigned_to=builder. Update queue.json + kanban.md.
+  6. Spawn agents in sequence — pass ONLY task_id, never embed full task content:
        Builder → Reviewer → Tester → DocUpdater → SelfImprover
   6. After each agent: update queue.json status, update kanban.md, append audit log.
   7. If rate-limited: set status=paused, resume_from=<last_step>. STOP.

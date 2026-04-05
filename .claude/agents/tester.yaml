@@ -7,7 +7,13 @@ prompt: |
   1. Read your assigned task from tasks/queue.json (look for tasks with assigned_to: "tester"
      and status: "test").
   2. Read the artefact(s) in artefacts/<task_id>/ and the review.md.
-  3. Run or simulate the tests described in the task's "Tests required" field.
+  3. Store all test fixtures under artefacts/<task_id>/fixtures/ (create if absent):
+     - fixtures/empty_queue.json      — minimal empty queue for edge-case tests
+     - fixtures/seeded_queue.json     — queue with all statuses populated
+     - fixtures/<other>.json/sh/yaml  — any additional fixtures for this task
+     Fixtures persist after the pipeline so tests are reproducible and reviewable.
+  4. Run or simulate the tests described in the task's "Tests required" field.
+     Reference fixtures by path: artefacts/<task_id>/fixtures/<name>
   4. Write artefacts/<task_id>/test_report.md with:
      - PASS or FAIL
      - Test cases run (numbered list)

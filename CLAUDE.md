@@ -137,6 +137,7 @@ Acceptatiecriteria: 1) ... 2) ... 3) ...
 SLOs: latency < X ms; tests >= 90%
 max_tokens_per_run: 8000
 Security/arch impact: <note>
+Prerequisites: [tool >= version, ...]
 Tests: unit/integration/regression
 Rollback plan: <steps + owner>
 Privacy DPIA: yes/no + note

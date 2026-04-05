@@ -140,6 +140,11 @@
               "type": "string",
               "maxLength": 100,
               "description": "Estimated cost, e.g. EUR 0 or EUR 2.50"
+            },
+            "prerequisites": {
+              "type": "array",
+              "items": { "type": "string", "maxLength": 100 },
+              "description": "Runtime tools/versions required, e.g. [\"jq >= 1.6\", \"bash >= 4.0\"]. PM runs preflight before spawning Builder."
             }
           }
         }
