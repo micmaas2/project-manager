@@ -2,7 +2,7 @@
 
 Cross-project recurring activities tracked by ProjectManager.
 **Owner**: Michel Maas
-**Last updated**: 2026-04-05
+**Last updated**: 2026-04-05 (Pi5 patch run complete)
 
 ---
 
@@ -31,7 +31,7 @@ Cross-project recurring activities tracked by ProjectManager.
 
 | # | Activity | Project | Command / Action | Last run | Next due | Status |
 |---|---|---|---|---|---|---|
-| M-1 | Pi 5 full patch run | pi-homelab | `sudo bash /opt/claude/pi-homelab/scripts/patch-pi5.sh` | 2026-03-12 | 2026-04-12 | due |
+| M-1 | Pi 5 full patch run | pi-homelab | `sudo bash /opt/claude/pi-homelab/scripts/patch-pi5.sh` | 2026-04-05 | 2026-05-05 | ok |
 | M-2 | Pi 4 full patch run | pi-homelab | `bash /opt/claude/pi-homelab/scripts/patch-pi4.sh` (from Pi5) | 2026-03-12 | 2026-04-12 | blocked |
 | M-3 | Pi 4 Docker stack check | pi-homelab | `ssh pi4 'docker ps; docker stats --no-stream'` | 2026-03-12 | 2026-04-12 | blocked |
 | M-4 | Let's Encrypt cert expiry check | pi-homelab | `ssh pi4 'sudo certbot certificates'` or check Nginx PM UI | — | 2026-04-12 | blocked |
