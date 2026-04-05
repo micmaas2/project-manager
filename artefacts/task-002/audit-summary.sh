@@ -27,18 +27,30 @@ if [[ ! -s "${LOG_FILE}" ]]; then
   exit 0
 fi
 
-# Parse and summarise: group by agent + action, count occurrences
+# Parse and summarise: group by agent + action, count occurrences.
+# Uses jq to emit TSV (safe against spaces in field values), then counts
+# with sort|uniq -c and formats with awk.
 echo "=== Audit Log Summary ==="
 echo "File: ${LOG_FILE}"
 echo ""
 
-jq -r '.agent + "\t" + .action' "${LOG_FILE}" \
+# jq filters out malformed/non-JSON lines via try; emits agent<TAB>action per valid entry
+valid_entries=$(jq -Rr 'try (fromjson | [.agent, .action] | @tsv)' "${LOG_FILE}")
+
+printf "%-6s %-25s %s\n" "Count" "Action" "Agent"
+printf "%-6s %-25s %s\n" "-----" "------------------------" "-------------------------"
+
+echo "${valid_entries}" \
   | sort \
   | uniq -c \
   | sort -rn \
-  | awk '{printf "  %-5s %-25s %s\n", $1, $3, $2}' \
-  | sed 's/^//' \
-  | { echo "Count  Action                    Agent"; echo "-----  ------------------------  -------------------------"; cat; }
+  | while IFS= read -r line; do
+      count=$(echo "${line}" | awk '{print $1}')
+      agent=$(echo "${line}" | awk '{print $2}')
+      action=$(echo "${line}" | awk '{print $3}')
+      printf "%-6s %-25s %s\n" "${count}" "${action}" "${agent}"
+    done
 
 echo ""
-echo "Total entries: $(wc -l < "${LOG_FILE}")"
+total=$(echo "${valid_entries}" | grep -c . 2>/dev/null || echo 0)
+echo "Total entries: ${total}"

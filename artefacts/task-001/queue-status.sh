@@ -3,7 +3,7 @@
 # Reads tasks/queue.json and prints a task count summary grouped by status.
 # Part of task-001: Queue status reporter script
 # Acceptance criteria:
-#   1. Exits 0 and prints counts for all 6 statuses
+#   1. Exits 0 and prints counts for all statuses (including failed)
 #   2. Handles empty queue gracefully (zero counts, no errors)
 #   3. Passes bash -n and shellcheck with no warnings
 
@@ -24,7 +24,10 @@ if ! command -v jq >/dev/null 2>&1; then
 fi
 
 # Extract task array; handle missing/null .tasks gracefully
-task_count=$(jq '.tasks | if . == null then 0 else length end' "${QUEUE_FILE}" 2>/dev/null) || task_count=0
+task_count=$(jq '.tasks | if . == null then 0 else length end' "${QUEUE_FILE}" 2>/dev/null) || {
+    echo "Warning: failed to parse ${QUEUE_FILE} — counts may be inaccurate" >&2
+    task_count=0
+}
 
 count_status() {
     local status="$1"
@@ -37,8 +40,9 @@ pending=$(count_status "pending")
 in_progress=$(count_status "in_progress")
 paused=$(count_status "paused")
 review=$(count_status "review")
-test=$(count_status "test")
+test_count=$(count_status "test")
 done_count=$(count_status "done")
+failed_count=$(count_status "failed")
 
 echo "Queue Status Report"
 echo "==================="
@@ -48,7 +52,8 @@ printf "%-15s %d\n" "pending"     "${pending}"
 printf "%-15s %d\n" "in_progress" "${in_progress}"
 printf "%-15s %d\n" "paused"      "${paused}"
 printf "%-15s %d\n" "review"      "${review}"
-printf "%-15s %d\n" "test"        "${test}"
+printf "%-15s %d\n" "test"        "${test_count}"
 printf "%-15s %d\n" "done"        "${done_count}"
+printf "%-15s %d\n" "failed"      "${failed_count}"
 echo "-------------------"
 printf "%-15s %d\n" "TOTAL"       "${task_count}"
