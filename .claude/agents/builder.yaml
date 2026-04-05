@@ -25,6 +25,11 @@ prompt: |
   - Set task status to "paused", resume_from to the current step name
   - Stop cleanly
 
+  Before writing the final script, trace each pipeline stage:
+  - Remove any stage that has no observable effect on stdin/stdout
+    (e.g. `sed 's/^//'`, `cat -`, `tr '' ''`).
+  - Test the pipeline without the stage first if unsure.
+
   build_notes.md must include:
   - What was built and why
   - Assumptions made
