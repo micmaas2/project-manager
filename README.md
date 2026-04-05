@@ -1,8 +1,11 @@
 # Project Manager — Multi-Agent Automation System
 
+**v0.6.0** — MVP1 and MVP2 complete. 6-agent pipeline operational. 3 tasks delivered end-to-end.
+Cross-project management active across 7 sibling projects (MVP3 in progress).
+
 A hierarchical multi-agent system that builds automations and scripts across projects.
-One orchestrator (ProjectManager, Opus 4.6) reads a task queue and spawns specialist
-Builder, Reviewer, and Tester agents (all Sonnet 4.6).
+One orchestrator (ProjectManager, Opus 4.6) reads a task queue and spawns a six-stage
+specialist pipeline (all Sonnet 4.6).
 
 Designed for Claude Pro with built-in rate-limit resume support: if a run is interrupted,
 tasks are marked `paused` and resume automatically on the next invocation.
@@ -12,10 +15,12 @@ tasks are marked `paused` and resume automatically on the next invocation.
 ## Architecture
 
 ```
-ProjectManager (Opus 4.6)       — orchestrator: reads queue, validates tasks, spawns agents
-  ├── Builder    (Sonnet 4.6)   — generates scripts, playbooks, and automation artefacts
-  ├── Reviewer   (Sonnet 4.6)   — checks quality, security, and arch compliance
-  └── Tester     (Sonnet 4.6)   — validates artefacts, writes test_report.md
+ProjectManager (Opus 4.6)        — orchestrator: reads queue, validates tasks, spawns agents
+  ├── Builder      (Sonnet 4.6)  — generates scripts, playbooks, and automation artefacts
+  ├── Reviewer     (Sonnet 4.6)  — checks quality, security, and arch compliance
+  ├── Tester       (Sonnet 4.6)  — validates artefacts with fixture-based tests, writes test_report.md
+  ├── DocUpdater   (Sonnet 4.6)  — updates CLAUDE.md, README, CHANGELOG after each task
+  └── SelfImprover (Sonnet 4.6)  — appends lessons to tasks/lessons.md; applies improvement proposals
 ```
 
 State is entirely file-based. All agents read and write `tasks/queue.json` and
@@ -24,7 +29,7 @@ State is entirely file-based. All agents read and write `tasks/queue.json` and
 ### Task lifecycle
 
 ```
-pending → in_progress → review → test → done
+pending → in_progress → review → test → doc-update → self-improve → done
                 ↑           |       |
                 └───────────┘       │  (CHANGES_REQUESTED loops back to builder)
                         ↑           │
@@ -32,6 +37,13 @@ pending → in_progress → review → test → done
 
 Any step → paused  (on rate limit; resumes at resume_from step)
 ```
+
+### Pipeline guards
+
+- **Preflight**: ProjectManager checks prerequisites (e.g., `jq` available) before spawning Builder.
+  Tasks with unmet prerequisites are blocked with an error in `audit.jsonl`.
+- **Self-improvement loop**: SelfImprover runs after every pipeline PASS. Improvement proposals are
+  applied at session start. Current lessons count: 5 (see `tasks/lessons.md`).
 
 ---
 
@@ -90,23 +102,41 @@ Or from a Claude Code session with this directory as context, say:
 
 The ProjectManager will:
 1. Read `tasks/queue.json` and find the next `pending` or `paused` task
-2. Validate the MVP template fields
+2. Run preflight: validate MVP template fields and check declared prerequisites (e.g., `jq`)
 3. Update the task status to `in_progress` and spawn the Builder
 4. The Builder writes output to `artefacts/<task_id>/` and hands off to Reviewer
 5. The Reviewer writes `review.md` and hands off to Tester (or loops back to Builder)
-6. The Tester writes `test_report.md` and sets status to `done` (or loops back to Builder)
+6. The Tester runs fixture-based tests, writes `test_report.md`, and hands off to DocUpdater (or loops back to Builder)
+7. The DocUpdater updates CLAUDE.md, README, and CHANGELOG; writes `doc_update.md`
+8. The SelfImprover appends to `tasks/lessons.md` and writes `improvement_proposals.md`; status set to `done`
 
 Each step is logged to `logs/audit.jsonl` and `logs/token_log.jsonl`.
 
 ### 3. Check results
 
 ```
-artefacts/<task_id>/          Primary artefact (script, playbook, config)
-artefacts/<task_id>/build_notes.md    Builder assumptions and test instructions
-artefacts/<task_id>/review.md         Reviewer decision (APPROVED / CHANGES_REQUESTED)
-artefacts/<task_id>/test_report.md    Tester results (PASS / FAIL, pass rate)
+artefacts/<task_id>/                      Primary artefact (script, playbook, config)
+artefacts/<task_id>/build_notes.md        Builder assumptions and test instructions
+artefacts/<task_id>/review.md             Reviewer decision (APPROVED / CHANGES_REQUESTED)
+artefacts/<task_id>/test_report.md        Tester results (PASS / FAIL, pass rate)
+artefacts/<task_id>/doc_update.md         DocUpdater change summary
+artefacts/<task_id>/improvement_proposals.md   SelfImprover proposals applied next session
+artefacts/<task_id>/fixtures/             Controlled test fixtures (e.g., empty/seeded queue)
 logs/audit.jsonl              Full audit trail (one JSON object per line)
 logs/token_log.jsonl          Token usage per agent per run
+```
+
+### 4. Useful one-liners
+
+```bash
+# View kanban board (task status at a glance)
+cat tasks/kanban.md
+
+# Run the queue status reporter
+bash artefacts/task-001/queue-status.sh
+
+# Run the audit log summary
+bash artefacts/task-002/audit-summary.sh
 ```
 
 ---
@@ -172,6 +202,8 @@ No manual editing of `queue.json` is required. A `paused` task is treated the sa
 | Builder | Sonnet 4.6 | 10,000 | Read, Write, Edit, Bash, Glob, Grep | Artefact written to `artefacts/<id>/` |
 | Reviewer | Sonnet 4.6 | 10,000 | Read, Write, Glob, Grep | `review.md` written |
 | Tester | Sonnet 4.6 | 10,000 | Read, Write, Bash, Glob, Grep | `test_report.md` written |
+| DocUpdater | Sonnet 4.6 | 5,000 | Read, Write, Edit, Glob | `doc_update.md` written |
+| SelfImprover | Sonnet 4.6 | 5,000 | Read, Write, Edit, Glob | `improvement_proposals.md` written; `lessons.md` appended |
 
 Agent YAML definitions live in `.claude/agents/`. Each definition includes `prompt`,
 `policy`, `owner`, and `incident_owner` fields.
@@ -184,36 +216,69 @@ Agent YAML definitions live in `.claude/agents/`. Each definition includes `prom
 
 ```
 .claude/
-  agents/             Agent YAML definitions (manager, builder, reviewer, tester)
+  agents/                    Agent YAML definitions (manager, builder, reviewer, tester,
+                             doc-updater, self-improver)
 tasks/
-  queue.json          Task queue — the single source of truth for task state
-  todo.md             Session planning notes (not committed to main)
-  lessons.md          Lessons learned — updated after any correction
+  queue.json                 Task queue — single source of truth for task state
+  queue.schema.json          JSON Schema for queue validation
+  kanban.md                  Human-readable board view (updated by ProjectManager)
+  backlog.md                 Backlogged items not yet queued
+  epics.md                   Epics and stories
+  lessons.md                 Lessons learned — appended by SelfImprover after each PASS
+  todo.md                    Session planning notes (not committed to main)
 artefacts/
-  <task_id>/          One subdirectory per task
-    build_notes.md    Builder assumptions, test instructions, known limits
-    review.md         Reviewer decision and findings
-    test_report.md    Tester pass/fail report
-    partial/          Partial output saved on rate-limit interruption
+  <task_id>/                 One subdirectory per task
+    build_notes.md           Builder assumptions, test instructions, known limits
+    review.md                Reviewer decision and findings
+    test_report.md           Tester pass/fail report
+    doc_update.md            DocUpdater change summary
+    improvement_proposals.md SelfImprover proposals (applied at next session start)
+    fixtures/                Controlled test inputs (e.g., empty_audit.jsonl, seeded_queue.json)
+    partial/                 Partial output saved on rate-limit interruption
 logs/
-  audit.jsonl         Append-only audit trail (agent, action, task, timestamp)
-  token_log.jsonl     Token usage per agent per run
-scripts/              Generated automation scripts (after Tester PASS)
-docs/                 Architecture decision records
-hooks/                pre-commit hook (symlinked to .git/hooks/pre-commit)
+  audit.jsonl                Append-only audit trail (agent, action, task, timestamp)
+  token_log.jsonl            Token usage per agent per run
+docs/                        Architecture decision records; project-registry.md
+hooks/                       pre-commit + commit-msg hooks (symlinked to .git/hooks/)
 ```
 
 ---
 
-## Target Projects
+## Managed Projects
 
-This system is project-agnostic. Tasks specify a `target_project` path. Current sibling projects:
+This system is project-agnostic. Tasks specify a `target_project` path. 7 projects currently managed:
 
-| Path | Description |
-|---|---|
-| `/opt/claude/CCAS/` | SAP infrastructure automation — Ansible-based, multiple repos |
-| `/opt/claude/pi-homelab/` | Raspberry Pi Home Assistant deployment (Pi 4 and Pi 5) |
-| `/opt/claude/project1/` | Generic project skeleton |
+| Path | GitHub remote | Status | Notes |
+|---|---|---|---|
+| `/opt/claude/project_manager/` | micmaas2/project-manager | Active | This system |
+| `/opt/claude/CCAS/` | (no remote) | Active | SAP infrastructure automation (Ansible-based) |
+| `/opt/claude/pi-homelab/` | micmaas2/pi-homelab | Blocked | Security hardening blocked on manual passwd steps |
+| `/opt/claude/pensieve/` | micmaas2/pensieve | Queued | Summarisation, tagging, folder structure improvements backlogged |
+| `/opt/claude/genealogie/` | micmaas2/genealogie | Active | Genealogy tooling (GEDCOM-based) |
+| `/opt/claude/performance_HPT/` | micmaas2/performance-twin | Active | Performance / HPT tooling |
+| `/opt/claude/project1/` | (no remote) | Inactive | Generic project skeleton |
+
+**Notable completed cross-project work:**
+- CCAS BL-007/BL-008: `hana_os_users` Ansible role + SAP start/stop ordering implemented
+- CCAS task-003: `feature/hana-os-users` merged to develop, stale branch deleted
+
+**Blocked items requiring manual user steps:**
+- pi-homelab Pi 4: run `sudo passwd pi` and remove nopasswd sudoers entry
+- pi-homelab Pi 5: `ssh-copy-id` from each laptop, `sudo passwd pi`, remove nopasswd sudoers
+
+---
+
+## Delivered Artefacts
+
+| Task | Artefact | Description |
+|---|---|---|
+| task-001 | `artefacts/task-001/queue-status.sh` | Prints a colour-coded summary of `tasks/queue.json` by status |
+| task-002 | `artefacts/task-002/audit-summary.sh` | Summarises `logs/audit.jsonl` by agent and action; requires `jq` |
+| task-003 | — | CCAS: verified `feature/hana-os-users` merged; stale branch deleted |
+
+All artefacts passed the full 6-agent pipeline (Builder → Reviewer → Tester → DocUpdater → SelfImprover).
+Fixture-based testing is in place: each task's `artefacts/<id>/fixtures/` holds controlled inputs
+used by the Tester independent of live system state.
 
 ---
 
@@ -247,3 +312,9 @@ Valid areas: `ROLE`, `DOCS`, `TEST`, `FIX`, `REFACTOR`, `PLAYBOOK`, `JENKINS`, `
 5. Label all outputs `[Opus]` or `[Sonnet]` depending on model
 6. Update this README's Agent Reference table
 7. Add a CHANGELOG entry under `[Unreleased]`
+8. If the agent produces a new artefact type, add it to the Directory Layout and the task lifecycle diagram above
+
+**Pipeline slot guidance:**
+- Agents that produce output artefacts go in the Builder/Reviewer/Tester slots
+- DocUpdater runs after Tester PASS — do not merge doc-writing into Builder
+- SelfImprover always runs last; it writes to `tasks/lessons.md` and `artefacts/<id>/improvement_proposals.md`
