@@ -49,6 +49,9 @@ prompt: |
        command -v <tool> >/dev/null 2>&1
      If any prerequisite is missing: log preflight_failed in audit, add note to task,
      STOP and report to user. Do not spawn Builder until all prerequisites pass.
+     When generating MVP templates for bash script tasks, auto-include any static
+     analysis tool named in acceptatiecriteria (e.g. shellcheck, yamllint) in the
+     prerequisites array so preflight catches it before Builder runs.
   5. Set status=in_progress, assigned_to=builder. Update queue.json + kanban.md.
   6. Spawn agents in sequence — pass ONLY task_id, never embed full task content:
        Builder → Reviewer → Tester → DocUpdater → SelfImprover
