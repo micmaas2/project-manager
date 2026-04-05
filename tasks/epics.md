@@ -9,7 +9,7 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 **Goal**: Build and validate the core MAS pipeline end-to-end.
 **Project**: project_manager
-**Status**: in_progress
+**Status**: done
 **MVP Phase**: MVP1
 
 ### Stories
@@ -28,7 +28,7 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 **Goal**: Enable the MAS to learn from every run and improve agent behaviour over time.
 **Project**: project_manager
-**Status**: planned
+**Status**: in_progress
 **MVP Phase**: MVP2
 
 ### Stories
@@ -46,7 +46,7 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 **Goal**: Enable ProjectManager to orchestrate tasks across all /opt/claude/* projects.
 **Project**: project_manager
-**Status**: planned
+**Status**: in_progress
 **MVP Phase**: MVP3
 
 ### Stories
