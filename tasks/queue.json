@@ -1,4 +1,41 @@
 {
   "$schema": "./queue.schema.json",
-  "tasks": []
+  "tasks": [
+    {
+      "id": "task-001",
+      "title": "Queue status reporter script",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-001",
+      "story_id": "S-001-5",
+      "assigned_to": null,
+      "status": "pending",
+      "artefact_path": "artefacts/task-001/",
+      "created": "2026-04-05",
+      "updated": "2026-04-05",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Build a bash script that reads queue.json and prints a task count summary grouped by status.",
+        "niet_in_scope": ["web UI", "email alerts", "cron scheduling", "colour output"],
+        "acceptatiecriteria": [
+          "Script exits 0 and prints counts for all 6 statuses (pending, in_progress, paused, review, test, done)",
+          "Handles empty queue gracefully (zero counts, no errors)",
+          "Passes bash -n and shellcheck with no warnings"
+        ],
+        "security_arch_impact": "None — read-only, no secrets, no network calls",
+        "tests_required": "bash -n; shellcheck; run with empty queue.json; run with seeded queue.json",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS with >=90% pass rate",
+          "script exists in artefacts/task-001/"
+        ],
+        "rollback_plan": "Delete artefacts/task-001/ — no system state changed",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No — no personal data processed",
+        "cost_estimate": "EUR 0"
+      }
+    }
+  ]
 }
