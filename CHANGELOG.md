@@ -9,6 +9,10 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 ## [Unreleased]
 
 ### Added
+- `artefacts/task-002/audit-summary.sh` — bash script that reads `logs/audit.jsonl`
+  and prints a formatted summary of agent actions grouped by agent name and action type.
+  Accepts optional log file path argument. Requires `jq >= 1.6`. Passes `bash -n`;
+  100% test pass rate (5/5 tests). Validates MVP2 preflight + fixtures improvements.
 - `artefacts/task-001/queue-status.sh` — bash script that reads `tasks/queue.json`
   and prints a formatted task count summary grouped by all 6 statuses (pending,
   in_progress, paused, review, test, done). Accepts optional queue file path argument.
