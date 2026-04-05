@@ -8,13 +8,22 @@ This is the workspace for the multi-agent automation system. Structure: `.claude
 
 ## Workspace Context
 
-This directory (`project_manager`) is part of the `/opt/claude/` multi-project workspace. Sibling projects:
+This directory (`project_manager`) is part of the `/opt/claude/` multi-project workspace.
+Full project registry: `docs/project-registry.md` (authoritative — update there first).
 
-| Directory | Purpose |
-|---|---|
-| `/opt/claude/CCAS/` | SAP infrastructure automation (Ansible-based, multiple repos) |
-| `/opt/claude/pi-homelab/` | Raspberry Pi Home Assistant deployment (Pi 4 & Pi 5) |
-| `/opt/claude/project1/` | Generic project skeleton |
+| Directory | GitHub | Purpose |
+|---|---|---|
+| `/opt/claude/project_manager` | micmaas2/project-manager | This MAS orchestration system |
+| `/opt/claude/CCAS/` | (no remote) | SAP infrastructure automation (Ansible-based) |
+| `/opt/claude/pi-homelab/` | micmaas2/pi-homelab | Raspberry Pi / Home Assistant deployment |
+| `/opt/claude/pensieve/` | micmaas2/pensieve | TBD |
+| `/opt/claude/genealogie/` | micmaas2/genealogie | Genealogy tooling |
+| `/opt/claude/performance_HPT/` | micmaas2/performance-twin | Performance / HPT tooling |
+| `/opt/claude/project1/` | (no remote) | Generic project skeleton |
+
+**Existing projects may already have plans, requirements, and in-progress work.**
+When a project is added or first onboarded, PM runs a discovery scan (see `manager.yaml`) and
+registers all existing artifacts in `docs/project-registry.md` before scheduling any tasks.
 
 **No build system, tests, or source code** currently exist in this directory. When code is added, update this file with relevant commands.
 
@@ -160,14 +169,22 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 ## Workflow Orchestration
 
-1. **Plan first**: enter plan mode for any non-trivial task (3+ steps or architectural decisions); write plan to `tasks/todo.md`
-2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent
-3. **Verify before done**: never mark complete without proving it works
-4. **Self-improvement**: after any user correction, update `tasks/lessons.md`; review lessons at session start
-5. **Autonomous bug fixing**: when given a bug report, fix it — point at logs/errors, then resolve
+1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Write plan to `tasks/todo.md`.
+2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
+3. **Token minimization**: agents receive only task_id; they read their own context from files. No large context copied between invocations. Stop after each deliverable.
+4. **Verify before done**: never mark complete without proving it works.
+5. **Self-improvement**: SelfImprover runs after every pipeline PASS and appends to `tasks/lessons.md`. Review lessons at session start.
+6. **Always-on pipeline**: every task runs Builder → Reviewer (quality + security + scope) → Tester → DocUpdater → SelfImprover. No skipping.
+7. **Autonomous bug fixing**: when given a bug report, fix it — point at logs/errors, then resolve.
+
+**PM Planning Session**: invoke ProjectManager with "planning" intent to review backlog, reprioritize, and onboard new projects. PM presents backlog and asks for user confirmation before queuing tasks.
 
 **Task tracking**:
-- Plan → `tasks/todo.md` (checkable items)
+- Active queue → `tasks/queue.json`
+- Backlog + scope-drift → `tasks/backlog.md`
+- Kanban view → `tasks/kanban.md`
+- Epics & stories → `tasks/epics.md`
+- Plan files → `/root/.claude/plans/` (registered in `docs/project-registry.md`)
 - Lessons → `tasks/lessons.md`
 - Mark items complete immediately as you go
 

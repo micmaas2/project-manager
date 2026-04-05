@@ -7,6 +7,7 @@
   "required": ["tasks"],
   "additionalProperties": false,
   "properties": {
+    "$schema": { "type": "string" },
     "tasks": {
       "type": "array",
       "items": { "$ref": "#/$defs/task" }
@@ -20,8 +21,8 @@
       "properties": {
         "id": {
           "type": "string",
-          "pattern": "^task_[a-z0-9_-]+$",
-          "description": "Unique task identifier, e.g. task_001"
+          "pattern": "^task[_-][a-z0-9_-]+$",
+          "description": "Unique task identifier, e.g. task-001 or task_001"
         },
         "title": {
           "type": "string",
@@ -30,11 +31,26 @@
         },
         "project": {
           "type": "string",
-          "enum": ["pensieve", "ccas", "pi-homelab", "project_manager", "other"]
+          "enum": ["project_manager", "ccas", "pi-homelab", "pensieve", "genealogie", "performance_HPT", "project1", "other"],
+          "description": "Short project name matching docs/project-registry.md"
+        },
+        "target_project_path": {
+          "type": "string",
+          "description": "Absolute path to target project root, e.g. /opt/claude/CCAS"
+        },
+        "epic_id": {
+          "type": "string",
+          "pattern": "^EPIC-[0-9]+$",
+          "description": "Optional epic reference, e.g. EPIC-001"
+        },
+        "story_id": {
+          "type": "string",
+          "pattern": "^S-[0-9]+-[0-9]+$",
+          "description": "Optional story reference, e.g. S-001-5"
         },
         "assigned_to": {
-          "type": "string",
-          "enum": ["manager", "builder", "reviewer", "tester"]
+          "type": ["string", "null"],
+          "enum": ["manager", "builder", "reviewer", "tester", "doc-updater", "self-improver", null]
         },
         "status": {
           "type": "string",
@@ -47,11 +63,11 @@
         },
         "created": {
           "type": "string",
-          "format": "date-time"
+          "format": "date"
         },
         "updated": {
           "type": "string",
-          "format": "date-time"
+          "format": "date"
         },
         "token_estimate": {
           "type": "integer",
@@ -60,17 +76,18 @@
         },
         "resume_from": {
           "type": ["string", "null"],
-          "maxLength": 100,
-          "description": "Step name to resume from after a rate-limit pause; null if not paused"
+          "enum": ["builder", "reviewer", "tester", "doc-updater", "self-improver", null],
+          "description": "Agent step to resume from after a rate-limit pause"
         },
         "notes": {
-          "type": "string",
-          "maxLength": 2000,
-          "description": "Free-text context for agents. Keep concise — long text is an injection risk."
+          "type": "array",
+          "items": { "type": "string", "maxLength": 500 },
+          "maxItems": 10,
+          "description": "Reviewer/Tester findings passed back to Builder. Array keeps each note bounded."
         },
         "mvp_template": {
           "type": "object",
-          "required": ["doel", "niet_in_scope", "acceptatiecriteria", "security_arch_impact", "tests", "definition_of_done", "rollback_plan", "incident_owner"],
+          "required": ["doel", "niet_in_scope", "acceptatiecriteria", "security_arch_impact", "tests_required", "definition_of_done", "rollback_plan", "incident_owner", "privacy_dpia", "cost_estimate"],
           "additionalProperties": false,
           "properties": {
             "doel": {
@@ -96,10 +113,10 @@
               "type": "string",
               "maxLength": 500
             },
-            "tests": {
+            "tests_required": {
               "type": "string",
               "maxLength": 500,
-              "description": "Test types required: unit/integration/regression"
+              "description": "Test types required: unit/integration/regression/shellcheck/etc."
             },
             "definition_of_done": {
               "type": "array",
@@ -113,6 +130,16 @@
             "incident_owner": {
               "type": "string",
               "maxLength": 100
+            },
+            "privacy_dpia": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "DPIA required? yes/no + note"
+            },
+            "cost_estimate": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Estimated cost, e.g. EUR 0 or EUR 2.50"
             }
           }
         }
