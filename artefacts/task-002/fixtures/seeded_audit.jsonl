@@ -8,7 +8,3 @@
 {"timestamp":"2026-04-05T10:00:00Z","agent":"ProjectManager","task_id":"task-002","action":"pipeline_start","status":"in_progress"}
 {"timestamp":"2026-04-05T10:01:00Z","agent":"Builder","task_id":"task-002","action":"build_complete","status":"review"}
 {"timestamp":"2026-04-05T10:02:00Z","agent":"Reviewer","task_id":"task-002","action":"review_complete","status":"test"}
-{"timestamp":"2026-04-05T10:03:00Z","agent":"Tester","task_id":"task-002","action":"test_complete","status":"done"}
-{"timestamp":"2026-04-05T10:04:00Z","agent":"DocUpdater","task_id":"task-002","action":"doc_update_complete","status":"done"}
-{"timestamp":"2026-04-05T10:05:00Z","agent":"SelfImprover","task_id":"task-002","action":"lessons_updated","status":"done"}
-{"timestamp":"2026-04-05T10:06:00Z","agent":"ProjectManager","task_id":"task-002","action":"task_done","status":"done"}
