@@ -43,6 +43,8 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-029 | EPIC-003 | project_manager: Activity dashboard in Obsidian vault (auto-generated markdown, 15-min cron) | project_manager | P2 | done | 2026-04-06 |
 | BL-030 | EPIC-003 | pensieve: Phone backlog submission via Telegram BACKLOG: prefix → GitHub API commit | pensieve | P2 | done | 2026-04-06 |
 | BL-031 | EPIC-003 | project_manager: Investigate git worktrees as isolation mechanism for parallel agent runs | project_manager | P3 | new | 2026-04-06 |
+| BL-033 | EPIC-003 | New project proposal: grocery price comparison across stores (requirements + plan first) | project_manager | P3 | new | 2026-04-06 |
+| BL-034 | EPIC-003 | project_manager: Add backlog and Pensieve capture from laptop (not only Telegram/phone) | project_manager | P2 | new | 2026-04-06 |
 
 ---
 
@@ -70,4 +72,4 @@ Items completed, rejected, or no longer relevant.
 | BL-008 | CCAS: SAP Start/Stop instance-level ordering | Fully implemented — sap_start.yml, sap_stop.yml (per-instance ordering), hana_stop.yml (safety check), Jenkinsfile v3 (TARGET_HOST). All in ccas-jenkins develop | 2026-04-05 |
 | BL-021 | project1: SAP Security Risk Profile section 4A | project1 is sandbox — not a managed project | 2026-04-05 |
 | BL-022 | project1: Azure diagram generator | project1 is sandbox — not a managed project | 2026-04-05 |
-| BL-032 | EPIC-003 | test backlog routing via telegram | project_manager | P2 | new | 2026-04-06 |
+| BL-032 | test backlog routing via telegram | Test entry — confirmed pipeline working | 2026-04-06 |
