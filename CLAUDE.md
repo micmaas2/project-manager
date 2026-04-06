@@ -251,3 +251,37 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 **Logs**:
 - `logs/audit.jsonl` — append-only, one JSON object per line: `{timestamp, agent, task_id, action, status}`
 - `logs/token_log.jsonl` — per-run token accounting: `{timestamp, agent, task_id, token_estimate}`
+
+---
+
+## n8n Workflow Deployment (Pi4)
+
+SSH alias: `pi4` (192.168.1.10). n8n runs as Docker container `n8n`.
+GitHub PAT for project-manager API calls: `/opt/n8n/github-pat` on Pi4.
+
+**Deploy sequence** (all three steps required):
+```bash
+# 1. Prep: inject workflow id + strip tags
+python3 -c "import json; wf=json.load(open('workflow.json')); wf['id']='<UUID>'; wf.pop('tags',None); json.dump(wf,open('/tmp/wf.json','w'))"
+# 2. Import + publish
+scp /tmp/wf.json pi4:/tmp/wf.json && ssh pi4 "docker cp /tmp/wf.json n8n:/tmp/wf.json && docker exec n8n n8n import:workflow --input=/tmp/wf.json && docker exec n8n n8n publish:workflow --id=<UUID>"
+# 3. Restart
+ssh pi4 "docker restart n8n && sleep 5 && docker ps | grep n8n"
+```
+
+**Import gotchas**:
+- Workflow JSON must have `id` (UUID string) — omitting causes `SQLITE_CONSTRAINT` on import
+- Strip `tags` array before import — tag IDs are DB-internal and cause `SQLITE_CONSTRAINT`
+- `--userId=1` (numeric) fails; use UUID string or omit entirely
+- No `sqlite3` in the n8n container; use `docker exec n8n n8n export:workflow --all` to inspect
+- Find active workflow ID: export all + filter by `active: true` and most recent `updatedAt`
+
+**n8n workflow JSON patterns**:
+- Use `specifyBody: "json"` + `jsonBody: "={{ $json.obj }}"` when passing an object — `specifyBody: "string"` silently mangles complex payloads (e.g. long base64 bodies)
+- Avoid `?.` optional chaining in IF node expressions — use `$json.commit ? 'ok' : ''` instead
+- Never interpolate `$json.error` into Telegram `text` fields — GitHub API error strings contain backticks/underscores that trigger Telegram "can't parse entities"
+- `continueOnFail: true` at node level handles 404s gracefully (e.g. GET a file that may not exist yet)
+
+**main/develop divergence**: n8n commits via GitHub API go directly to `main` (default branch, no hooks).
+Operational files written by n8n (e.g. `tasks/telegram-inbox.md`) must exist on `main`, not just `develop`.
+When creating such files locally, also push them to `main` via the GitHub API or a fast-track merge.
