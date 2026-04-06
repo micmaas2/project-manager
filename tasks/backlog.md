@@ -41,7 +41,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-020 | EPIC-003 | performance_HPT: HPT Dashboard Fase 1 — move from /opt/claude/future/ into repo (imperative-wobbling-newell.md) | performance_HPT | P2 | discovered | 2026-04-05 |
 | BL-028 | EPIC-003 | project_manager: Merge Boris Cherny CLAUDE.md principles + archive original | project_manager | P2 | done | 2026-04-06 |
 | BL-029 | EPIC-003 | project_manager: Activity dashboard in Obsidian vault (auto-generated markdown, 15-min cron) | project_manager | P2 | done | 2026-04-06 |
-| BL-030 | EPIC-003 | pensieve: Phone backlog submission via Telegram BACKLOG: prefix → GitHub API commit | pensieve | P2 | new | 2026-04-06 |
+| BL-030 | EPIC-003 | pensieve: Phone backlog submission via Telegram BACKLOG: prefix → GitHub API commit | pensieve | P2 | done | 2026-04-06 |
 | BL-031 | EPIC-003 | project_manager: Investigate git worktrees as isolation mechanism for parallel agent runs | project_manager | P3 | new | 2026-04-06 |
 
 ---
