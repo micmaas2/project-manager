@@ -70,3 +70,4 @@ Items completed, rejected, or no longer relevant.
 | BL-008 | CCAS: SAP Start/Stop instance-level ordering | Fully implemented — sap_start.yml, sap_stop.yml (per-instance ordering), hana_stop.yml (safety check), Jenkinsfile v3 (TARGET_HOST). All in ccas-jenkins develop | 2026-04-05 |
 | BL-021 | project1: SAP Security Risk Profile section 4A | project1 is sandbox — not a managed project | 2026-04-05 |
 | BL-022 | project1: Azure diagram generator | project1 is sandbox — not a managed project | 2026-04-05 |
+| BL-032 | EPIC-003 | test backlog routing via telegram | project_manager | P2 | new | 2026-04-06 |
