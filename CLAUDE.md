@@ -58,6 +58,12 @@ feature/* (work)      ← New features, bug fixes, planned work
 
 **Git remote**: SSH-based (`git@github.com:micmaas2/project-manager.git`). Run `git remote -v` before adding — it already exists. HTTPS will fail.
 
+**Releasing to main**: `git push origin develop:main` — the only working release path.
+The pre-commit hook blocks ALL commits on `main` and `develop` (including merge commits), so
+`git checkout main && git merge develop` always fails locally. Use the refspec push instead.
+If main has GitHub API commits that develop lacks (diverged), use `--force-with-lease` after
+syncing via a feature branch: `git checkout -b feature/sync && git checkout origin/main -- <file> && git commit ... && merge into develop`, then `git push origin develop:main --force-with-lease`.
+
 **Git hooks** (in `hooks/`, symlinked to `.git/hooks/`):
 - `pre-commit` — branch protection (blocks main/develop) + sensitive file detection
 - `commit-msg` — enforces `[AREA]` message format; receives commit file as `$1`
