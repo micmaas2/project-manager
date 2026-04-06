@@ -14,14 +14,16 @@ _(items in backlog.md not yet in queue)_
 - BL-009 CCAS: Quick Win #3 Infrastructure Validation
 - BL-012/013 pi-homelab: Security hardening (blocked-manual — user passwd steps needed first)
 - BL-015 pensieve: Gmail capture activation
-- BL-023/024/025 pensieve: Improved summarisation, tagging, folder structure (new)
+- BL-023/024/025 pensieve: Improved summarisation, tagging, folder structure → task-004 ✅ queued
+- BL-027 pensieve: Retroactive vault quality improvement → task-005 ✅ queued
 
 ---
 
 ## Ready
 _(in queue.json with status: pending)_
 
-_(empty)_
+- **task-004** pensieve: Improved captures — richer summaries, better tagging, topic folders (BL-023/024/025)
+- **task-005** pensieve: Retroactive vault quality improvement script (BL-027)
 
 ---
 

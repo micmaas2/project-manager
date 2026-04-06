@@ -173,10 +173,13 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Write plan to `tasks/todo.md`.
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
 3. **Token minimization**: agents receive only task_id; they read their own context from files. No large context copied between invocations. Stop after each deliverable.
-4. **Verify before done**: never mark complete without proving it works.
-5. **Self-improvement**: SelfImprover runs after every pipeline PASS and appends to `tasks/lessons.md`. Review lessons at session start.
+4. **Verify before done**: never mark complete without proving it works. Ask: "Would a staff engineer approve this?"
+5. **Self-improvement**: SelfImprover runs after every pipeline PASS and appends to `tasks/lessons.md`. After any correction: update CLAUDE.md so the mistake cannot recur; commit to git.
 6. **Always-on pipeline**: every task runs Builder → Reviewer (quality + security + scope) → Tester → DocUpdater → SelfImprover. No skipping.
 7. **Autonomous bug fixing**: when given a bug report, fix it — point at logs/errors, then resolve.
+8. **Demand elegance (balanced)**: pause and ask "Is there a more elegant way?" before finalising any non-trivial design. Skip for simple fixes — do not over-engineer.
+9. **Minimal impact**: touch only what is strictly necessary; avoid side effects on untouched code or config. If you must change something adjacent, flag it explicitly.
+10. **Explain with diagrams**: when explaining architecture or non-obvious decisions, prefer ASCII diagrams over prose where they add clarity.
 
 **PM Planning Session**: invoke ProjectManager with "planning" intent to review backlog, reprioritize, and onboard new projects. PM presents backlog and asks for user confirmation before queuing tasks.
 

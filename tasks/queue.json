@@ -2,6 +2,91 @@
   "$schema": "./queue.schema.json",
   "tasks": [
     {
+      "id": "task-005",
+      "title": "pensieve: Retroactive vault quality improvement script",
+      "project": "pensieve",
+      "target_project_path": "/opt/claude/pensieve",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-005/",
+      "created": "2026-04-05",
+      "updated": "2026-04-05T13:00:00Z",
+      "token_estimate": 9000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Build a Python script that retroactively improves existing Obsidian vault notes: migrates old-format notes to YAML frontmatter, normalises tags, re-enriches non-LinkedIn URL captures via Claude API, and flags unresolvable captures with a needs-review tag.",
+        "niet_in_scope": ["n8n workflow changes", "modifying the folder structure of existing notes (covered by task-004 going forward)", "processing Gmail captures", "GUI or web interface"],
+        "acceptatiecriteria": [
+          "Migrates old-format notes (# heading + **bold** fields + #hashtag tags) to YAML frontmatter matching the current template",
+          "Normalises concatenated tags to hyphenated lowercase (e.g. aiagents → ai-agents)",
+          "For source:link notes with non-LinkedIn URLs: fetches page content (requests + BeautifulSoup), re-calls Claude API with improved prompt, rewrites summary/key_points/tags",
+          "For LinkedIn or unresolvable URLs: adds needs-review tag without modifying existing content",
+          "Supports --dry-run flag that prints planned changes without writing files",
+          "Passes pylint / flake8 with no errors",
+          "Script runs on Pi 4 via: ssh pi4 python3 /tmp/migrate-vault.py --vault /opt/obsidian-vault [--dry-run]"
+        ],
+        "security_arch_impact": "Low — reads/writes local vault files; Claude API key passed via ANTHROPIC_API_KEY env var, never hardcoded; URL fetching uses requests with 10s timeout and no redirect to private IPs",
+        "tests_required": "Unit tests with fixture notes covering: old-format migration, tag normalisation, LinkedIn detection, dry-run mode",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS with >=90% pass rate",
+          "script exists in artefacts/task-005/migrate-vault.py",
+          "fixtures present in artefacts/task-005/fixtures/"
+        ],
+        "rollback_plan": "Script makes in-place edits — run with --dry-run first; vault is synced to OneDrive so files can be restored from OneDrive version history if needed",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No — notes are personal knowledge captures, no third-party personal data",
+        "cost_estimate": "EUR 0.01 (Claude API calls for URL re-enrichment of ~5-10 existing URL notes)",
+        "prerequisites": ["python3 >= 3.9", "pip install requests beautifulsoup4", "ANTHROPIC_API_KEY set in environment"]
+      }
+    },
+    {
+      "id": "task-004",
+      "title": "pensieve: Improved captures — richer summaries, better tagging, topic folders",
+      "project": "pensieve",
+      "target_project_path": "/opt/claude/pensieve",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "done",
+      "artefact_path": "artefacts/task-004/",
+      "created": "2026-04-05",
+      "updated": "2026-04-05T16:00:00Z",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Update the Pensieve Telegram capture workflow to produce richer summaries (5-7 key_points + analysis field), improved tagging (4-8 tags including domain/entity/action types), and topic-based folder structure (Category/Topic/filename.md).",
+        "niet_in_scope": ["Gmail capture workflow", "Obsidian Clipper", "URL fetching/enrichment (covered by task-005)", "deployment to n8n (import is manual)", "changing the Claude model from Haiku"],
+        "acceptatiecriteria": [
+          "Claude API prompt updated: key_points expanded to 5-7 items (max 25 words each), new analysis field (2-3 sentences: thesis, argument, implication)",
+          "Tags expanded to 4-8 items; prompt instructs domain tags, entity tags, and action tags (e.g. follow-up, implement, read-deeper)",
+          "Claude response schema includes new topic field (single lowercase slug word, e.g. ai, sap, homelab, productivity)",
+          "Build Markdown Note node updated: folder path is Category/Topic/filename.md (e.g. Research/AI/2026-04-05-title.md)",
+          "Parse Claude Response node validates new fields (analysis string, topic slug format)",
+          "workflow JSON validates: python3 -m json.tool workflows/telegram-capture.json",
+          "prompts/claude-processor.txt and templates/note-template.md updated to reflect new schema"
+        ],
+        "security_arch_impact": "None — same Claude API call, same vault write path; topic slug validated against [a-z0-9-]+ before use in path construction",
+        "tests_required": "Manual import test in n8n; fixture-based unit test of Parse Claude Response and Build Markdown Note JS logic; validate JSON",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "workflows/telegram-capture.json updated and JSON-valid",
+          "prompts/claude-processor.txt updated",
+          "templates/note-template.md updated"
+        ],
+        "rollback_plan": "git revert in pensieve repo — workflow JSON is version-controlled; re-import previous version in n8n",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No — no change to data handling",
+        "cost_estimate": "EUR 0",
+        "prerequisites": ["python3 >= 3.0 (for JSON validation only)"]
+      }
+    },
+    {
       "id": "task-003",
       "title": "CCAS: Merge feature/hana-os-users into ccas-jenkins develop",
       "project": "ccas",
