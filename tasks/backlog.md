@@ -72,3 +72,4 @@ Items completed, rejected, or no longer relevant.
 | BL-022 | project1: Azure diagram generator | project1 is sandbox — not a managed project | 2026-04-05 |
 | BL-032 | EPIC-003 | test backlog routing via telegram | project_manager | P2 | new | 2026-04-06 |
 | BL-033 | EPIC-003 | Can you add potential new project for grocery shopping. Idea is where to find our groceries the cheapest by few selected stores. Requirements and plan to created first/ drafted still | project_manager | P2 | new | 2026-04-06 |
+| BL-034 | EPIC-003 | prioriteit. Would like to have possibility to add backlog & Pensieve items from laptop, not only via telegram app in phone | project_manager | P2 | new | 2026-04-06 |
