@@ -170,6 +170,8 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 ## Workflow Orchestration
 
+0. **Session start — process Telegram inbox (mandatory first action)**: Read `tasks/telegram-inbox.md`. If it contains any items, promote each to `tasks/backlog.md` as a proper BL entry (assign next BL ID, fill table row with title, EPIC-003, project_manager, P2, new, today's date), then clear the inbox file (leave only the header). Commit both changes together. Do this before any other work.
+
 1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Write plan to `tasks/todo.md`.
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
 3. **Token minimization**: agents receive only task_id; they read their own context from files. No large context copied between invocations. Stop after each deliverable.
