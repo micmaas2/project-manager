@@ -161,6 +161,35 @@ No manual editing of `queue.json` is required. A `paused` task is treated the sa
 
 ---
 
+## Telegram Backlog Intake
+
+Backlog items can be submitted from Telegram without opening a Claude session. Send a message starting with `BACKLOG:` to the Pensieve bot:
+
+```
+BACKLOG: Add dark mode to the dashboard
+```
+
+The n8n workflow in `pensieve/workflows/telegram-capture.json` handles this path:
+
+```
+Telegram "BACKLOG: <title>"
+  → n8n strips prefix, fetches tasks/telegram-inbox.md from GitHub
+  → appends "- YYYY-MM-DD: <title>" and commits back
+  → bot replies "✅ Backlog item queued: <title>" with commit URL
+     OR "❌ Kon niet opslaan. Stuur het opnieuw." on failure
+```
+
+**At the start of every PM session (step 0, mandatory):** The ProjectManager reads `tasks/telegram-inbox.md`. For each item it:
+1. Assigns the next BL ID and adds a row to `tasks/backlog.md`
+2. Clears `tasks/telegram-inbox.md` (preserves the header comment)
+3. Commits both files together before any other work
+
+This keeps `backlog.md` as the single authoritative list while letting new items arrive asynchronously between sessions.
+
+**Note:** `telegram-inbox.md` is written by n8n via the GitHub Contents API using a PAT with `contents:write` scope on this repo. Direct edits to the file are safe — n8n fetches the current SHA before each write to avoid conflicts.
+
+---
+
 ## Queue Schema Reference
 
 `tasks/queue.json` contains a single object with a `tasks` array. Each task object:
@@ -222,7 +251,8 @@ tasks/
   queue.json                 Task queue — single source of truth for task state
   queue.schema.json          JSON Schema for queue validation
   kanban.md                  Human-readable board view (updated by ProjectManager)
-  backlog.md                 Backlogged items not yet queued
+  backlog.md                 Backlogged items not yet queued (with BL IDs)
+  telegram-inbox.md          Staging file for BACKLOG: items sent via Telegram (cleared each session)
   epics.md                   Epics and stories
   lessons.md                 Lessons learned — appended by SelfImprover after each PASS
   todo.md                    Session planning notes (not committed to main)
