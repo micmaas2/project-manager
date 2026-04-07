@@ -22,7 +22,7 @@ Add the following bullet to the MVP template's `Security/arch impact` block, aft
 
 **Rationale**: task-004 implemented slug validation and `filepath.startsWith(VAULT + '/')` correctly, but these were added from Builder experience — the MVP template's security section did not require them. Without an explicit mandate, future tasks writing files at dynamic paths may skip the path-traversal guard. Making this a required checklist item in the template ensures it is evaluated during preflight and review on every applicable task.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -41,7 +41,7 @@ Add the following line to the MVP template, under or adjacent to the security bl
 
 **Rationale**: The Reviewer observed that `claude-processor.txt` said "no hyphens" while `TOPIC_PATTERN = /^[a-z0-9-]+$/` accepted them. This is benign here (code is more permissive), but if the model strictly follows the prompt, valid hyphenated slugs get silently dropped or sanitised — a latent defect. Requiring prompt/validator alignment in the MVP template prevents this class of inconsistency being shipped without a deliberate decision.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -62,4 +62,4 @@ Add the following to the builder agent's prompt or checklist section:
 
 **Rationale**: task-004's Telegram confirmation showed only `title` and `filename`, omitting `Category/Topic`. The Reviewer flagged this as a non-blocking UX gap. Baking this rule into the Builder agent prompt ensures future capture workflows emit traceable confirmations by default, rather than relying on a Reviewer catch.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

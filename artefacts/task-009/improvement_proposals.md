@@ -25,7 +25,7 @@ The task-009 Builder correctly implemented YAML escaping for `title` and `from` 
 
 **Rationale**: YAML injection via unescaped email sender display names or subject lines is a realistic attack surface for any note-capture workflow. Requiring explicit YAML-escape guards in the MVP template ensures Builder implements them by default rather than as an afterthought, and means Reviewer can treat their absence as a template non-compliance rather than just an observation.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -46,7 +46,7 @@ The task-009 Builder implemented a `gmailData.id` null check (Test 11 passes), b
 
 **Rationale**: External IDs from third-party APIs (Gmail, calendar, CRM) are not guaranteed to be present in every response. A downstream step that silently skips when the ID is missing (or crashes without a user-facing error) creates a hard-to-debug operational failure. The MVP template should mandate null-guards for any cross-step ID dependency.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -69,4 +69,4 @@ The task-009 `from` field had newline stripping (`replace(/\n/g, ' ')`) but no g
 
 **Rationale**: Newline-only stripping is a partial defence. A complete sanitisation pass over externally-sourced strings before writing to YAML/Markdown prevents a class of corruption bugs and injection vectors. Mandating this in the MVP template ensures it is implemented at build time rather than discovered during review.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
