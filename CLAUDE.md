@@ -193,6 +193,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 10. **Explain with diagrams**: when explaining architecture or non-obvious decisions, prefer ASCII diagrams over prose where they add clarity.
 
 **PM Planning Session**: invoke ProjectManager with "planning" intent to review backlog, reprioritize, and onboard new projects. PM presents backlog and asks for user confirmation before queuing tasks.
+**MVP ordering gate**: During PM planning, check epics.md for any stories with status `planned` in lower MVP phases before queuing higher-phase work. All stories in a phase must be `done` before the next phase is prioritized.
 
 **Task tracking**:
 - Active queue → `tasks/queue.json`
@@ -203,6 +204,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 - Lessons → `tasks/lessons.md` (append-only table: `| Date | Agent | Lesson | Applied To |`)
 - Improvement proposals → `artefacts/<task_id>/improvement_proposals.md` (one `## Proposal N` section per proposal, fields: **Target file**, **Change** (diff or description), **Rationale**, **Status**: `REQUIRES_HUMAN_APPROVAL` → `APPROVED` / `REJECTED: <reason>`)
 - Mark items complete immediately as you go
+- When marking a queue task `done`, also update the corresponding BL entries in `tasks/backlog.md` to `done` status in the same commit.
 
 ---
 
@@ -257,6 +259,8 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 4. ProjectManager reads queue, finds paused tasks, resumes from `resume_from` step
 
 **Queue validation**: `tasks/queue.schema.json` enforces all field types. Key constraint: `artefact_path` must match `^artefacts/[a-zA-Z0-9_-]+/$` — no path traversal. Validate with any JSON Schema tool before adding tasks manually.
+
+**Artefact path assignment**: Before adding a new task to queue.json, run `ls artefacts/` to check if the target path already exists. If it does, use a descriptive suffix (e.g. `artefacts/task-008-laptop/`) rather than the bare ID.
 
 **Logs**:
 - `logs/audit.jsonl` — append-only, one JSON object per line: `{timestamp, agent, task_id, action, status}`
