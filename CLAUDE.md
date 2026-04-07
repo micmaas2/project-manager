@@ -184,8 +184,9 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
 3. **Token minimization**: agents receive only task_id; they read their own context from files. No large context copied between invocations. Stop after each deliverable.
 4. **Verify before done**: never mark complete without proving it works. Ask: "Would a staff engineer approve this?"
-5. **Self-improvement**: SelfImprover runs after every pipeline PASS and appends to `tasks/lessons.md`. After any correction: update CLAUDE.md so the mistake cannot recur; commit to git.
+5. **Self-improvement**: SelfImprover runs after every pipeline PASS and appends to `tasks/lessons.md`. If a significant pattern is found it also writes `artefacts/<task_id>/improvement_proposals.md` (format below). After any correction: update CLAUDE.md so the mistake cannot recur; commit to git.
 6. **Always-on pipeline**: every task runs Builder → Reviewer (quality + security + scope) → Tester → DocUpdater → SelfImprover. No skipping.
+6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval.
 7. **Autonomous bug fixing**: when given a bug report, fix it — point at logs/errors, then resolve.
 8. **Demand elegance (balanced)**: pause and ask "Is there a more elegant way?" before finalising any non-trivial design. Skip for simple fixes — do not over-engineer.
 9. **Minimal impact**: touch only what is strictly necessary; avoid side effects on untouched code or config. If you must change something adjacent, flag it explicitly.
@@ -200,6 +201,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 - Epics & stories → `tasks/epics.md`
 - Plan files → `/root/.claude/plans/` (registered in `docs/project-registry.md`)
 - Lessons → `tasks/lessons.md` (append-only table: `| Date | Agent | Lesson | Applied To |`)
+- Improvement proposals → `artefacts/<task_id>/improvement_proposals.md` (one `## Proposal N` section per proposal, fields: **Target file**, **Change** (diff or description), **Rationale**, **Status**: `REQUIRES_HUMAN_APPROVAL` → `APPROVED` / `REJECTED: <reason>`)
 - Mark items complete immediately as you go
 
 ---

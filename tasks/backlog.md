@@ -10,7 +10,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | Epic ID | Title | Project | Status |
 |---|---|---|---|
 | EPIC-001 | Multi-Agent System Foundation | project_manager | done |
-| EPIC-002 | Self-Improvement & Learning Loop | project_manager | in_progress |
+| EPIC-002 | Self-Improvement & Learning Loop | project_manager | done |
 | EPIC-003 | Multi-Project Coordination | project_manager | in_progress |
 
 ---

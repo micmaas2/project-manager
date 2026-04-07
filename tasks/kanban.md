@@ -25,7 +25,6 @@ _(items in backlog.md not yet in queue)_
 ## Ready
 _(in queue.json with status: pending)_
 
-- **task-007** [MVP2] PM: Human-gated improvement proposals to YAML/CLAUDE.md (S-002-4)
 - **task-008** [DEMO] PM: Laptop backlog and Pensieve capture mechanism (BL-034)
 - **task-009** pensieve: Activate Gmail capture workflow in n8n (BL-015)
 
@@ -55,6 +54,7 @@ _(empty)_
 ## Done
 _(status: done — pipeline complete, artefact delivered)_
 
+- **task-007** PM: Human-gated improvement proposals (S-002-4) — MVP2 COMPLETE [2026-04-07]
 - **task-006** PM: lessons.md read at session start (S-002-3) [2026-04-07]
 - **task-005** pensieve: Retroactive vault quality improvement script [2026-04-07]
 - **task-004** pensieve: Improved captures — richer summaries, tagging, topic folders [2026-04-05]
