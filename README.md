@@ -1,7 +1,7 @@
 # Project Manager — Multi-Agent Automation System
 
-**v0.6.0** — MVP1 and MVP2 complete. 6-agent pipeline operational. 3 tasks delivered end-to-end.
-Cross-project management active across 7 sibling projects (MVP3 in progress).
+**v0.8.0** — Extended pipeline with built-in Claude Code agents. SelfImprover loop fully operational with enforcement gates.
+8 tasks delivered end-to-end. Cross-project management active across 7 sibling projects (MVP3 in progress).
 
 A hierarchical multi-agent system that builds automations and scripts across projects.
 One orchestrator (ProjectManager, Opus 4.6) reads a task queue and spawns a six-stage
@@ -15,12 +15,15 @@ tasks are marked `paused` and resume automatically on the next invocation.
 ## Architecture
 
 ```
-ProjectManager (Opus 4.6)        — orchestrator: reads queue, validates tasks, spawns agents
-  ├── Builder      (Sonnet 4.6)  — generates scripts, playbooks, and automation artefacts
-  ├── Reviewer     (Sonnet 4.6)  — checks quality, security, and arch compliance
-  ├── Tester       (Sonnet 4.6)  — validates artefacts with fixture-based tests, writes test_report.md
-  ├── DocUpdater   (Sonnet 4.6)  — updates CLAUDE.md, README, CHANGELOG after each task
-  └── SelfImprover (Sonnet 4.6)  — appends lessons to tasks/lessons.md; applies improvement proposals
+ProjectManager (Opus 4.6)           — orchestrator: reads queue, validates tasks, spawns agents
+  ├── Builder         (Sonnet 4.6)  — generates scripts, playbooks, and automation artefacts
+  ├── Reviewer        (Sonnet 4.6)  — checks quality, security, and arch compliance
+  ├── code-quality-reviewer (built-in, parallel with Reviewer)
+  ├── Tester          (Sonnet 4.6)  — validates artefacts with fixture-based tests, writes test_report.md
+  ├── DocUpdater      (Sonnet 4.6)  — updates CLAUDE.md, README, CHANGELOG after each task
+  ├── docs-readme-writer (built-in, parallel with DocUpdater)
+  ├── SelfImprover    (Sonnet 4.6)  — appends lessons to tasks/lessons.md; writes improvement_proposals.md for human review
+  └── revise-claude-md (built-in)   — applies session learnings to CLAUDE.md at session end
 ```
 
 State is entirely file-based. All agents read and write `tasks/queue.json` and
@@ -42,8 +45,14 @@ Any step → paused  (on rate limit; resumes at resume_from step)
 
 - **Preflight**: ProjectManager checks prerequisites (e.g., `jq` available) before spawning Builder.
   Tasks with unmet prerequisites are blocked with an error in `audit.jsonl`.
-- **Self-improvement loop**: SelfImprover runs after every pipeline PASS. Improvement proposals are
-  applied at session start. Current lessons count: 5 (see `tasks/lessons.md`).
+- **Self-improvement loop**: SelfImprover runs after every pipeline PASS. It appends to
+  `tasks/lessons.md` and writes `improvement_proposals.md`. Proposals require human approval
+  before being applied — the PM presents them at end-of-session (step 6b). Current lessons count: 8
+  (see `tasks/lessons.md`).
+- **Artefact path audit**: ProjectManager runs `ls artefacts/` before assigning any new task ID
+  to avoid directory conflicts with informally pre-populated paths.
+- **MVP ordering gate**: All stories in lower MVP phases must be `done` before any higher-phase
+  task is queued.
 
 ---
 
@@ -101,6 +110,12 @@ Or from a Claude Code session with this directory as context, say:
 > "Run the ProjectManager agent on the task queue."
 
 The ProjectManager will:
+
+**Session start (before any task work):**
+- Step 0: Read `tasks/telegram-inbox.md`; promote items to `backlog.md` and clear the inbox
+- Step 0b: Read `tasks/lessons.md`; list the 3 most recent rows in the plan preamble as active context
+
+**Per task:**
 1. Read `tasks/queue.json` and find the next `pending` or `paused` task
 2. Run preflight: validate MVP template fields and check declared prerequisites (e.g., `jq`)
 3. Update the task status to `in_progress` and spawn the Builder
@@ -109,6 +124,9 @@ The ProjectManager will:
 6. The Tester runs fixture-based tests, writes `test_report.md`, and hands off to DocUpdater (or loops back to Builder)
 7. The DocUpdater updates CLAUDE.md, README, and CHANGELOG; writes `doc_update.md`
 8. The SelfImprover appends to `tasks/lessons.md` and writes `improvement_proposals.md`; status set to `done`
+
+**Session end:**
+- Step 6b: PM reviews all `artefacts/*/improvement_proposals.md` files with `Status: REQUIRES_HUMAN_APPROVAL`. User approves or rejects each proposal before it is applied.
 
 Each step is logged to `logs/audit.jsonl` and `logs/token_log.jsonl`.
 
@@ -305,6 +323,8 @@ This system is project-agnostic. Tasks specify a `target_project` path. 7 projec
 | task-001 | `artefacts/task-001/queue-status.sh` | Prints a colour-coded summary of `tasks/queue.json` by status |
 | task-002 | `artefacts/task-002/audit-summary.sh` | Summarises `logs/audit.jsonl` by agent and action; requires `jq` |
 | task-003 | — | CCAS: verified `feature/hana-os-users` merged; stale branch deleted |
+| task-006 (S-002-3) | CLAUDE.md + `manager.yaml` | PM reads 3 most recent lessons at session start (step 0b) |
+| task-007 (S-002-4) | `self-improver.yaml` + CLAUDE.md | Human-gated improvement proposals: PM presents at session end (step 6b); user approves/rejects before application |
 
 All artefacts passed the full 6-agent pipeline (Builder → Reviewer → Tester → DocUpdater → SelfImprover).
 Fixture-based testing is in place: each task's `artefacts/<id>/fixtures/` holds controlled inputs

@@ -53,10 +53,17 @@ prompt: |
      analysis tool named in acceptatiecriteria (e.g. shellcheck, yamllint) in the
      prerequisites array so preflight catches it before Builder runs.
   5. Set status=in_progress, assigned_to=builder. Update queue.json + kanban.md.
-  6. Spawn agents in sequence — pass ONLY task_id, never embed full task content:
-       Builder → Reviewer → Tester → DocUpdater → SelfImprover
-  6. After each agent: update queue.json status, update kanban.md, append audit log.
-  7. If rate-limited: set status=paused, resume_from=<last_step>. STOP.
+  6. Spawn agents — pass ONLY task_id, never embed full task content:
+     a. Builder
+     b. IN PARALLEL: Reviewer (YAML agent) + code-quality-reviewer (built-in Agent tool, subagent_type=code-quality-reviewer)
+        - Combine findings from both; if either returns CHANGES_REQUESTED, loop Builder with the combined list.
+     c. Tester
+     d. IN PARALLEL: DocUpdater (YAML agent) + docs-readme-writer (built-in Agent tool, subagent_type=docs-readme-writer)
+     e. SelfImprover (YAML agent)
+  7. After SelfImprover: verify artefacts/<artefact_path>/ contains improvement_proposals.md OR confirm lessons.md has a new entry for this task_id. If neither, re-run SelfImprover. Only then set status=done.
+  8. After each agent: update queue.json status, update kanban.md, append audit log.
+  9. If rate-limited: set status=paused, resume_from=<last_step>. STOP.
+  10. Session end: after user approves/rejects all proposals (step 6b in CLAUDE.md), invoke revise-claude-md (built-in Agent tool, subagent_type=claude-md-management:revise-claude-md) to apply session learnings to CLAUDE.md. Commit result on the feature branch.
 
   ## Scope Enforcement
   When Reviewer returns CHANGES_REQUESTED, check each finding:

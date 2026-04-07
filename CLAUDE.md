@@ -99,16 +99,27 @@ Areas: `ROLE`, `DOCS`, `TEST`, `FIX`, `REFACTOR`, `PLAYBOOK`, `JENKINS`, `INVENT
 
 ## Agent Roles & Spawn Order
 
-Spawn sequence: Manager → Architect/Security → Builder → Reviewer → Tester
+Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-quality-reviewer] → Tester → [DocUpdater + docs-readme-writer] → SelfImprover
 
-| Agent | Model | Focus | Tools | Stop At |
-|-------|-------|-------|-------|---------|
-| ProjectManager | Opus | Scope/MVP/coordination | spawn_agent, task_list | Approved MVP plan |
-| Architect | Opus | Modular design | diagram, diff | Arch diagram |
-| Security | Sonnet | Secrets/auth/validation | checklist | Security OK |
-| Builder (ScriptBuilder / TaskAutomator / DeliveryOptimizer) | Sonnet | Code/impl | code_exec, file_edit, bash | Script/patch |
-| Reviewer | Sonnet | Quality/arch-compliance | lint, diff | Approved review |
-| Tester (BugHunter) | Sonnet | Tests/regression | test_run | 90% pass |
+| Agent | Type | Model | Focus | Stop At |
+|-------|------|-------|-------|---------|
+| ProjectManager | YAML | Opus | Scope/MVP/coordination | Approved MVP plan |
+| Architect | YAML | Opus | Modular design | Arch diagram |
+| Security | YAML | Sonnet | Secrets/auth/validation | Security OK |
+| Builder (ScriptBuilder / TaskAutomator / DeliveryOptimizer) | YAML | Sonnet | Code/impl | Script/patch |
+| Reviewer | YAML | Sonnet | Quality/arch-compliance | Approved review |
+| code-quality-reviewer | built-in | Sonnet | Security, quality, best-practices | Review report |
+| Tester (BugHunter) | YAML | Sonnet | Tests/regression | 90% pass |
+| DocUpdater | YAML | Sonnet | Docs/changelog | Updated docs |
+| docs-readme-writer | built-in | Sonnet | README/module docs | Docs written |
+| SelfImprover | YAML | Sonnet | Lessons/proposals | proposals.md written |
+| revise-claude-md | built-in | Sonnet | CLAUDE.md session learnings | CLAUDE.md updated |
+
+**Built-in Claude Code agents** (invoke via `Agent` tool with `subagent_type`):
+- `code-quality-reviewer` — security + quality review; runs parallel to Reviewer
+- `docs-readme-writer` — README/module docs; runs parallel to DocUpdater
+- `claude-md-management:revise-claude-md` — apply session learnings to CLAUDE.md (session end)
+- `claude-md-management:claude-md-improver` — full CLAUDE.md audit (on demand)
 
 Agent definitions live in `.claude/agents/[name].yaml`. Required fields: `name`, `prompt`, `policy`, `owner`, `incident_owner`.
 
@@ -143,6 +154,9 @@ Acceptatiecriteria: 1) ... 2) ... 3) ...
 SLOs: latency < X ms; tests >= 90%
 max_tokens_per_run: 8000
 Security/arch impact: <note>
+  - If outbound HTTP: private IP ranges blocked (localhost, 127.x, 10.x, 192.168.x, 172.16-31.x)?
+  - If outbound HTTP: request timeout set?
+No external deps: true/false  (if true: stdlib/built-ins only; no pip/npm installs)
 Prerequisites: [tool >= version, ...]
 Tests: unit/integration/regression
 Rollback plan: <steps + owner>
@@ -180,19 +194,31 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 0b. **Session start — read lessons (mandatory second action)**: Read `tasks/lessons.md`. List the **3 most recent rows** in the plan preamble (or state them to the user) before making planning or approach decisions. If the file is missing or has no data rows, skip and proceed. Lessons inform tooling choices, testing approach, and task design — do not repeat past mistakes captured here.
 
+0c. **Session start — catch-up SelfImprover (mandatory third action)**: For every task with `status: done` in `tasks/queue.json`, check `artefacts/<artefact_path>/` for `improvement_proposals.md`. If absent, run SelfImprover for that task before proceeding. This catches tasks that completed without a SelfImprover run (e.g. manual pipeline steps or interrupted sessions).
+
 1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Plans are written to `/root/.claude/plans/` (auto-managed by plan mode).
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
 3. **Token minimization**: agents receive only task_id; they read their own context from files. No large context copied between invocations. Stop after each deliverable.
 4. **Verify before done**: never mark complete without proving it works. Ask: "Would a staff engineer approve this?"
 5. **Self-improvement**: SelfImprover runs after every pipeline PASS and appends to `tasks/lessons.md`. If a significant pattern is found it also writes `artefacts/<task_id>/improvement_proposals.md` (format below). After any correction: update CLAUDE.md so the mistake cannot recur; commit to git.
-6. **Always-on pipeline**: every task runs Builder → Reviewer (quality + security + scope) → Tester → DocUpdater → SelfImprover. No skipping.
-6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval.
+6. **Always-on pipeline**: every task runs the full pipeline — no skipping:
+   ```
+   Builder
+     → [Reviewer (YAML agent) + code-quality-reviewer (built-in)] — run IN PARALLEL; combine findings before looping Builder
+     → Tester
+     → [DocUpdater (YAML agent) + docs-readme-writer (built-in)]  — run IN PARALLEL
+     → SelfImprover (YAML agent)
+   ```
+   Built-in agent roles:
+   - `code-quality-reviewer` — security, quality, best-practices check on all new/modified code
+   - `docs-readme-writer` — creates/updates README and module docs for code-producing tasks
+6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval. After all proposals are resolved, invoke the `revise-claude-md` built-in agent to bake session learnings into CLAUDE.md and commit the result. **Cross-file consistency check**: when a proposal introduces a format definition (e.g. improvement_proposals.md schema), verify the format is identical in both CLAUDE.md and the relevant agent YAML before presenting to the user. **Proposal response format**: user replies `APPROVE: P1, P3 / REJECT: P2` — apply all approved in one pass, log rejections. **SelfImprover dedup**: when running SelfImprover for multiple tasks in a session, collect all proposals before presenting — remove duplicates and proposals targeting text already present in the target file.
 7. **Autonomous bug fixing**: when given a bug report, fix it — point at logs/errors, then resolve.
 8. **Demand elegance (balanced)**: pause and ask "Is there a more elegant way?" before finalising any non-trivial design. Skip for simple fixes — do not over-engineer.
 9. **Minimal impact**: touch only what is strictly necessary; avoid side effects on untouched code or config. If you must change something adjacent, flag it explicitly.
 10. **Explain with diagrams**: when explaining architecture or non-obvious decisions, prefer ASCII diagrams over prose where they add clarity.
 
-**PM Planning Session**: invoke ProjectManager with "planning" intent to review backlog, reprioritize, and onboard new projects. PM presents backlog and asks for user confirmation before queuing tasks.
+**PM Planning Session**: invoke ProjectManager with "planning" intent to review backlog, reprioritize, and onboard new projects. PM presents backlog and asks for user confirmation before queuing tasks. **Preflight**: run `ls artefacts/` before assigning any task ID — use a descriptive suffix (e.g. `task-007-gate/`) if the target path already exists.
 **MVP ordering gate**: During PM planning, check epics.md for any stories with status `planned` in lower MVP phases before queuing higher-phase work. All stories in a phase must be `done` before the next phase is prioritized.
 
 **Task tracking**:
@@ -284,6 +310,8 @@ Install missing packages with `pip3 install <pkg> --break-system-packages` (Debi
 
 **Hyphenated script filenames**: `migrate-vault.py` cannot be imported directly in Python tests.
 Use `importlib.util.spec_from_file_location("name", "path/to/script.py")` instead.
+
+**Testing hyphenated-filename scripts**: Use `importlib.util.spec_from_file_location("module_name", path)` in all test files for scripts with hyphens in their names — this is the only safe import path. See `artefacts/task-005/test_migrate_vault.py` as the canonical example.
 
 **Task unit tests**: test files live in `artefacts/<task-id>/test_*.py`; run with `python3 -m pytest artefacts/<task-id>/test_*.py -v`. Use `importlib.util.spec_from_file_location` + `unittest.mock.patch.object` to test scripts without making them importable packages.
 

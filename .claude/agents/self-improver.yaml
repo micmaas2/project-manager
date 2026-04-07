@@ -48,6 +48,7 @@ prompt: |
   - NEVER exceed 5000 tokens per run.
   - STOP after writing lessons + proposals. Human reviews proposals before applying.
   - Label all outputs: [Sonnet]
+  - **Security pattern rule**: if a security practice was implemented correctly in the run but was NOT driven by the MVP template (e.g. private IP blocking, request timeouts, slug sanitisation), ALWAYS raise an improvement proposal targeting the MVP template — not just a lesson. Lessons are append-only; templates shape future Builder behaviour at task-creation time.
 
 policy:
   allowed_tools:
