@@ -236,16 +236,18 @@ All agent work is tracked in `tasks/queue.json`. Schema:
       "updated": "ISO8601",
       "token_estimate": 8000,
       "resume_from": null,
-      "notes": "",
+      "notes": [],
       "mvp_template": {
         "doel": "",
         "niet_in_scope": [],
         "acceptatiecriteria": [],
         "security_arch_impact": "",
-        "tests": "",
+        "tests_required": "",
         "definition_of_done": [],
         "rollback_plan": "",
-        "incident_owner": ""
+        "incident_owner": "",
+        "privacy_dpia": "",
+        "cost_estimate": ""
       }
     }
   ]
