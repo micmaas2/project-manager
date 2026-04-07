@@ -24,8 +24,7 @@
           "Workflow triggers on Gmail label or sender filter (configurable via env var or n8n credential)",
           "Email body/subject parsed and passed to Claude API (Haiku) for summary + tags + topic",
           "Output written to vault as YAML frontmatter note matching current template (source:email, date, title, summary, key_points, tags, topic)",
-          "Manual import + test run documented in artefacts/task-009/deploy-notes.md",
-          "workflow JSON validates: python3 -m json.tool workflows/gmail-capture.json"
+          "Manual import test on Pi4 documented in artefacts/task-009/deploy-notes.md; workflow JSON validates via python3 -m json.tool"
         ],
         "security_arch_impact": "Medium — Gmail OAuth credentials stored in n8n credential store; no secrets in workflow JSON; Claude API key via n8n env var",
         "tests_required": "JSON validation; manual import test on Pi4; dry-run with fixture email payload",

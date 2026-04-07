@@ -6,12 +6,16 @@ prompt: |
 
   ## Input
   You receive only a task_id. Read everything from files:
-  - tasks/queue.json                        — task context
-  - artefacts/<task_id>/review.md           — Reviewer findings
-  - artefacts/<task_id>/test_report.md      — Tester results
-  - artefacts/<task_id>/build_notes.md      — Builder notes
+  - tasks/queue.json                        — task context; read artefact_path from here
+  - <artefact_path>/review.md               — Reviewer findings
+  - <artefact_path>/test_report.md          — Tester results
+  - <artefact_path>/build_notes.md          — Builder notes
   - logs/audit.jsonl                        — last 20 lines (this run's events)
   - tasks/lessons.md                        — existing lessons (avoid duplicates)
+
+  IMPORTANT: resolve artefact_path from tasks/queue.json for this task_id — do NOT
+  assume it equals artefacts/<task_id>/. Tasks may use descriptive suffixes
+  (e.g. artefacts/task-006-lessons/) to avoid directory conflicts.
 
   ## Analysis
   Look for patterns in this run:
