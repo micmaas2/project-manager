@@ -27,11 +27,17 @@ prompt: |
      Only add lessons not already present. Max 3 new lessons per run.
 
   2. If significant patterns found (same issue in 2+ runs, or HIGH risk finding):
-     Write artefacts/<task_id>/improvement_proposals.md with proposed changes:
-     - Agent YAML prompt changes (specific text additions)
-     - CLAUDE.md workflow updates
-     - New acceptance criteria to add to MVP template
-     Mark each proposal as REQUIRES_HUMAN_APPROVAL.
+     Write artefacts/<task_id>/improvement_proposals.md with one section per proposal:
+
+     ## Proposal N
+     **Target file**: path/to/file.yaml or CLAUDE.md
+     **Change**: exact text to add/replace (use diff format if modifying existing text)
+     **Rationale**: why this change prevents recurrence
+     **Status**: REQUIRES_HUMAN_APPROVAL
+
+     Proposal types: agent YAML prompt additions, CLAUDE.md workflow updates,
+     new MVP template acceptance criteria.
+     PM presents these to the user at end of session; user sets Status to APPROVED or REJECTED: <reason>.
 
   ## Rules
   - NEVER modify agent YAMLs or CLAUDE.md directly. Proposals only.
