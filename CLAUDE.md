@@ -178,6 +178,8 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 0. **Session start — process Telegram inbox (mandatory first action)**: Read `tasks/telegram-inbox.md`. If the file does not exist or contains no items below the header, skip and proceed. Otherwise promote each item to `tasks/backlog.md` as a proper BL entry (assign next BL ID, fill table row with title, EPIC-003, project_manager, P2, new, today's date), then clear the inbox file leaving only the two-line header (`# Telegram Backlog Inbox\n\nItems below are picked up by Claude PM at the start of the next session.\n`). Commit both changes on a feature branch. Do this before any other work.
 
+0b. **Session start — read lessons (mandatory second action)**: Read `tasks/lessons.md`. Surface the **3 most recent rows** as context before making any planning or approach decisions this session. If the file is missing or has no data rows, skip and proceed. Lessons inform tooling choices, testing approach, and task design — do not repeat past mistakes captured here.
+
 1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Write plan to `tasks/todo.md`.
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
 3. **Token minimization**: agents receive only task_id; they read their own context from files. No large context copied between invocations. Stop after each deliverable.
@@ -197,7 +199,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 - Kanban view → `tasks/kanban.md`
 - Epics & stories → `tasks/epics.md`
 - Plan files → `/root/.claude/plans/` (registered in `docs/project-registry.md`)
-- Lessons → `tasks/lessons.md`
+- Lessons → `tasks/lessons.md` (append-only table: `| Date | Agent | Lesson | Applied To |`)
 - Mark items complete immediately as you go
 
 ---

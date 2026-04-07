@@ -37,7 +37,7 @@ Each story maps to one or more entries in `tasks/queue.json`.
 |---|---|---|---|
 | S-002-1 | SelfImprover agent (reads logs, writes lessons) | — | done |
 | S-002-2 | lessons.md populated after every pipeline run | task-002 | done |
-| S-002-3 | PM reads lessons at session start | — | planned |
+| S-002-3 | PM reads lessons at session start | task-006 | done |
 | S-002-4 | Human-gated improvement proposals to YAML/CLAUDE.md | — | planned |
 
 ---
