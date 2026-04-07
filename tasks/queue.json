@@ -2,6 +2,164 @@
   "$schema": "./queue.schema.json",
   "tasks": [
     {
+      "id": "task-009",
+      "title": "pensieve: Activate Gmail capture workflow in n8n",
+      "project": "pensieve",
+      "target_project_path": "/opt/claude/pensieve",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-009/",
+      "created": "2026-04-07",
+      "updated": "2026-04-07T00:00:00Z",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Build an n8n workflow that monitors a Gmail inbox (label or address) and captures matching emails as notes into the Obsidian vault on Pi4, using the same YAML frontmatter template as the Telegram capture workflow.",
+        "niet_in_scope": ["Obsidian Clipper setup (BL-016)", "modifying the Telegram capture workflow", "email archiving or deletion in Gmail", "GUI configuration for end-users"],
+        "acceptatiecriteria": [
+          "n8n workflow JSON produced and importable on Pi4 without SQLITE_CONSTRAINT errors",
+          "Workflow triggers on Gmail label or sender filter (configurable via env var or n8n credential)",
+          "Email body/subject parsed and passed to Claude API (Haiku) for summary + tags + topic",
+          "Output written to vault as YAML frontmatter note matching current template (source:email, date, title, summary, key_points, tags, topic)",
+          "Manual import + test run documented in artefacts/task-009/deploy-notes.md",
+          "workflow JSON validates: python3 -m json.tool workflows/gmail-capture.json"
+        ],
+        "security_arch_impact": "Medium — Gmail OAuth credentials stored in n8n credential store; no secrets in workflow JSON; Claude API key via n8n env var",
+        "tests_required": "JSON validation; manual import test on Pi4; dry-run with fixture email payload",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "workflows/gmail-capture.json present and JSON-valid",
+          "deploy-notes.md documents import steps"
+        ],
+        "rollback_plan": "Delete workflow from n8n UI — no vault writes occur until workflow is active and triggered",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "Yes — email content is personal data; processed locally on Pi4, not sent to external services beyond Claude API; Gmail OAuth scoped to read-only",
+        "cost_estimate": "EUR 0.01 (Claude Haiku per captured email)",
+        "prerequisites": ["n8n running on Pi4 with Gmail OAuth credential configured", "ANTHROPIC_API_KEY set in n8n environment", "Obsidian vault mounted at /opt/obsidian-vault on Pi4"]
+      }
+    },
+    {
+      "id": "task-008",
+      "title": "PM: Laptop backlog and Pensieve capture mechanism",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-008/",
+      "created": "2026-04-07",
+      "updated": "2026-04-07T00:00:00Z",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": ["Demo priority — implement for demo purposes"],
+      "mvp_template": {
+        "doel": "Enable capturing backlog items and Pensieve notes from a laptop (browser bookmarklet, CLI script, or email) so that captures are not limited to Telegram/phone.",
+        "niet_in_scope": ["mobile app", "Telegram workflow changes", "real-time sync", "GUI dashboard"],
+        "acceptatiecriteria": [
+          "At least one capture path implemented: browser bookmarklet OR CLI script OR email-to-backlog",
+          "Captured items land in tasks/telegram-inbox.md (backlog items) or Obsidian vault (Pensieve notes) via GitHub API commit — same path as Telegram captures",
+          "Capture includes: title, source URL (if applicable), date, type (backlog or pensieve)",
+          "deploy-notes.md documents how to set up and use the capture mechanism on a laptop",
+          "Works without requiring Claude Code or SSH access from the laptop"
+        ],
+        "security_arch_impact": "Low-medium — GitHub API token required for commit; token scoped to repo write only; no secrets stored client-side beyond token",
+        "tests_required": "End-to-end test: capture an item from laptop, verify it appears in telegram-inbox.md or vault",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "capture mechanism deployed and tested end-to-end",
+          "deploy-notes.md present in artefacts/task-008/"
+        ],
+        "rollback_plan": "Delete artefact; revoke GitHub token if bookmarklet/CLI was distributed",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No — captures are personal notes, no third-party personal data",
+        "cost_estimate": "EUR 0",
+        "prerequisites": ["GitHub PAT with repo write scope", "python3 >= 3.9 (if CLI path chosen)"]
+      }
+    },
+    {
+      "id": "task-007",
+      "title": "PM: Human-gated improvement proposals to YAML/CLAUDE.md (S-002-4)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-002",
+      "story_id": "S-002-4",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-007/",
+      "created": "2026-04-07",
+      "updated": "2026-04-07T00:00:00Z",
+      "token_estimate": 7000,
+      "resume_from": null,
+      "notes": ["MVP2 closeout — required before further MVP3 expansion"],
+      "mvp_template": {
+        "doel": "After each pipeline run, SelfImprover produces concrete improvement proposals (CLAUDE.md updates, agent YAML changes); a human must explicitly approve each proposal before it is written.",
+        "niet_in_scope": ["automated application without approval", "changes to queue/backlog schema", "modifying epics.md structure"],
+        "acceptatiecriteria": [
+          "SelfImprover appends proposals to artefacts/<task-id>/improvement_proposals.md after each run",
+          "Each proposal has: target file, proposed change (diff or description), rationale",
+          "PM presents proposals to user at end of session with clear approve/reject prompt",
+          "Only approved proposals are applied; rejected proposals logged with reason",
+          "CLAUDE.md updated to document this human-gate workflow step"
+        ],
+        "security_arch_impact": "Low — no automated writes to CLAUDE.md or agent YAMLs without explicit approval",
+        "tests_required": "Fixture run: SelfImprover produces a proposal; simulate approve + verify file updated; simulate reject + verify file unchanged",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "CLAUDE.md updated with human-gate step",
+          "improvement_proposals.md format documented"
+        ],
+        "rollback_plan": "Revert CLAUDE.md change via git; no agent YAML changes unless explicitly approved",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-006",
+      "title": "PM: PM reads lessons.md at session start (S-002-3)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-002",
+      "story_id": "S-002-3",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-006/",
+      "created": "2026-04-07",
+      "updated": "2026-04-07T00:00:00Z",
+      "token_estimate": 4000,
+      "resume_from": null,
+      "notes": ["MVP2 closeout — required before further MVP3 expansion"],
+      "mvp_template": {
+        "doel": "Update the PM session workflow so that tasks/lessons.md is read at the start of every session and the top lessons inform task planning and agent decisions.",
+        "niet_in_scope": ["automated lesson application", "modifying individual agent YAMLs", "lesson scoring or prioritization algorithm"],
+        "acceptatiecriteria": [
+          "CLAUDE.md updated: 'Session start' section adds lessons.md read as mandatory step (after telegram inbox, before backlog review)",
+          "PM surfaces the 3 most recent lessons as context when planning new tasks",
+          "lessons.md format documented (if not already) so future SelfImprover runs append correctly"
+        ],
+        "security_arch_impact": "None — read-only change to workflow documentation",
+        "tests_required": "Review CLAUDE.md diff; manually verify lessons.md is consulted in next PM session",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "CLAUDE.md updated with lessons-read step",
+          "lessons.md format section present"
+        ],
+        "rollback_plan": "Revert CLAUDE.md via git",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
       "id": "task-005",
       "title": "pensieve: Retroactive vault quality improvement script",
       "project": "pensieve",

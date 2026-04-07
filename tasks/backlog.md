@@ -21,7 +21,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 |---|---|---|---|---|---|---|
 | BL-003 | EPIC-003 | PI/Refinement planning session workflow | project_manager | P2 | planned | 2026-04-05 |
 | BL-004 | EPIC-003 | Multi-project priority ranking in PM | project_manager | P2 | planned | 2026-04-05 |
-| BL-007a | EPIC-003 | CCAS: Merge feature/hana-os-users → ccas-jenkins develop | ccas | P1 | ready | 2026-04-05 |
+| BL-007a | EPIC-003 | CCAS: Merge feature/hana-os-users → ccas-jenkins develop | ccas | P1 | done | 2026-04-05 |
 | BL-009 | EPIC-003 | CCAS: Quick Win #3 — Infrastructure Validation Enhancements | ccas | P2 | discovered | 2026-04-05 |
 | BL-010 | EPIC-003 | CCAS: BW/4HANA inventory parametrization — final ~10% | ccas | P2 | discovered | 2026-04-05 |
 | BL-011 | EPIC-003 | CCAS: Resolve open remote branch feature/enhance-jenkinsfile-s4hana | ccas | P2 | discovered | 2026-04-05 |
@@ -29,12 +29,12 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-013 | EPIC-003 | pi-homelab: Pi 5 manual security prereqs + apply-hardening.sh | pi-homelab | P1 | blocked-manual | 2026-04-05 |
 | BL-026 | EPIC-003 | pi-homelab: Regular patching — Pi 4 SSH fix + first patch run | pi-homelab | P1 | blocked-ssh | 2026-04-05 |
 | BL-014 | EPIC-003 | pi-homelab: Migrate python:3.11-slim-bullseye → bookworm (health-api) | pi-homelab | P2 | discovered | 2026-04-05 |
-| BL-015 | EPIC-003 | pensieve: Activate Gmail capture workflow in n8n | pensieve | P1 | discovered | 2026-04-05 |
+| BL-015 | EPIC-003 | pensieve: Activate Gmail capture workflow in n8n | pensieve | P1 | planned | 2026-04-05 |
 | BL-016 | EPIC-003 | pensieve: Configure Obsidian Clipper | pensieve | P2 | discovered | 2026-04-05 |
-| BL-023 | EPIC-003 | pensieve: Improve article/blog summarisation quality | pensieve | P1 | new | 2026-04-05 |
-| BL-024 | EPIC-003 | pensieve: Improved tagging for captured content | pensieve | P1 | new | 2026-04-05 |
-| BL-025 | EPIC-003 | pensieve: Store files in topic-based folders for better search | pensieve | P1 | new | 2026-04-05 |
-| BL-027 | EPIC-003 | pensieve: Retroactive vault quality improvement — format migration, tag normalization, URL re-enrichment | pensieve | P1 | new | 2026-04-05 |
+| BL-023 | EPIC-003 | pensieve: Improve article/blog summarisation quality | pensieve | P1 | done | 2026-04-05 |
+| BL-024 | EPIC-003 | pensieve: Improved tagging for captured content | pensieve | P1 | done | 2026-04-05 |
+| BL-025 | EPIC-003 | pensieve: Store files in topic-based folders for better search | pensieve | P1 | done | 2026-04-05 |
+| BL-027 | EPIC-003 | pensieve: Retroactive vault quality improvement — format migration, tag normalization, URL re-enrichment | pensieve | P1 | done | 2026-04-05 |
 | BL-017 | EPIC-003 | genealogie: Implement MyHeritageAgent write-back via MyHeritage API | genealogie | P2 | discovered | 2026-04-05 |
 | BL-018 | EPIC-003 | genealogie: Merge develop → main and tag v2.x release | genealogie | P3 | discovered | 2026-04-05 |
 | BL-019 | EPIC-003 | performance_HPT: Scaffold performance-twin repo + deploy HPT Dashboard | performance_HPT | P2 | discovered | 2026-04-05 |
@@ -44,7 +44,8 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-030 | EPIC-003 | pensieve: Phone backlog submission via Telegram BACKLOG: prefix → GitHub API commit | pensieve | P2 | done | 2026-04-06 |
 | BL-031 | EPIC-003 | project_manager: Investigate git worktrees as isolation mechanism for parallel agent runs | project_manager | P3 | new | 2026-04-06 |
 | BL-033 | EPIC-003 | New project proposal: grocery price comparison across stores (requirements + plan first) | project_manager | P3 | new | 2026-04-06 |
-| BL-034 | EPIC-003 | project_manager: Add backlog and Pensieve capture from laptop (not only Telegram/phone) | project_manager | P2 | new | 2026-04-06 |
+| BL-034 | EPIC-003 | project_manager: Add backlog and Pensieve capture from laptop (not only Telegram/phone) | project_manager | P2 | planned | 2026-04-06 |
+| BL-035 | EPIC-003 | New project proposal: school-ai — AI learning assistant for primary school kids (helps learn, not do work) | school-ai | P2 | new | 2026-04-07 |
 
 ---
 
