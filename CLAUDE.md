@@ -265,6 +265,16 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 SSH alias: `pi4` (192.168.1.10). n8n runs as Docker container `n8n`.
 GitHub PAT for project-manager API calls: `/opt/n8n/github-pat` on Pi4.
 
+**Vault location**: `/opt/obsidian-vault/` exists on Pi4 only — not on the local host.
+Explore agents run locally; always use `ssh pi4 "find /opt/obsidian-vault ..."` for vault state.
+
+**Pi4 Python packages**: verify before deploying scripts: `ssh pi4 "python3 -c 'import X'"`.
+Install missing packages with `pip3 install <pkg> --break-system-packages` (Debian-managed env).
+`beautifulsoup4` installs as `beautifulsoup4` but imports as `bs4`.
+
+**Hyphenated script filenames**: `migrate-vault.py` cannot be imported directly in Python tests.
+Use `importlib.util.spec_from_file_location("name", "path/to/script.py")` instead.
+
 **Deploy sequence** (all three steps required):
 ```bash
 # 1. Prep: inject workflow id + strip tags
