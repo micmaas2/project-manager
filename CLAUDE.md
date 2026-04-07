@@ -285,6 +285,10 @@ Install missing packages with `pip3 install <pkg> --break-system-packages` (Debi
 **Hyphenated script filenames**: `migrate-vault.py` cannot be imported directly in Python tests.
 Use `importlib.util.spec_from_file_location("name", "path/to/script.py")` instead.
 
+**Task unit tests**: test files live in `artefacts/<task-id>/test_*.py`; run with `python3 -m pytest artefacts/<task-id>/test_*.py -v`. Use `importlib.util.spec_from_file_location` + `unittest.mock.patch.object` to test scripts without making them importable packages.
+
+**GitHub API commits (stdlib)**: read a file with `GET /repos/{repo}/contents/{path}?ref={branch}` → decode `base64.b64decode(resp["content"])`; write with `PUT /repos/{repo}/contents/{path}` + `{"content": base64.b64encode(...).decode(), "sha": <existing_sha_or_omit_for_new>, "branch": ...}`. No `requests` package needed — `urllib.request` suffices.
+
 **Deploy sequence** (all three steps required):
 ```bash
 # 1. Prep: inject workflow id + strip tags
