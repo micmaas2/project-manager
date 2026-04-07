@@ -9,7 +9,7 @@ This is the workspace for the multi-agent automation system. Structure: `.claude
 ## Workspace Context
 
 This directory (`project_manager`) is part of the `/opt/claude/` multi-project workspace.
-Full project registry: `docs/project-registry.md` (authoritative — update there first).
+Full project registry: `docs/project-registry.md` (authoritative — update there first when adding or onboarding a project during a PM planning session).
 
 | Directory | GitHub | Purpose |
 |---|---|---|
@@ -178,9 +178,9 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 0. **Session start — process Telegram inbox (mandatory first action)**: Read `tasks/telegram-inbox.md`. If the file does not exist or contains no items below the header, skip and proceed. Otherwise promote each item to `tasks/backlog.md` as a proper BL entry (assign next BL ID, fill table row with title, EPIC-003, project_manager, P2, new, today's date), then clear the inbox file leaving only the two-line header (`# Telegram Backlog Inbox\n\nItems below are picked up by Claude PM at the start of the next session.\n`). Commit both changes on a feature branch. Do this before any other work.
 
-0b. **Session start — read lessons (mandatory second action)**: Read `tasks/lessons.md`. Surface the **3 most recent rows** as context before making any planning or approach decisions this session. If the file is missing or has no data rows, skip and proceed. Lessons inform tooling choices, testing approach, and task design — do not repeat past mistakes captured here.
+0b. **Session start — read lessons (mandatory second action)**: Read `tasks/lessons.md`. List the **3 most recent rows** in the plan preamble (or state them to the user) before making planning or approach decisions. If the file is missing or has no data rows, skip and proceed. Lessons inform tooling choices, testing approach, and task design — do not repeat past mistakes captured here.
 
-1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Write plan to `tasks/todo.md`.
+1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Plans are written to `/root/.claude/plans/` (auto-managed by plan mode).
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
 3. **Token minimization**: agents receive only task_id; they read their own context from files. No large context copied between invocations. Stop after each deliverable.
 4. **Verify before done**: never mark complete without proving it works. Ask: "Would a staff engineer approve this?"
