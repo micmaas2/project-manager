@@ -344,6 +344,22 @@ ssh pi4 "docker restart n8n && sleep 5 && docker ps | grep n8n"
 - No `sqlite3` in the n8n container; use `docker exec n8n n8n export:workflow --all` to inspect
 - Find active workflow ID: export all + filter by `active: true` and most recent `updatedAt`
 
+**Updating workflow JSON programmatically**: when modifying n8n workflow nodes that contain
+multi-line `jsCode` or `jsonBody` strings, use Python to load/modify/dump — avoids JSON
+double-escaping errors that make the Edit tool unreliable for these files:
+```python
+import json
+with open('workflows/foo.json') as f: wf = json.load(f)
+for n in wf['nodes']:
+    if n['id'] == 'node-target': n['parameters']['jsCode'] = "new code..."
+with open('workflows/foo.json', 'w') as f: json.dump(wf, f, indent=2, ensure_ascii=False)
+```
+
+**Testing n8n Code nodes**: extract `jsCode` from the workflow JSON at runtime (no copy-paste
+drift), execute in `node:vm` with a mocked context (mock `require('fs')`, `require('path')`,
+`$()` helper). See `artefacts/task-009/test_gmail_workflow.js` as the canonical example.
+Run with: `/root/.nvm/versions/node/v24.12.0/bin/node artefacts/<task-id>/test_*.js`
+
 **n8n workflow JSON patterns**:
 - Use `specifyBody: "json"` + `jsonBody: "={{ $json.obj }}"` when passing an object — `specifyBody: "string"` silently mangles complex payloads (e.g. long base64 bodies)
 - Avoid `?.` optional chaining in IF node expressions — use `$json.commit ? 'ok' : ''` instead
