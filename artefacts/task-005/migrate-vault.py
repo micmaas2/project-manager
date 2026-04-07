@@ -302,6 +302,107 @@ def _add_needs_review(fields: dict) -> None:
         fields["tags"].append("needs-review")
 
 
+def parse_yaml_frontmatter(content: str) -> Optional[dict]:
+    """Extract fields from a YAML-frontmatter note. Returns None if not parseable."""
+    lines = content.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None
+    try:
+        end = lines.index("---", 1)
+    except ValueError:
+        return None
+    fm_lines = lines[1:end]
+    fields: dict = {}
+    for line in fm_lines:
+        if ": " in line:
+            key, _, val = line.partition(": ")
+            fields[key.strip()] = val.strip().strip('"')
+    # Parse tags list: "tags: [a, b, c]"
+    for line in fm_lines:
+        if line.startswith("tags:"):
+            raw = line[5:].strip().strip("[]")
+            fields["tags"] = [t.strip() for t in raw.split(",") if t.strip()]
+            break
+    # Extract summary and raw_capture from body
+    body_lines = lines[end + 1:]
+    fields["summary"] = _extract_section(
+        body_lines, "## Summary",
+        stop_on=("## Key Points", "## Analysis", "## Raw capture")
+    )
+    fields["key_points_text"] = _extract_section(
+        body_lines, "## Key Points", stop_on=("## Analysis", "## Raw capture")
+    )
+    fields["analysis"] = _extract_section(body_lines, "## Analysis", stop_on=("## Raw capture",))
+    fields["raw_capture"] = _extract_section(body_lines, "## Raw capture")
+    return fields
+
+
+def _reenrich_skip_reason(fields: dict) -> Optional[str]:
+    """Return a skip reason string if this note should not be re-enriched, else None."""
+    if "needs-review" not in fields.get("tags", []):
+        return "no needs-review"
+    if fields.get("source") != "link":
+        return "not a link note"
+    url = extract_url(fields.get("raw_capture", ""))
+    if not url or is_linkedin_url(url):
+        return "linkedin/no-url"
+    return None
+
+
+def reenrich_note(filepath: str, dry_run: bool, client) -> bool:
+    """Re-enrich a YAML-frontmatter note that has the needs-review tag.
+
+    Attempts URL fetch + Claude API enrichment. Returns True if changed.
+    """
+    with open(filepath, encoding="utf-8") as fh:
+        content = fh.read()
+
+    fields = parse_yaml_frontmatter(content)
+    if not fields:
+        return False
+
+    reason = _reenrich_skip_reason(fields)
+    if reason:
+        print(f"  skip   ({reason}) {filepath}")
+        return False
+
+    url = extract_url(fields.get("raw_capture", ""))
+    page_text = fetch_page_content(url)
+    if not page_text:
+        print(f"  skip   (fetch failed) {filepath}")
+        return False
+
+    enriched = reenrich_via_claude(fields["raw_capture"], page_text, client)
+    if not enriched:
+        print(f"  skip   (enrich failed) {filepath}")
+        return False
+
+    # Remove needs-review, apply enriched data
+    new_tags = [normalize_tag(t) for t in enriched.get("tags", [])]
+    new_fields = {
+        "title": enriched.get("title", fields.get("title", "")),
+        "date": fields.get("date", ""),
+        "category": enriched.get("category", fields.get("category", "Inbox")),
+        "topic": enriched.get("topic") or derive_topic(new_tags),
+        "source": fields.get("source", "link"),
+        "channel": fields.get("channel", "telegram"),
+        "tags": new_tags,
+        "summary": enriched.get("summary", fields.get("summary", "")),
+        "key_points": enriched.get("key_points", []),
+        "analysis": enriched.get("analysis", ""),
+        "raw_capture": fields.get("raw_capture", ""),
+    }
+    print(f"  enrich {filepath}")
+    new_content = build_new_format(new_fields)
+
+    if dry_run:
+        print(f"  [dry-run] would write {len(new_content)} bytes → {filepath}")
+    else:
+        with open(filepath, "w", encoding="utf-8") as fh:
+            fh.write(new_content)
+    return True
+
+
 def main() -> int:
     """Entry point."""
     parser = argparse.ArgumentParser(
@@ -312,6 +413,11 @@ def main() -> int:
         "--dry-run",
         action="store_true",
         help="Print planned changes without writing files",
+    )
+    parser.add_argument(
+        "--reenrich-needs-review",
+        action="store_true",
+        help="Re-enrich already-migrated notes that have the needs-review tag",
     )
     args = parser.parse_args()
 
@@ -340,6 +446,7 @@ def main() -> int:
 
     changed = 0
     skipped = 0
+    action_fn = reenrich_note if args.reenrich_needs_review else migrate_note
     for dirpath, _dirs, filenames in os.walk(vault_path):
         for fname in sorted(filenames):
             if not fname.endswith(".md"):
@@ -348,7 +455,7 @@ def main() -> int:
             # Safety: ensure path stays within vault
             if not os.path.realpath(filepath).startswith(vault_path):
                 continue
-            if migrate_note(filepath, args.dry_run, client):
+            if action_fn(filepath, args.dry_run, client):
                 changed += 1
             else:
                 skipped += 1
