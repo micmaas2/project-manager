@@ -36,6 +36,11 @@ prompt: |
   - How to test it
   - Known limitations
 
+  When a workflow sends a confirmation message to the user (e.g. Telegram reply, log output),
+  the message MUST include the fully-resolved destination path (e.g. Category/Topic/filename.md),
+  not just the filename. This allows the user to verify correct placement without opening the
+  target application.
+
   Label all outputs: [Sonnet]
 
 policy:
