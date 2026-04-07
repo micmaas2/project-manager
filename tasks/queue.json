@@ -9,16 +9,21 @@
       "epic_id": "EPIC-003",
       "story_id": null,
       "assigned_to": "builder",
-      "status": "pending",
+      "status": "done",
       "artefact_path": "artefacts/task-009/",
       "created": "2026-04-07",
-      "updated": "2026-04-07T00:00:00Z",
+      "updated": "2026-04-07T20:44:20Z",
       "token_estimate": 8000,
       "resume_from": null,
       "notes": [],
       "mvp_template": {
         "doel": "Build an n8n workflow that monitors a Gmail inbox (label or address) and captures matching emails as notes into the Obsidian vault on Pi4, using the same YAML frontmatter template as the Telegram capture workflow.",
-        "niet_in_scope": ["Obsidian Clipper setup (BL-016)", "modifying the Telegram capture workflow", "email archiving or deletion in Gmail", "GUI configuration for end-users"],
+        "niet_in_scope": [
+          "Obsidian Clipper setup (BL-016)",
+          "modifying the Telegram capture workflow",
+          "email archiving or deletion in Gmail",
+          "GUI configuration for end-users"
+        ],
         "acceptatiecriteria": [
           "n8n workflow JSON produced and importable on Pi4 without SQLITE_CONSTRAINT errors",
           "Workflow triggers on Gmail label or sender filter (configurable via env var or n8n credential)",
@@ -26,7 +31,7 @@
           "Output written to vault as YAML frontmatter note matching current template (source:email, date, title, summary, key_points, tags, topic)",
           "Manual import test on Pi4 documented in artefacts/task-009/deploy-notes.md; workflow JSON validates via python3 -m json.tool"
         ],
-        "security_arch_impact": "Medium — Gmail OAuth credentials stored in n8n credential store; no secrets in workflow JSON; Claude API key via n8n env var",
+        "security_arch_impact": "Medium \u2014 Gmail OAuth credentials stored in n8n credential store; no secrets in workflow JSON; Claude API key via n8n env var",
         "tests_required": "JSON validation; manual import test on Pi4; dry-run with fixture email payload",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -34,11 +39,15 @@
           "workflows/gmail-capture.json present and JSON-valid",
           "deploy-notes.md documents import steps"
         ],
-        "rollback_plan": "Delete workflow from n8n UI — no vault writes occur until workflow is active and triggered",
+        "rollback_plan": "Delete workflow from n8n UI \u2014 no vault writes occur until workflow is active and triggered",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "Yes — email content is personal data; processed locally on Pi4, not sent to external services beyond Claude API; Gmail OAuth scoped to read-only",
+        "privacy_dpia": "Yes \u2014 email content is personal data; processed locally on Pi4, not sent to external services beyond Claude API; Gmail OAuth scoped to read-only",
         "cost_estimate": "EUR 0.01 (Claude Haiku per captured email)",
-        "prerequisites": ["n8n running on Pi4 with Gmail OAuth credential configured", "ANTHROPIC_API_KEY set in n8n environment", "Obsidian vault mounted at /opt/obsidian-vault on Pi4"]
+        "prerequisites": [
+          "n8n running on Pi4 with Gmail OAuth credential configured",
+          "ANTHROPIC_API_KEY set in n8n environment",
+          "Obsidian vault mounted at /opt/obsidian-vault on Pi4"
+        ]
       }
     },
     {
@@ -55,18 +64,25 @@
       "updated": "2026-04-07T13:00:00Z",
       "token_estimate": 8000,
       "resume_from": null,
-      "notes": ["Demo priority — implement for demo purposes"],
+      "notes": [
+        "Demo priority \u2014 implement for demo purposes"
+      ],
       "mvp_template": {
         "doel": "Enable capturing backlog items and Pensieve notes from a laptop (browser bookmarklet, CLI script, or email) so that captures are not limited to Telegram/phone.",
-        "niet_in_scope": ["mobile app", "Telegram workflow changes", "real-time sync", "GUI dashboard"],
+        "niet_in_scope": [
+          "mobile app",
+          "Telegram workflow changes",
+          "real-time sync",
+          "GUI dashboard"
+        ],
         "acceptatiecriteria": [
           "At least one capture path implemented: browser bookmarklet OR CLI script OR email-to-backlog",
-          "Captured items land in tasks/telegram-inbox.md (backlog items) or Obsidian vault (Pensieve notes) via GitHub API commit — same path as Telegram captures",
+          "Captured items land in tasks/telegram-inbox.md (backlog items) or Obsidian vault (Pensieve notes) via GitHub API commit \u2014 same path as Telegram captures",
           "Capture includes: title, source URL (if applicable), date, type (backlog or pensieve)",
           "deploy-notes.md documents how to set up and use the capture mechanism on a laptop",
           "Works without requiring Claude Code or SSH access from the laptop"
         ],
-        "security_arch_impact": "Low-medium — GitHub API token required for commit; token scoped to repo write only; no secrets stored client-side beyond token",
+        "security_arch_impact": "Low-medium \u2014 GitHub API token required for commit; token scoped to repo write only; no secrets stored client-side beyond token",
         "tests_required": "End-to-end test: capture an item from laptop, verify it appears in telegram-inbox.md or vault",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -76,9 +92,12 @@
         ],
         "rollback_plan": "Delete artefact; revoke GitHub token if bookmarklet/CLI was distributed",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No — captures are personal notes, no third-party personal data",
+        "privacy_dpia": "No \u2014 captures are personal notes, no third-party personal data",
         "cost_estimate": "EUR 0",
-        "prerequisites": ["GitHub PAT with repo write scope", "python3 >= 3.9 (if CLI path chosen)"]
+        "prerequisites": [
+          "GitHub PAT with repo write scope",
+          "python3 >= 3.9 (if CLI path chosen)"
+        ]
       }
     },
     {
@@ -95,10 +114,16 @@
       "updated": "2026-04-07T12:30:00Z",
       "token_estimate": 7000,
       "resume_from": null,
-      "notes": ["MVP2 closeout — required before further MVP3 expansion"],
+      "notes": [
+        "MVP2 closeout \u2014 required before further MVP3 expansion"
+      ],
       "mvp_template": {
         "doel": "After each pipeline run, SelfImprover produces concrete improvement proposals (CLAUDE.md updates, agent YAML changes); a human must explicitly approve each proposal before it is written.",
-        "niet_in_scope": ["automated application without approval", "changes to queue/backlog schema", "modifying epics.md structure"],
+        "niet_in_scope": [
+          "automated application without approval",
+          "changes to queue/backlog schema",
+          "modifying epics.md structure"
+        ],
         "acceptatiecriteria": [
           "SelfImprover appends proposals to artefacts/<task-id>/improvement_proposals.md after each run",
           "Each proposal has: target file, proposed change (diff or description), rationale",
@@ -106,7 +131,7 @@
           "Only approved proposals are applied; rejected proposals logged with reason",
           "CLAUDE.md updated to document this human-gate workflow step"
         ],
-        "security_arch_impact": "Low — no automated writes to CLAUDE.md or agent YAMLs without explicit approval",
+        "security_arch_impact": "Low \u2014 no automated writes to CLAUDE.md or agent YAMLs without explicit approval",
         "tests_required": "Fixture run: SelfImprover produces a proposal; simulate approve + verify file updated; simulate reject + verify file unchanged",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -135,16 +160,22 @@
       "updated": "2026-04-07T12:00:00Z",
       "token_estimate": 4000,
       "resume_from": null,
-      "notes": ["MVP2 closeout — required before further MVP3 expansion"],
+      "notes": [
+        "MVP2 closeout \u2014 required before further MVP3 expansion"
+      ],
       "mvp_template": {
         "doel": "Update the PM session workflow so that tasks/lessons.md is read at the start of every session and the top lessons inform task planning and agent decisions.",
-        "niet_in_scope": ["automated lesson application", "modifying individual agent YAMLs", "lesson scoring or prioritization algorithm"],
+        "niet_in_scope": [
+          "automated lesson application",
+          "modifying individual agent YAMLs",
+          "lesson scoring or prioritization algorithm"
+        ],
         "acceptatiecriteria": [
           "CLAUDE.md updated: 'Session start' section adds lessons.md read as mandatory step (after telegram inbox, before backlog review)",
           "PM surfaces the 3 most recent lessons as context when planning new tasks",
           "lessons.md format documented (if not already) so future SelfImprover runs append correctly"
         ],
-        "security_arch_impact": "None — read-only change to workflow documentation",
+        "security_arch_impact": "None \u2014 read-only change to workflow documentation",
         "tests_required": "Review CLAUDE.md diff; manually verify lessons.md is consulted in next PM session",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -175,17 +206,22 @@
       "notes": [],
       "mvp_template": {
         "doel": "Build a Python script that retroactively improves existing Obsidian vault notes: migrates old-format notes to YAML frontmatter, normalises tags, re-enriches non-LinkedIn URL captures via Claude API, and flags unresolvable captures with a needs-review tag.",
-        "niet_in_scope": ["n8n workflow changes", "modifying the folder structure of existing notes (covered by task-004 going forward)", "processing Gmail captures", "GUI or web interface"],
+        "niet_in_scope": [
+          "n8n workflow changes",
+          "modifying the folder structure of existing notes (covered by task-004 going forward)",
+          "processing Gmail captures",
+          "GUI or web interface"
+        ],
         "acceptatiecriteria": [
           "Migrates old-format notes (# heading + **bold** fields + #hashtag tags) to YAML frontmatter matching the current template",
-          "Normalises concatenated tags to hyphenated lowercase (e.g. aiagents → ai-agents)",
+          "Normalises concatenated tags to hyphenated lowercase (e.g. aiagents \u2192 ai-agents)",
           "For source:link notes with non-LinkedIn URLs: fetches page content (requests + BeautifulSoup), re-calls Claude API with improved prompt, rewrites summary/key_points/tags",
           "For LinkedIn or unresolvable URLs: adds needs-review tag without modifying existing content",
           "Supports --dry-run flag that prints planned changes without writing files",
           "Passes pylint / flake8 with no errors",
           "Script runs on Pi 4 via: ssh pi4 python3 /tmp/migrate-vault.py --vault /opt/obsidian-vault [--dry-run]"
         ],
-        "security_arch_impact": "Low — reads/writes local vault files; Claude API key passed via ANTHROPIC_API_KEY env var, never hardcoded; URL fetching uses requests with 10s timeout and no redirect to private IPs",
+        "security_arch_impact": "Low \u2014 reads/writes local vault files; Claude API key passed via ANTHROPIC_API_KEY env var, never hardcoded; URL fetching uses requests with 10s timeout and no redirect to private IPs",
         "tests_required": "Unit tests with fixture notes covering: old-format migration, tag normalisation, LinkedIn detection, dry-run mode",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -193,16 +229,20 @@
           "script exists in artefacts/task-005/migrate-vault.py",
           "fixtures present in artefacts/task-005/fixtures/"
         ],
-        "rollback_plan": "Script makes in-place edits — run with --dry-run first; vault is synced to OneDrive so files can be restored from OneDrive version history if needed",
+        "rollback_plan": "Script makes in-place edits \u2014 run with --dry-run first; vault is synced to OneDrive so files can be restored from OneDrive version history if needed",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No — notes are personal knowledge captures, no third-party personal data",
+        "privacy_dpia": "No \u2014 notes are personal knowledge captures, no third-party personal data",
         "cost_estimate": "EUR 0.01 (Claude API calls for URL re-enrichment of ~5-10 existing URL notes)",
-        "prerequisites": ["python3 >= 3.9", "pip install requests beautifulsoup4", "ANTHROPIC_API_KEY set in environment"]
+        "prerequisites": [
+          "python3 >= 3.9",
+          "pip install requests beautifulsoup4",
+          "ANTHROPIC_API_KEY set in environment"
+        ]
       }
     },
     {
       "id": "task-004",
-      "title": "pensieve: Improved captures — richer summaries, better tagging, topic folders",
+      "title": "pensieve: Improved captures \u2014 richer summaries, better tagging, topic folders",
       "project": "pensieve",
       "target_project_path": "/opt/claude/pensieve",
       "epic_id": "EPIC-003",
@@ -217,7 +257,13 @@
       "notes": [],
       "mvp_template": {
         "doel": "Update the Pensieve Telegram capture workflow to produce richer summaries (5-7 key_points + analysis field), improved tagging (4-8 tags including domain/entity/action types), and topic-based folder structure (Category/Topic/filename.md).",
-        "niet_in_scope": ["Gmail capture workflow", "Obsidian Clipper", "URL fetching/enrichment (covered by task-005)", "deployment to n8n (import is manual)", "changing the Claude model from Haiku"],
+        "niet_in_scope": [
+          "Gmail capture workflow",
+          "Obsidian Clipper",
+          "URL fetching/enrichment (covered by task-005)",
+          "deployment to n8n (import is manual)",
+          "changing the Claude model from Haiku"
+        ],
         "acceptatiecriteria": [
           "Claude API prompt updated: key_points expanded to 5-7 items (max 25 words each), new analysis field (2-3 sentences: thesis, argument, implication)",
           "Tags expanded to 4-8 items; prompt instructs domain tags, entity tags, and action tags (e.g. follow-up, implement, read-deeper)",
@@ -227,7 +273,7 @@
           "workflow JSON validates: python3 -m json.tool workflows/telegram-capture.json",
           "prompts/claude-processor.txt and templates/note-template.md updated to reflect new schema"
         ],
-        "security_arch_impact": "None — same Claude API call, same vault write path; topic slug validated against [a-z0-9-]+ before use in path construction",
+        "security_arch_impact": "None \u2014 same Claude API call, same vault write path; topic slug validated against [a-z0-9-]+ before use in path construction",
         "tests_required": "Manual import test in n8n; fixture-based unit test of Parse Claude Response and Build Markdown Note JS logic; validate JSON",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -236,11 +282,13 @@
           "prompts/claude-processor.txt updated",
           "templates/note-template.md updated"
         ],
-        "rollback_plan": "git revert in pensieve repo — workflow JSON is version-controlled; re-import previous version in n8n",
+        "rollback_plan": "git revert in pensieve repo \u2014 workflow JSON is version-controlled; re-import previous version in n8n",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No — no change to data handling",
+        "privacy_dpia": "No \u2014 no change to data handling",
         "cost_estimate": "EUR 0",
-        "prerequisites": ["python3 >= 3.0 (for JSON validation only)"]
+        "prerequisites": [
+          "python3 >= 3.0 (for JSON validation only)"
+        ]
       }
     },
     {
@@ -260,13 +308,17 @@
       "notes": [],
       "mvp_template": {
         "doel": "Merge the feature/hana-os-users branch in ccas-jenkins into develop, resolving any conflicts, and verify the Jenkinsfile-HANA-OS-Users pipeline is present on develop.",
-        "niet_in_scope": ["running the Jenkins pipeline against live HANA hosts", "changes to ccas-core-infrastructure or ccas-inventory", "pipeline testing beyond syntax check"],
+        "niet_in_scope": [
+          "running the Jenkins pipeline against live HANA hosts",
+          "changes to ccas-core-infrastructure or ccas-inventory",
+          "pipeline testing beyond syntax check"
+        ],
         "acceptatiecriteria": [
           "feature/hana-os-users merged to ccas-jenkins develop with no conflicts",
           "Jenkinsfile-HANA-OS-Users and README-HANA-OS-Users.md present on ccas-jenkins develop",
           "ccas-jenkins develop pushed to remote"
         ],
-        "security_arch_impact": "None — merge only, no new code introduced",
+        "security_arch_impact": "None \u2014 merge only, no new code introduced",
         "tests_required": "git log verify merge commit present; ls verify pipeline files present on develop",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -276,9 +328,11 @@
         ],
         "rollback_plan": "git revert merge commit on ccas-jenkins develop",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No — no personal data",
+        "privacy_dpia": "No \u2014 no personal data",
         "cost_estimate": "EUR 0",
-        "prerequisites": ["git >= 2.0"]
+        "prerequisites": [
+          "git >= 2.0"
+        ]
       }
     },
     {
@@ -298,13 +352,18 @@
       "notes": [],
       "mvp_template": {
         "doel": "Build a bash script that reads logs/audit.jsonl and prints a summary of agent actions grouped by agent name and action type.",
-        "niet_in_scope": ["web UI", "email alerts", "live tail/watch mode", "colour output"],
+        "niet_in_scope": [
+          "web UI",
+          "email alerts",
+          "live tail/watch mode",
+          "colour output"
+        ],
         "acceptatiecriteria": [
           "Script exits 0 and prints action counts grouped by agent",
           "Handles missing or empty audit.jsonl gracefully (zero counts, no errors)",
           "Passes bash -n and shellcheck with no warnings"
         ],
-        "security_arch_impact": "None — read-only, no secrets, no network calls",
+        "security_arch_impact": "None \u2014 read-only, no secrets, no network calls",
         "tests_required": "bash -n; shellcheck; run with missing file; run with empty file; run with seeded fixture",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -312,11 +371,13 @@
           "script exists in artefacts/task-002/",
           "fixtures present in artefacts/task-002/fixtures/"
         ],
-        "rollback_plan": "Delete artefacts/task-002/ — no system state changed",
+        "rollback_plan": "Delete artefacts/task-002/ \u2014 no system state changed",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No — no personal data processed",
+        "privacy_dpia": "No \u2014 no personal data processed",
         "cost_estimate": "EUR 0",
-        "prerequisites": ["jq >= 1.6"]
+        "prerequisites": [
+          "jq >= 1.6"
+        ]
       }
     },
     {
@@ -336,22 +397,27 @@
       "notes": [],
       "mvp_template": {
         "doel": "Build a bash script that reads queue.json and prints a task count summary grouped by status.",
-        "niet_in_scope": ["web UI", "email alerts", "cron scheduling", "colour output"],
+        "niet_in_scope": [
+          "web UI",
+          "email alerts",
+          "cron scheduling",
+          "colour output"
+        ],
         "acceptatiecriteria": [
           "Script exits 0 and prints counts for all 6 statuses (pending, in_progress, paused, review, test, done)",
           "Handles empty queue gracefully (zero counts, no errors)",
           "Passes bash -n and shellcheck with no warnings"
         ],
-        "security_arch_impact": "None — read-only, no secrets, no network calls",
+        "security_arch_impact": "None \u2014 read-only, no secrets, no network calls",
         "tests_required": "bash -n; shellcheck; run with empty queue.json; run with seeded queue.json",
         "definition_of_done": [
           "review.md contains APPROVED",
           "test_report.md contains PASS with >=90% pass rate",
           "script exists in artefacts/task-001/"
         ],
-        "rollback_plan": "Delete artefacts/task-001/ — no system state changed",
+        "rollback_plan": "Delete artefacts/task-001/ \u2014 no system state changed",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No — no personal data processed",
+        "privacy_dpia": "No \u2014 no personal data processed",
         "cost_estimate": "EUR 0"
       }
     }
