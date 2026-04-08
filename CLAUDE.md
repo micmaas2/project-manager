@@ -200,11 +200,10 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 ## Workflow Orchestration
 
-0. **Session start — process Telegram inbox (mandatory first action)**: Read `tasks/telegram-inbox.md`. If the file does not exist or contains no items below the header, skip and proceed. Otherwise promote each item to `tasks/backlog.md` as a proper BL entry (assign next BL ID, fill table row with title, EPIC-003, project_manager, P2, new, today's date), then clear the inbox file leaving only the two-line header (`# Telegram Backlog Inbox\n\nItems below are picked up by Claude PM at the start of the next session.\n`). Commit both changes on a feature branch. Do this before any other work.
-
-0b. **Session start — read lessons (mandatory second action)**: Read `tasks/lessons.md`. List the **3 most recent rows** in the plan preamble (or state them to the user) before making planning or approach decisions. If the file is missing or has no data rows, skip and proceed. Lessons inform tooling choices, testing approach, and task design — do not repeat past mistakes captured here.
-
-0c. **Session start — catch-up SelfImprover (mandatory third action)**: For every task with `status: done` in `tasks/queue.json`, check `artefacts/<artefact_path>/` for `improvement_proposals.md`. If absent, run SelfImprover for that task before proceeding. This catches tasks that completed without a SelfImprover run (e.g. manual pipeline steps or interrupted sessions).
+0. **Session start — mandatory checklist (run in order before any task work)**:
+   - [ ] **Telegram inbox**: Read `tasks/telegram-inbox.md`. If items exist below the header, promote each to `tasks/backlog.md` (next BL ID, EPIC-003, project_manager, P2, new, today), clear the file to the two-line header, commit on a feature branch.
+   - [ ] **Lessons**: Read `tasks/lessons.md`; state the 3 most recent rows before planning. Lessons govern tooling choices and approach — do not repeat captured mistakes.
+   - [ ] **Catch-up SelfImprover**: For every `status: done` task in `tasks/queue.json`, verify `artefacts/<artefact_path>/improvement_proposals.md` exists. If absent, run SelfImprover for that task first.
 
 1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Plans are written to `/root/.claude/plans/` (auto-managed by plan mode).
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
@@ -345,6 +344,15 @@ ssh pi4 "docker restart n8n && sleep 5 && docker ps | grep n8n"
 - Find active workflow ID: export all + filter by `active: true` and most recent `updatedAt`
 - **Credential IDs in workflow JSON are placeholders** — n8n resolves credentials by internal UUID, not name. A mismatched or placeholder ID (e.g. `anthropic-cred`) causes silent auth failures; the HTTP node sends no credential header. After every import, verify each node's credential `id` matches a real credential (`n8n export:credentials --all`). Patch with Python before import if needed.
 - `export:workflow --id=X --output=file.json` wraps output in a JSON array — use `data[0]` when loading a single exported workflow in Python.
+
+**Pending deployments** (not yet imported into n8n on Pi4):
+- `pensieve/workflows/gmail-capture.json` — built in task-009; deploy steps in `artefacts/task-009/deploy-notes.md`; requires Gmail OAuth credential + Pensieve label re-selection after import.
+
+**Quick health check** (verify active workflows + credentials):
+```bash
+ssh pi4 "docker exec n8n n8n export:workflow --all --output=/home/node/wf.json && docker cp n8n:/home/node/wf.json /tmp/wf.json" && python3 -c "import json; [print(w['id'],'|',w['name'],'|',w.get('active')) for w in json.load(open('/tmp/wf.json'))]"
+ssh pi4 "docker exec n8n n8n export:credentials --all --output=/home/node/creds.json && docker cp n8n:/home/node/creds.json /tmp/creds.json" && python3 -c "import json; [print(c['id'],'|',c['name'],'|',c['type']) for c in json.load(open('/tmp/creds.json'))]"
+```
 
 **Updating workflow JSON programmatically**: when modifying n8n workflow nodes that contain
 multi-line `jsCode` or `jsonBody` strings, use Python to load/modify/dump — avoids JSON
