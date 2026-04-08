@@ -343,6 +343,8 @@ ssh pi4 "docker restart n8n && sleep 5 && docker ps | grep n8n"
 - `--userId=1` (numeric) fails; use UUID string or omit entirely
 - No `sqlite3` in the n8n container; use `docker exec n8n n8n export:workflow --all` to inspect
 - Find active workflow ID: export all + filter by `active: true` and most recent `updatedAt`
+- **Credential IDs in workflow JSON are placeholders** — n8n resolves credentials by internal UUID, not name. A mismatched or placeholder ID (e.g. `anthropic-cred`) causes silent auth failures; the HTTP node sends no credential header. After every import, verify each node's credential `id` matches a real credential (`n8n export:credentials --all`). Patch with Python before import if needed.
+- `export:workflow --id=X --output=file.json` wraps output in a JSON array — use `data[0]` when loading a single exported workflow in Python.
 
 **Updating workflow JSON programmatically**: when modifying n8n workflow nodes that contain
 multi-line `jsCode` or `jsonBody` strings, use Python to load/modify/dump — avoids JSON
