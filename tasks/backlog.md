@@ -47,6 +47,10 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-034 | EPIC-003 | project_manager: Add backlog and Pensieve capture from laptop (not only Telegram/phone) | project_manager | P2 | done | 2026-04-06 |
 | BL-035 | EPIC-003 | New project proposal: school-ai — AI learning assistant for primary school kids (helps learn, not do work) | school-ai | P2 | new | 2026-04-07 |
 | BL-036 | EPIC-003 | pi-homelab: Pi4 vault sync — pull pensieve GitHub repo into Obsidian vault on Pi4 (cron or webhook) | pi-homelab | P2 | new | 2026-04-07 |
+| BL-037 | EPIC-003 | pensieve: Workflow not completing or working | pensieve | P1 | done | 2026-04-07 |
+| BL-038 | EPIC-003 | project_manager: Investigate mempalace-style memory for PM setup | project_manager | P3 | new | 2026-04-07 |
+| BL-039 | EPIC-003 | project_manager: MAS personal assistant — daily facts gives incorrect facts | project_manager | P2 | new | 2026-04-07 |
+| BL-040 | EPIC-003 | project_manager: Enhance functionality using Claude Code skills (e.g. /pm-start) | project_manager | P2 | new | 2026-04-08 |
 
 ---
 
