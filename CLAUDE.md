@@ -89,7 +89,9 @@ Areas: `ROLE`, `DOCS`, `TEST`, `FIX`, `REFACTOR`, `PLAYBOOK`, `JENKINS`, `INVENT
 
 - **Sonnet 4.6** — default for execution, building, testing, reviewing (80–90% of work)
 - **Opus 4.6** — only for ProjectManager (plan/scope), Architect (design), Security (risk analysis)
-- **Pattern**: Opus plans, Sonnet executes
+- **Haiku 4.5** — DocUpdater, SelfImprover, revise-claude-md, and any agent doing templated/structured work with no complex reasoning required
+- **Pattern**: Opus plans, Sonnet executes, Haiku documents
+- **Default to Haiku** for any agent that does not require reasoning over complex context
 - **Label** all outputs and tool calls with `[Sonnet]` or `[Opus]`
 - **Token limits**: max 10,000 tokens per agent run; project cap 500k tokens/run (fail threshold)
 - **Artefact stop**: agents stop after delivering a plan, script, test report, or review — continuation requires explicit approval
@@ -110,16 +112,25 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 | Reviewer | YAML | Sonnet | Quality/arch-compliance | Approved review |
 | code-quality-reviewer | built-in | Sonnet | Security, quality, best-practices | Review report |
 | Tester (BugHunter) | YAML | Sonnet | Tests/regression | 90% pass |
-| DocUpdater | YAML | Sonnet | Docs/changelog | Updated docs |
-| docs-readme-writer | built-in | Sonnet | README/module docs | Docs written |
-| SelfImprover | YAML | Sonnet | Lessons/proposals | proposals.md written |
-| revise-claude-md | built-in | Sonnet | CLAUDE.md session learnings | CLAUDE.md updated |
+| DocUpdater | YAML | Haiku | Docs/changelog | Updated docs |
+| docs-readme-writer | built-in | Haiku | README/module docs | Docs written |
+| SelfImprover | YAML | Haiku | Lessons/proposals | proposals.md written |
+| revise-claude-md | built-in | Haiku | CLAUDE.md session learnings | CLAUDE.md updated |
 
 **Built-in Claude Code agents** (invoke via `Agent` tool with `subagent_type`):
 - `code-quality-reviewer` — security + quality review; runs parallel to Reviewer
 - `docs-readme-writer` — README/module docs; runs parallel to DocUpdater
 - `claude-md-management:revise-claude-md` — apply session learnings to CLAUDE.md (session end)
 - `claude-md-management:claude-md-improver` — full CLAUDE.md audit (on demand)
+
+**Prompt writing discipline**: All agent prompts MUST use imperative voice addressed to the agent itself ("You will", "Do not", "Stop if"). Never narrate what other agents do — instead state this agent's responsibility relative to other agents' outputs. Orchestration sequencing (waiting, parallelism) belongs in design docs, not embedded in agent prompts.
+
+**Cross-file rule mirroring (M-1 pattern)**: Enumerated rules that appear in both CLAUDE.md and agent YAMLs can silently accumulate orphan entries. When editing either file, verify rule counts and text match in both directions. Tester must include a regression guard for any task that modifies mirrored content: (a) rule-count equality check across all copies, (b) absence check for any rule that was removed.
+
+**Skill authoring rules**: Skills are executable command prompts (`.claude/commands/*.md`).
+- Every angle-bracket placeholder must include an explicit resolution instruction naming the source file and lookup pattern — do not assume the reader will infer where data lives.
+- Test all placeholders manually before committing: simulate a fresh session with no prior context and verify every `<placeholder>` can be resolved without ambiguity.
+- **Security filter ordering: inline, not post-hoc** — inspect for sensitive patterns (password, secret, api_key, etc.) per-item before appending to any buffer; a post-hoc filter is logically bypassed when the buffer already contains sensitive data.
 
 Agent definitions live in `.claude/agents/[name].yaml`. Required fields: `name`, `prompt`, `policy`, `owner`, `incident_owner`.
 
@@ -196,6 +207,8 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 - Metrics: tokens/run, median latency, success rate, test pass rate
 - Alerts: token overspend, policy violations, regressions
 
+**80% cap alert (preflight)**: before starting a task, sum all agent token estimates for that task. If total > 400,000 (80% of 500k cap), halt with: `ALERT: Task <id> estimated tokens (<n>) exceed 80% of project cap. Reduce scope or split task before proceeding.`
+
 ---
 
 ## Workflow Orchestration
@@ -205,6 +218,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
    - [ ] **Telegram inbox**: Run `git show origin/main:tasks/telegram-inbox.md` to read the live inbox (not the local checkout). If items exist below the header, promote each to `tasks/backlog.md` (next BL ID, EPIC-003, project_manager, P2, new, today), clear the file to the two-line header via a feature branch commit.
    - [ ] **Lessons**: Read `tasks/lessons.md`; state the 3 most recent rows before planning. Lessons govern tooling choices and approach — do not repeat captured mistakes.
    - [ ] **Catch-up SelfImprover**: For every `status: done` task in `tasks/queue.json`, verify `artefacts/<artefact_path>/improvement_proposals.md` exists. If absent, run SelfImprover for that task first.
+   - [ ] **ExitPlanMode denial**: if the user denies ExitPlanMode, use AskUserQuestion to clarify intent before re-attempting — the user may be redirecting to a side task first, not rejecting the plan outright.
 
 1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Plans are written to `/root/.claude/plans/` (auto-managed by plan mode).
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
@@ -222,7 +236,9 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
    Built-in agent roles:
    - `code-quality-reviewer` — security, quality, best-practices check on all new/modified code
    - `docs-readme-writer` — creates/updates README and module docs for code-producing tasks
-6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval. After all proposals are resolved, invoke the `revise-claude-md` built-in agent to bake session learnings into CLAUDE.md and commit the result. **Cross-file consistency check**: when a proposal introduces a format definition (e.g. improvement_proposals.md schema), verify the format is identical in both CLAUDE.md and the relevant agent YAML before presenting to the user. **Proposal response format**: user replies `APPROVE: P1, P3 / REJECT: P2` — apply all approved in one pass, log rejections. **SelfImprover dedup**: when running SelfImprover for multiple tasks in a session, collect all proposals before presenting — remove duplicates and proposals targeting text already present in the target file.
+
+   **Doc stage file ownership**: when DocUpdater and docs-readme-writer run in parallel, assign ownership explicitly: DocUpdater → `CHANGELOG.md`; docs-readme-writer → `README.md`. This prevents overwrite conflicts when both agents target the same file.
+6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval. After all proposals are resolved, invoke the `revise-claude-md` built-in agent to bake session learnings into CLAUDE.md and commit the result. **Cross-file consistency check**: when a proposal introduces a format definition (e.g. improvement_proposals.md schema), verify the format is identical in both CLAUDE.md and the relevant agent YAML before presenting to the user. **Proposal response format**: user replies `APPROVE: P1, P3 / REJECT: P2` — apply all approved in one pass, log rejections. **SelfImprover dedup**: when running SelfImprover for multiple tasks in a session, collect all proposals before presenting — remove duplicates and proposals targeting text already present in the target file. **Scanning for pending proposals**: use `find artefacts -name "improvement_proposals.md" | xargs grep -l "REQUIRES_HUMAN_APPROVAL"` — do NOT use `grep -rl` on the whole artefacts dir as it produces false positives from Tester test files that assert on the string.
 7. **Autonomous bug fixing**: when given a bug report, fix it — point at logs/errors, then resolve.
 8. **Demand elegance (balanced)**: pause and ask "Is there a more elegant way?" before finalising any non-trivial design. Skip for simple fixes — do not over-engineer.
 9. **Minimal impact**: touch only what is strictly necessary; avoid side effects on untouched code or config. If you must change something adjacent, flag it explicitly.
@@ -299,6 +315,10 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 **Queue validation**: `tasks/queue.schema.json` enforces all field types. Key constraint: `artefact_path` must match `^artefacts/[a-zA-Z0-9_-]+/$` — no path traversal. Validate with any JSON Schema tool before adding tasks manually.
 
 **Artefact path assignment**: Before adding a new task to queue.json, run `ls artefacts/` to check if the target path already exists. If it does, use a descriptive suffix (e.g. `artefacts/task-008-laptop/`) rather than the bare ID.
+
+**`assigned_to` tracks pipeline stage**: update `assigned_to` at every stage transition alongside `status` (`builder` → `reviewer+code-quality-reviewer` → `tester` → `doc-updater+docs-readme-writer` → `self-improver`). For parallel stages set `assigned_to` to both agents: `"reviewer+code-quality-reviewer"` or `"doc-updater+docs-readme-writer"`.
+
+**queue.json stale-read fix**: if the Edit tool fails with "file modified since read", use `python3 -c "import json; q=json.load(open('tasks/queue.json')); ...; json.dump(q,open('tasks/queue.json','w'),indent=2)"` to atomically update it.
 
 **Logs**:
 - `logs/audit.jsonl` — append-only, one JSON object per line: `{timestamp, agent, task_id, action, status}`
