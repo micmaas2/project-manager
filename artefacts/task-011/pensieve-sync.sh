@@ -16,7 +16,7 @@ GIT_BRANCH="main"
 # Update the path below to match the deploy key on this host.
 # Alternative: configure Host github.com in /root/.ssh/config with IdentityFile
 # and StrictHostKeyChecking no — then remove this export entirely.
-export GIT_SSH_COMMAND="ssh -i /root/.ssh/id_rsa -o StrictHostKeyChecking=no"
+export GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519 -o StrictHostKeyChecking=no"
 
 # ---------------------------------------------------------------------------
 # Concurrency lock — prevent overlapping instances
