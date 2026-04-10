@@ -325,6 +325,7 @@ This system is project-agnostic. Tasks specify a `target_project` path. 7 projec
 | task-003 | — | CCAS: verified `feature/hana-os-users` merged; stale branch deleted |
 | task-006 (S-002-3) | CLAUDE.md + `manager.yaml` | PM reads 3 most recent lessons at session start (step 0b) |
 | task-007 (S-002-4) | `self-improver.yaml` + CLAUDE.md | Human-gated improvement proposals: PM presents at session end (step 6b); user approves/rejects before application |
+| task-011 | `artefacts/task-011/pensieve-sync.sh` | Bash cron script that runs `git pull` on `/opt/obsidian-vault` (Pi4) every 15 minutes to keep the Obsidian vault in sync with `micmaas2/pensieve`. Deploy instructions in `artefacts/task-011/deploy-notes.md`. |
 
 All artefacts passed the full 6-agent pipeline (Builder → Reviewer → Tester → DocUpdater → SelfImprover).
 Fixture-based testing is in place: each task's `artefacts/<id>/fixtures/` holds controlled inputs
