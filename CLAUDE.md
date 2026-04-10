@@ -125,7 +125,26 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 
 **Prompt writing discipline**: All agent prompts MUST use imperative voice addressed to the agent itself ("You will", "Do not", "Stop if"). Never narrate what other agents do — instead state this agent's responsibility relative to other agents' outputs. Orchestration sequencing (waiting, parallelism) belongs in design docs, not embedded in agent prompts.
 
+**Opus advisor escalation**: When Builder or Reviewer hits an ambiguous architectural or security decision that context alone cannot resolve, spawn a focused Opus sub-agent (model: claude-opus-4-6) with ONE question. Format:
+```
+ADVISOR_CONSULT: <single specific question>
+Context: <2-3 sentences of relevant background>
+Options considered: <list>
+```
+Opus returns a recommendation; Builder/Reviewer continues with it and notes the escalation in `build_notes.md` under "Advisor Consults". Triggers: architecture tradeoff with no clear winner; security decision outside established patterns; scope ambiguity where both interpretations are defensible. Do NOT use for routine decisions.
+
 **Cross-file rule mirroring (M-1 pattern)**: Enumerated rules that appear in both CLAUDE.md and agent YAMLs can silently accumulate orphan entries. When editing either file, verify rule counts and text match in both directions. Tester must include a regression guard for any task that modifies mirrored content: (a) rule-count equality check across all copies, (b) absence check for any rule that was removed.
+
+**PM Skills** (invoke as `/pm-start`, `/pm-status`, etc. — files in `.claude/commands/`):
+
+| Skill | File | Purpose |
+|-------|------|---------|
+| `/pm-start` | `pm-start.md` | Session startup: fetch, inbox, lessons, queue, phase gate, summary |
+| `/pm-status` | `pm-status.md` | Queue counts, kanban, phase status, token spend |
+| `/pm-propose` | `pm-propose.md` | End-of-session proposal review: scan, deduplicate, apply, bake |
+| `/pm-close` | `pm-close.md` | Sprint close: clean tree → proposals → merge → push → phase gate |
+| `/pm-lessons` | `pm-lessons.md` | Print last 10 lessons |
+| `/pm-run` | `pm-run.md` | Execute next pending task through full pipeline |
 
 **Skill authoring rules**: Skills are executable command prompts (`.claude/commands/*.md`).
 - Every angle-bracket placeholder must include an explicit resolution instruction naming the source file and lookup pattern — do not assume the reader will infer where data lives.

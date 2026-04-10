@@ -41,6 +41,17 @@ prompt: |
   not just the filename. This allows the user to verify correct placement without opening the
   target application.
 
+  ## Opus Advisor Escalation
+  If you hit an architectural or security decision you cannot resolve from context:
+  1. Stop implementation at that point.
+  2. Spawn an Opus sub-agent (model: claude-opus-4-6) with a single focused question:
+     ADVISOR_CONSULT: <question>
+     Context: <2-3 sentences>
+     Options considered: <list>
+  3. Continue with Opus's recommendation.
+  4. Note the escalation in build_notes.md under "Advisor Consults".
+  Trigger only when genuinely stuck — not for routine decisions.
+
   Label all outputs: [Sonnet]
 
 policy:

@@ -50,9 +50,9 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-037 | EPIC-003 | pensieve: Workflow not completing or working | pensieve | P1 | done | 2026-04-07 |
 | BL-038 | EPIC-003 | project_manager: Investigate mempalace-style memory for PM setup | project_manager | P3 | new | 2026-04-07 |
 | BL-039 | EPIC-003 | project_manager: MAS personal assistant — daily facts gives incorrect facts | project_manager | P2 | new | 2026-04-07 |
-| BL-040 | EPIC-003 | project_manager: Implement PM skills — /pm-start, /pm-status, /pm-propose, /pm-close, /pm-lessons, /pm-run — as .claude/commands/*.md with explicit placeholder resolution and inline security filtering | project_manager | P1 | new | 2026-04-08 |
-| BL-041 | EPIC-003 | project_manager: Explore Claude Platform advisor strategy — Opus as mid-task advisor paired with Sonnet/Haiku executor | project_manager | P2 | new | 2026-04-09 |
-| BL-042 | EPIC-003 | project_manager: Investigate Caveman prompt technique — telegram-style instructions cut output tokens by 65% | project_manager | P2 | new | 2026-04-09 |
+| BL-040 | EPIC-003 | project_manager: Implement PM skills — /pm-start, /pm-status, /pm-propose, /pm-close, /pm-lessons, /pm-run — as .claude/commands/*.md with explicit placeholder resolution and inline security filtering | project_manager | P1 | done | 2026-04-08 |
+| BL-041 | EPIC-003 | project_manager: Explore Claude Platform advisor strategy — Opus as mid-task advisor paired with Sonnet/Haiku executor | project_manager | P2 | done | 2026-04-09 |
+| BL-042 | EPIC-003 | project_manager: Investigate Caveman prompt technique — telegram-style instructions cut output tokens by 65% | project_manager | P2 | done | 2026-04-09 |
 | BL-043 | EPIC-003 | project_manager: Investigate why session-start telegram inbox check misses origin/main items (root cause: no git fetch before read) | project_manager | P2 | new | 2026-04-10 |
 | BL-044 | EPIC-003 | project_manager: Read CLAUDE_file_work_pm.md (branch: feature_claudemd_work_pm), extract improvements for our MAS setup, apply as self-improvement proposals | project_manager | P2 | new | 2026-04-10 |
 
