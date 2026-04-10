@@ -51,6 +51,9 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-038 | EPIC-003 | project_manager: Investigate mempalace-style memory for PM setup | project_manager | P3 | new | 2026-04-07 |
 | BL-039 | EPIC-003 | project_manager: MAS personal assistant — daily facts gives incorrect facts | project_manager | P2 | new | 2026-04-07 |
 | BL-040 | EPIC-003 | project_manager: Enhance functionality using Claude Code skills (e.g. /pm-start) | project_manager | P2 | new | 2026-04-08 |
+| BL-041 | EPIC-003 | project_manager: Explore Claude Platform advisor strategy — Opus as mid-task advisor paired with Sonnet/Haiku executor | project_manager | P2 | new | 2026-04-09 |
+| BL-042 | EPIC-003 | project_manager: Investigate Caveman prompt technique — telegram-style instructions cut output tokens by 65% | project_manager | P2 | new | 2026-04-09 |
+| BL-043 | EPIC-003 | project_manager: Investigate why session-start telegram inbox check misses origin/main items (root cause: no git fetch before read) | project_manager | P2 | new | 2026-04-10 |
 
 ---
 
