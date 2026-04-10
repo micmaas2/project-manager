@@ -19,7 +19,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 
 | ID | Epic | Title | Project | Priority | Status | Added |
 |---|---|---|---|---|---|---|
-| BL-003 | EPIC-003 | PI/Refinement planning session workflow | project_manager | P2 | planned | 2026-04-05 |
+| BL-003 | EPIC-003 | PI/Refinement planning session workflow | project_manager | P2 | in_progress | 2026-04-05 |
 | BL-004 | EPIC-003 | Multi-project priority ranking in PM | project_manager | P2 | planned | 2026-04-05 |
 | BL-007a | EPIC-003 | CCAS: Merge feature/hana-os-users → ccas-jenkins develop | ccas | P1 | done | 2026-04-05 |
 | BL-009 | EPIC-003 | CCAS: Quick Win #3 — Infrastructure Validation Enhancements | ccas | P2 | discovered | 2026-04-05 |
@@ -46,15 +46,15 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-033 | EPIC-003 | New project proposal: grocery price comparison across stores (requirements + plan first) | project_manager | P3 | new | 2026-04-06 |
 | BL-034 | EPIC-003 | project_manager: Add backlog and Pensieve capture from laptop (not only Telegram/phone) | project_manager | P2 | done | 2026-04-06 |
 | BL-035 | EPIC-003 | New project proposal: school-ai — AI learning assistant for primary school kids (helps learn, not do work) | school-ai | P2 | new | 2026-04-07 |
-| BL-036 | EPIC-003 | pi-homelab: Pi4 vault sync — pull pensieve GitHub repo into Obsidian vault on Pi4 (cron or webhook) | pi-homelab | P2 | new | 2026-04-07 |
+| BL-036 | EPIC-003 | pi-homelab: Pi4 vault sync — pull pensieve GitHub repo into Obsidian vault on Pi4 (cron or webhook) | pi-homelab | P2 | in_progress | 2026-04-07 |
 | BL-037 | EPIC-003 | pensieve: Workflow not completing or working | pensieve | P1 | done | 2026-04-07 |
 | BL-038 | EPIC-003 | project_manager: Investigate mempalace-style memory for PM setup | project_manager | P3 | new | 2026-04-07 |
-| BL-039 | EPIC-003 | project_manager: MAS personal assistant — daily facts gives incorrect facts | project_manager | P2 | new | 2026-04-07 |
+| BL-039 | EPIC-003 | project_manager: MAS personal assistant — daily facts gives incorrect facts | project_manager | P2 | in_progress | 2026-04-07 |
 | BL-040 | EPIC-003 | project_manager: Implement PM skills — /pm-start, /pm-status, /pm-propose, /pm-close, /pm-lessons, /pm-run — as .claude/commands/*.md with explicit placeholder resolution and inline security filtering | project_manager | P1 | done | 2026-04-08 |
 | BL-041 | EPIC-003 | project_manager: Explore Claude Platform advisor strategy — Opus as mid-task advisor paired with Sonnet/Haiku executor | project_manager | P2 | done | 2026-04-09 |
 | BL-042 | EPIC-003 | project_manager: Investigate Caveman prompt technique — telegram-style instructions cut output tokens by 65% | project_manager | P2 | done | 2026-04-09 |
-| BL-043 | EPIC-003 | project_manager: Investigate why session-start telegram inbox check misses origin/main items (root cause: no git fetch before read) | project_manager | P2 | new | 2026-04-10 |
-| BL-044 | EPIC-003 | project_manager: Read CLAUDE_file_work_pm.md (branch: feature_claudemd_work_pm), extract improvements for our MAS setup, apply as self-improvement proposals | project_manager | P2 | new | 2026-04-10 |
+| BL-043 | EPIC-003 | project_manager: Investigate why session-start telegram inbox check misses origin/main items (root cause: no git fetch before read) | project_manager | P2 | done | 2026-04-10 |
+| BL-044 | EPIC-003 | project_manager: Read CLAUDE_file_work_pm.md (branch: feature_claudemd_work_pm), extract improvements for our MAS setup, apply as self-improvement proposals | project_manager | P2 | done | 2026-04-10 |
 
 ---
 
