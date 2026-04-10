@@ -25,7 +25,7 @@ to run. Tasks with no artefact directory cannot be retrospected.
 
 **Rationale**: task-003 was completed informally — no artefact directory, no verification output, no test evidence. When SelfImprover runs post-completion there is nothing to analyse. The process gap is that "merge only" tasks feel too small to warrant an artefact, but the pipeline requires one for traceability and retrospection. Making the minimum bar explicit (a single `verification.md`) closes this gap with minimal overhead.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -50,4 +50,4 @@ a non-empty `artefact_path`. If no code was produced, set the path and create a
 
 **Rationale**: task-003 has `artefact_path` set in queue.json but no directory was ever created on disk. A schema-level constraint (enforced at the point of status update) would catch this earlier. Combined with Proposal 1, it creates a two-layer guard: the schema rejects a `done` transition with no path, and the process rule requires the directory and `verification.md` to actually exist.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

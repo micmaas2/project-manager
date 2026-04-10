@@ -243,6 +243,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
 3. **Token minimization**: agents receive only task_id; they read their own context from files. No large context copied between invocations. Stop after each deliverable.
 4. **Verify before done**: never mark complete without proving it works. Ask: "Would a staff engineer approve this?"
+   **Artefact minimum for git-only tasks**: even when no code is produced, create `artefacts/<task-id>/verification.md` capturing: commands run (e.g. `git log --oneline`, `ls` of key files), their output, and a PASS/FAIL verdict per acceptance criterion. Tasks with no artefact directory cannot be retrospected by SelfImprover.
 5. **Self-improvement**: SelfImprover runs after every pipeline PASS and appends to `tasks/lessons.md`. If a significant pattern is found it also writes `artefacts/<task_id>/improvement_proposals.md` (format below). After any correction: update CLAUDE.md so the mistake cannot recur; commit to git.
 6. **Always-on pipeline**: every task runs the full pipeline — no skipping:
    ```
@@ -274,6 +275,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 - Plan files → `/root/.claude/plans/` (registered in `docs/project-registry.md`)
 - Lessons → `tasks/lessons.md` (append-only table: `| Date | Agent | Lesson | Applied To |`)
 - Improvement proposals → `artefacts/<task_id>/improvement_proposals.md` (one `## Proposal N` section per proposal, fields: **Target file**, **Change** (diff or description), **Rationale**, **Status**: `REQUIRES_HUMAN_APPROVAL` → `APPROVED` / `REJECTED: <reason>`)
+- **Artefact path required on done**: a task may not be set to `status: done` without a non-empty `artefact_path`. If no code was produced, set the path and create a `verification.md` (see step 4).
 - Mark items complete immediately as you go
 - When marking a queue task `done`, also update the corresponding BL entries in `tasks/backlog.md` to `done` status in the same commit.
 
