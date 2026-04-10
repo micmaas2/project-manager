@@ -8,6 +8,9 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ## [Unreleased]
 
+### Fixed
+- task-012: daily_facts_agent — 7-day person dedup window prevents same person appearing multiple days in a row; PERSON field added to LLM prompt, person_name stored in generation_params, case-normalised comparison, multi-line FACT parsing fixed (BL-039)
+
 ### Added
 - task-011: pensieve-sync.sh cron script for Pi4 — git-pulls micmaas2/pensieve into /opt/obsidian-vault every 15 min; includes flock guard, --ff-only merge, log sanitization, stash-pop conflict detection (BL-036)
 - **Built-in agent pipeline integration**: `code-quality-reviewer`, `docs-readme-writer`, and `claude-md-management:revise-claude-md` wired into the standard task pipeline. Review and doc stages now run YAML agents + built-in agents in parallel; `revise-claude-md` runs at session end after proposals are resolved.
