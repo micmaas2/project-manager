@@ -9,6 +9,7 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 ## [Unreleased]
 
 ### Added
+- task-011: pensieve-sync.sh cron script for Pi4 — git-pulls micmaas2/pensieve into /opt/obsidian-vault every 15 min; includes flock guard, --ff-only merge, log sanitization, stash-pop conflict detection (BL-036)
 - **Built-in agent pipeline integration**: `code-quality-reviewer`, `docs-readme-writer`, and `claude-md-management:revise-claude-md` wired into the standard task pipeline. Review and doc stages now run YAML agents + built-in agents in parallel; `revise-claude-md` runs at session end after proposals are resolved.
 - **Session step 0c — SelfImprover catch-up**: PM scans all `done` tasks at session start for missing `improvement_proposals.md`; runs SelfImprover for any that lack it. Prevents silent pipeline gaps from manual or interrupted runs.
 - **SelfImprover verification gate**: ProjectManager verifies SelfImprover produced output (proposals or new lessons entry) before setting a task to `done`. Re-runs SelfImprover if neither exists.
