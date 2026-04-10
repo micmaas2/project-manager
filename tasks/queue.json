@@ -56,10 +56,10 @@
       "epic_id": "EPIC-003",
       "story_id": null,
       "assigned_to": "builder",
-      "status": "pending",
+      "status": "done",
       "artefact_path": "artefacts/task-012/",
       "created": "2026-04-10",
-      "updated": "2026-04-10T09:10:35Z",
+      "updated": "2026-04-10T14:55:47Z",
       "token_estimate": 8000,
       "resume_from": null,
       "notes": [
