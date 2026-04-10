@@ -18,6 +18,13 @@
       "type": "object",
       "required": ["id", "title", "project", "assigned_to", "status", "artefact_path", "created", "updated", "mvp_template"],
       "additionalProperties": false,
+      "if": {
+        "properties": { "status": { "const": "done" } }
+      },
+      "then": {
+        "properties": { "artefact_path": { "minLength": 1 } },
+        "required": ["artefact_path"]
+      },
       "properties": {
         "id": {
           "type": "string",
