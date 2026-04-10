@@ -201,7 +201,8 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 ## Workflow Orchestration
 
 0. **Session start — mandatory checklist (run in order before any task work)**:
-   - [ ] **Telegram inbox**: Read `tasks/telegram-inbox.md`. If items exist below the header, promote each to `tasks/backlog.md` (next BL ID, EPIC-003, project_manager, P2, new, today), clear the file to the two-line header, commit on a feature branch.
+   - [ ] **Fetch remote**: Run `git fetch origin` before reading any operational file. n8n commits go directly to `origin/main` via GitHub API — without fetching, inbox items are invisible.
+   - [ ] **Telegram inbox**: Run `git show origin/main:tasks/telegram-inbox.md` to read the live inbox (not the local checkout). If items exist below the header, promote each to `tasks/backlog.md` (next BL ID, EPIC-003, project_manager, P2, new, today), clear the file to the two-line header via a feature branch commit.
    - [ ] **Lessons**: Read `tasks/lessons.md`; state the 3 most recent rows before planning. Lessons govern tooling choices and approach — do not repeat captured mistakes.
    - [ ] **Catch-up SelfImprover**: For every `status: done` task in `tasks/queue.json`, verify `artefacts/<artefact_path>/improvement_proposals.md` exists. If absent, run SelfImprover for that task first.
 
