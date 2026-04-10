@@ -3,29 +3,32 @@
 Updated by ProjectManager after every task status change.
 Source of truth: `tasks/queue.json`. This board is a human-readable view.
 
-Last updated: 2026-04-07T00:00:00Z
+Last updated: 2026-04-10T00:00:00Z
 
 ---
 
 ## Backlog
 _(items in backlog.md not yet in queue)_
 
-- BL-009 CCAS: Quick Win #3 Infrastructure Validation (P2 — next after MVP2 closeout)
+- BL-009 CCAS: Quick Win #3 Infrastructure Validation (P2)
 - BL-010/011 CCAS: Inventory parametrization + enhance-jenkinsfile-s4hana (P2)
 - BL-019/020 performance_HPT: Scaffold repo + HPT Dashboard Phase 1 (P2)
 - BL-016 pensieve: Configure Obsidian Clipper (P2 — low automation value, manual)
 - BL-012/013 pi-homelab: Security hardening Pi 4 + Pi 5 (P1 — blocked-manual)
 - BL-026 pi-homelab: Regular patching (P1 — blocked-ssh, depends on BL-012/013)
+- BL-035 school-ai: AI learning assistant new project (P2)
+- BL-038 project_manager: Mempalace-style memory investigation (P3)
 - BL-031 PM: git worktrees investigation (P3)
 - BL-033 New project: grocery price comparison (P3)
-- BL-035 New project: school-ai — AI learning assistant for primary school kids (P2)
 
 ---
 
 ## Ready
 _(in queue.json with status: pending)_
 
-- **task-009** pensieve: Activate Gmail capture workflow in n8n (BL-015)
+- **task-011** pi-homelab: Pi4 vault sync — pull pensieve into Obsidian vault (BL-036)
+- **task-012** project_manager: Fix MAS daily facts — birth-date match + 7-day dedup (BL-039)
+- **task-013** project_manager: /pm-plan skill — PI/Refinement planning session (BL-003, S-003-2)
 
 ---
 
@@ -53,7 +56,8 @@ _(empty)_
 ## Done
 _(status: done — pipeline complete, artefact delivered)_
 
-- **task-008** PM: Laptop backlog/Pensieve capture — `scripts/capture.py` [2026-04-07]
+- **task-009** pensieve: Activate Gmail capture workflow in n8n (BL-015) [2026-04-07]
+- **task-008** PM: Laptop backlog/Pensieve capture — `scripts/capture.py` (BL-034) [2026-04-07]
 - **task-007** PM: Human-gated improvement proposals (S-002-4) — MVP2 COMPLETE [2026-04-07]
 - **task-006** PM: lessons.md read at session start (S-002-3) [2026-04-07]
 - **task-005** pensieve: Retroactive vault quality improvement script [2026-04-07]

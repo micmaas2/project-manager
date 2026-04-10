@@ -2,6 +2,146 @@
   "$schema": "./queue.schema.json",
   "tasks": [
     {
+      "id": "task-011",
+      "title": "pi-homelab: Pi4 vault sync \u2014 pull pensieve repo into Obsidian vault",
+      "project": "pi-homelab",
+      "target_project_path": "/opt/claude/pi-homelab",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-011/",
+      "created": "2026-04-10",
+      "updated": "2026-04-10T09:10:35Z",
+      "token_estimate": 6000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Deploy a cron job on Pi4 that pulls micmaas2/pensieve into /opt/obsidian-vault so Obsidian always reflects the latest captured notes.",
+        "niet_in_scope": [
+          "Conflict resolution (vault is append-only from n8n side)",
+          "Two-way sync (Pi4 to GitHub)",
+          "Obsidian plugin changes"
+        ],
+        "acceptatiecriteria": [
+          "Cron runs every 15 min on Pi4; pulls latest pensieve commits into /opt/obsidian-vault",
+          "Script logs success/failure to /var/log/pensieve-sync.log with timestamp",
+          "On pull failure, does NOT overwrite local files; logs error and exits non-zero",
+          "Deploy script and cron entry documented in artefacts/task-011/deploy-notes.md"
+        ],
+        "security_arch_impact": "Low \u2014 read-only git pull; no secrets beyond SSH key already on Pi4. No outbound HTTP; no user-controlled path values.",
+        "tests_required": "Unit test for error-exit behaviour; integration test via ssh pi4 dry run; shellcheck on deploy script",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "sync script deployed on Pi4 and cron entry active",
+          "deploy-notes.md present in artefacts/task-011/"
+        ],
+        "rollback_plan": "Remove cron entry and script from Pi4 \u2014 no vault data is modified by the sync (read-only pull)",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No \u2014 syncing personal notes to local device only",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "git >= 2.0",
+          "SSH key with read access to micmaas2/pensieve on Pi4",
+          "ssh pi4 access from build host"
+        ]
+      }
+    },
+    {
+      "id": "task-012",
+      "title": "project_manager: Fix MAS daily facts \u2014 enforce birth-date match and 7-day dedup",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-012/",
+      "created": "2026-04-10",
+      "updated": "2026-04-10T09:10:35Z",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [
+        "Bug: same person appears multiple days in a row \u2014 person selection not gated on birth date"
+      ],
+      "mvp_template": {
+        "doel": "Fix the daily-facts personal assistant so each fact is about a person born on today's calendar date, with no person repeated within a 7-day rolling window.",
+        "niet_in_scope": [
+          "Changing the delivery channel (Telegram assumed)",
+          "Adding new fact categories",
+          "Retroactive correction of past facts",
+          "Changing the Claude model or prompt style"
+        ],
+        "acceptatiecriteria": [
+          "Discovery: identify workflow location (n8n on Pi4) and document current person-selection logic in artefacts/task-012/build_notes.md",
+          "Fix: person selected each day has birth date matching today MM-DD",
+          "Dedup guard: same person does not appear within a 7-day rolling window (persisted across runs)",
+          "Fix deployed to n8n on Pi4 and verified with a manual trigger test"
+        ],
+        "security_arch_impact": "Low \u2014 may use external birthday dataset or Wikipedia API; if so: timeout set, private IP ranges blocked, no secrets in workflow JSON.",
+        "tests_required": "Fixture test with mocked date verifies correct birth-date filtering; dedup test verifies repeat rejected within 7-day window",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Fixed workflow deployed and active on Pi4",
+          "build_notes.md documents discovery findings and fix approach"
+        ],
+        "rollback_plan": "Restore previous workflow version from git or n8n export \u2014 no persistent data loss",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No \u2014 historical public figures only",
+        "cost_estimate": "EUR 0.01 (Claude API per daily trigger)",
+        "prerequisites": [
+          "ssh pi4 access",
+          "n8n running on Pi4",
+          "ANTHROPIC_API_KEY set in n8n environment"
+        ]
+      }
+    },
+    {
+      "id": "task-013",
+      "title": "project_manager: /pm-plan skill \u2014 PI/Refinement planning session workflow (S-003-2)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": "S-003-2",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-013/",
+      "created": "2026-04-10",
+      "updated": "2026-04-10T09:10:35Z",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Implement a /pm-plan skill that guides the user through a repeatable PI planning session: backlog review, epic/story mapping, sprint goal setting, and task queuing \u2014 producing a committed sprint plan in queue.json.",
+        "niet_in_scope": [
+          "SAFe/Agile ceremony tooling or external integrations",
+          "Automated capacity planning or velocity tracking",
+          "Changes to existing PM skills (/pm-start, /pm-run, etc.)"
+        ],
+        "acceptatiecriteria": [
+          ".claude/commands/pm-plan.md skill file created with complete step-by-step planning flow",
+          "Flow covers: fetch state, review epics/stories, prioritize backlog, draft MVP templates, confirm with user, commit to queue.json",
+          "All angle-bracket placeholders include explicit resolution instructions naming source file and lookup pattern",
+          "Skill dry-run tested end-to-end: all placeholders resolve without ambiguity in a simulated fresh session"
+        ],
+        "security_arch_impact": "None \u2014 file reads and queue.json writes only; no external calls; no user-controlled values used in file paths.",
+        "tests_required": "Manual dry-run walkthrough; verify placeholder resolution; verify output queue.json is schema-valid",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          ".claude/commands/pm-plan.md present and committed",
+          "Skill listed in CLAUDE.md PM Skills table"
+        ],
+        "rollback_plan": "Delete .claude/commands/pm-plan.md \u2014 no system state changed beyond the file",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
       "id": "task-009",
       "title": "pensieve: Activate Gmail capture workflow in n8n",
       "project": "pensieve",
