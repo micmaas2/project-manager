@@ -1,5 +1,5 @@
 # Project Dashboard
-_Last updated: 2026-04-07 22:45_
+_Last updated: 2026-04-11 11:15_
 
 ## Queue Status
 
@@ -10,7 +10,7 @@ _Last updated: 2026-04-07 22:45_
 | paused | 0 |
 | review | 0 |
 | test | 0 |
-| done | 9 |
+| done | 12 |
 
 ## Active Tasks
 
@@ -18,11 +18,11 @@ _No tasks currently in progress._
 
 ## Recently Completed
 
+- **task-013** project_manager: /pm-plan skill — PI/Refinement planning session workflow (S-003-2) [2026-04-11]
+- **task-012** project_manager: Fix MAS daily facts — enforce birth-date match and 7-day dedup [2026-04-10]
+- **task-011** pi-homelab: Pi4 vault sync — pull pensieve repo into Obsidian vault [2026-04-10]
 - **task-009** pensieve: Activate Gmail capture workflow in n8n [2026-04-07]
 - **task-008** PM: Laptop backlog and Pensieve capture mechanism [2026-04-07]
-- **task-007** PM: Human-gated improvement proposals to YAML/CLAUDE.md (S-002-4) [2026-04-07]
-- **task-006** PM: PM reads lessons.md at session start (S-002-3) [2026-04-07]
-- **task-005** pensieve: Retroactive vault quality improvement script [2026-04-07]
 
 ## Next Up (Pending)
 
