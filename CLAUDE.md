@@ -65,6 +65,14 @@ The pre-commit hook blocks ALL commits on `main` and `develop` (including merge 
 If main has GitHub API commits that develop lacks (diverged), use `--force-with-lease` after
 syncing via a feature branch: `git checkout -b feature/sync && git checkout origin/main -- <file> && git commit ... && merge into develop`, then `git push origin develop:main --force-with-lease`.
 
+**Merging feature branches with conflicts into develop**: conflict-free `git merge --no-ff -m "..."` on develop works (git internal path bypasses the hook). When a merge has conflicts, `git commit` after resolution is blocked. Pattern:
+1. `git merge --abort` on develop
+2. `git checkout -b feature/sync-X` (from develop)
+3. `git merge feature/X` — resolve conflicts here, `git commit` (allowed on feature branch)
+4. `git push origin feature/sync-X:develop` — pushes resolved state to remote develop
+5. `git checkout develop && git pull origin develop` — sync local
+Avoid `git stash && checkout && stash pop` when branches have diverged — it creates cascading conflicts.
+
 **Git hooks** (in `hooks/`, symlinked to `.git/hooks/`):
 - `pre-commit` — branch protection (blocks main/develop) + sensitive file detection
 - `commit-msg` — enforces `[AREA]` message format; receives commit file as `$1`
