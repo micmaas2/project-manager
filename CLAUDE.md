@@ -20,6 +20,7 @@ Full project registry: `docs/project-registry.md` (authoritative — update ther
 | `/opt/claude/genealogie/` | micmaas2/genealogie | Genealogy tooling |
 | `/opt/claude/performance_HPT/` | micmaas2/performance-twin | Performance / HPT tooling |
 | `/opt/claude/project1/` | (no remote) | Generic project skeleton |
+| Pi4: `/opt/mas/` | micmaas2/mas_personal_assistant (private) | Personal assistant — Telegram bot, FastAPI, PostgreSQL, React (mas.femic.nl) |
 
 **Existing projects may already have plans, requirements, and in-progress work.**
 When a project is added or first onboarded, PM runs a discovery scan (see `manager.yaml`) and
@@ -141,6 +142,8 @@ Opus returns a recommendation; Builder/Reviewer continues with it and notes the 
 
 **Cross-file rule mirroring (M-1 pattern)**: Enumerated rules that appear in both CLAUDE.md and agent YAMLs can silently accumulate orphan entries. When editing either file, verify rule counts and text match in both directions. Tester must include a regression guard for any task that modifies mirrored content: (a) rule-count equality check across all copies, (b) absence check for any rule that was removed.
 
+**Agent YAML policy schema**: the pre-commit hook enforces that every `.claude/agents/*.yaml` contains all 5 required policy fields (`allowed_tools`, `max_tokens_per_run`, `require_human_approval`, `audit_logging`, `external_calls_allowed`). A commit that adds or modifies an agent YAML without all 5 fields will be rejected.
+
 **PM Skills** (invoke as `/pm-start`, `/pm-status`, etc. — files in `.claude/commands/`):
 
 | Skill | File | Purpose |
@@ -165,7 +168,7 @@ Agent definitions live in `.claude/agents/[name].yaml`. Required fields: `name`,
 policy:
   allowed_tools: [...]
   max_tokens_per_run: 10000
-  require_human_approval: false  # set to TRUE for any agent that has Bash in allowed_tools
+  require_human_approval: false  # set to TRUE for any agent that has Bash, Write, or Edit in allowed_tools
   audit_logging: true
   external_calls_allowed: false
 owner: "Role Name"
@@ -270,7 +273,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
    - `docs-readme-writer` — creates/updates README and module docs for code-producing tasks
 
    **Doc stage file ownership**: when DocUpdater and docs-readme-writer run in parallel, assign ownership explicitly: DocUpdater → `CHANGELOG.md`; docs-readme-writer → `README.md`. This prevents overwrite conflicts when both agents target the same file.
-6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval. After all proposals are resolved, invoke `revise-claude-md` via the `Skill` tool (not `Agent`) to bake session learnings into CLAUDE.md and commit the result. **Cross-file consistency check**: when a proposal introduces a format definition (e.g. improvement_proposals.md schema), verify the format is identical in both CLAUDE.md and the relevant agent YAML before presenting to the user. **Proposal response format**: user replies `APPROVE: P1, P3 / REJECT: P2` — apply all approved in one pass, log rejections. **SelfImprover dedup**: when running SelfImprover for multiple tasks in a session, collect all proposals before presenting — remove duplicates and proposals targeting text already present in the target file. **Scanning for pending proposals**: use `find artefacts -name "improvement_proposals.md" | xargs grep -l "REQUIRES_HUMAN_APPROVAL"` — do NOT use `grep -rl` on the whole artefacts dir as it produces false positives from Tester test files that assert on the string. **Proposal text false positives**: a proposal whose body quotes the grep pattern `REQUIRES_HUMAN_APPROVAL` will cause the scan to match the file even when all proposals are APPROVED — verify the match is a Status line, not body text, before treating the file as pending.
+6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval. After all proposals are resolved, invoke `revise-claude-md` via the `Skill` tool (not `Agent`) to bake session learnings into CLAUDE.md and commit the result. **Cross-file consistency check**: when a proposal introduces a format definition (e.g. improvement_proposals.md schema), verify the format is identical in both CLAUDE.md and the relevant agent YAML before presenting to the user. **Proposal response format**: user replies `APPROVE: P1, P3 / REJECT: P2` — apply all approved in one pass, log rejections. **SelfImprover dedup**: when running SelfImprover for multiple tasks in a session, collect all proposals before presenting — remove duplicates and proposals targeting text already present in the target file. **Scanning for pending proposals**: use `find artefacts -name "improvement_proposals.md" | xargs grep -l "REQUIRES_HUMAN_APPROVAL"` — do NOT use `grep -rl` on the whole artefacts dir as it produces false positives from Tester test files that assert on the string. **Proposal text false positives**: a proposal whose body quotes the grep pattern `REQUIRES_HUMAN_APPROVAL` will cause the scan to match the file even when all proposals are APPROVED — verify the match is a Status line, not body text, before treating the file as pending. **pm-propose commit discipline**: after applying approved proposals that edit CLAUDE.md, immediately commit on the current feature branch before proceeding — do not leave session-learning edits unstaged across a context boundary.
 7. **Autonomous bug fixing**: when given a bug report, fix it — point at logs/errors, then resolve.
 8. **Demand elegance (balanced)**: pause and ask "Is there a more elegant way?" before finalising any non-trivial design. Skip for simple fixes — do not over-engineer.
 9. **Minimal impact**: touch only what is strictly necessary; avoid side effects on untouched code or config. If you must change something adjacent, flag it explicitly.
