@@ -3,7 +3,7 @@
 Updated by ProjectManager after every task status change.
 Source of truth: `tasks/queue.json`. This board is a human-readable view.
 
-Last updated: 2026-04-10T00:00:00Z
+Last updated: 2026-04-11T09:00:00Z
 
 ---
 
@@ -26,9 +26,7 @@ _(items in backlog.md not yet in queue)_
 ## Ready
 _(in queue.json with status: pending)_
 
-- **task-011** pi-homelab: Pi4 vault sync — pull pensieve into Obsidian vault (BL-036)
-- **task-012** project_manager: Fix MAS daily facts — birth-date match + 7-day dedup (BL-039)
-- **task-013** project_manager: /pm-plan skill — PI/Refinement planning session (BL-003, S-003-2)
+_(empty)_
 
 ---
 
@@ -56,6 +54,9 @@ _(empty)_
 ## Done
 _(status: done — pipeline complete, artefact delivered)_
 
+- **task-013** PM: /pm-plan skill — PI/Refinement planning session (BL-003, S-003-2) [2026-04-11]
+- **task-012** project_manager: Fix MAS daily facts — birth-date match + 7-day dedup (BL-039) [2026-04-11]
+- **task-011** pi-homelab: Pi4 vault sync — pull pensieve into Obsidian vault (BL-036) [2026-04-11]
 - **task-009** pensieve: Activate Gmail capture workflow in n8n (BL-015) [2026-04-07]
 - **task-008** PM: Laptop backlog/Pensieve capture — `scripts/capture.py` (BL-034) [2026-04-07]
 - **task-007** PM: Human-gated improvement proposals (S-002-4) — MVP2 COMPLETE [2026-04-07]

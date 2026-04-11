@@ -8,6 +8,9 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ## [Unreleased]
 
+### Added
+- task-013: `/pm-plan` skill — PI/Refinement planning session workflow; guides user through backlog review, epic/story mapping, MVP template drafting, and queue.json commit in one repeatable flow. All placeholders resolved from named sources; feature branch commit includes queue.json + backlog.md + kanban.md + epics.md (BL-003, S-003-2)
+
 ### Fixed
 - task-012: daily_facts_agent — 7-day person dedup window prevents same person appearing multiple days in a row; PERSON field added to LLM prompt, person_name stored in generation_params, case-normalised comparison, multi-line FACT parsing fixed (BL-039)
 

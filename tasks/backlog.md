@@ -19,7 +19,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 
 | ID | Epic | Title | Project | Priority | Status | Added |
 |---|---|---|---|---|---|---|
-| BL-003 | EPIC-003 | PI/Refinement planning session workflow | project_manager | P2 | in_progress | 2026-04-05 |
+| BL-003 | EPIC-003 | PI/Refinement planning session workflow | project_manager | P2 | done | 2026-04-05 |
 | BL-004 | EPIC-003 | Multi-project priority ranking in PM | project_manager | P2 | planned | 2026-04-05 |
 | BL-007a | EPIC-003 | CCAS: Merge feature/hana-os-users → ccas-jenkins develop | ccas | P1 | done | 2026-04-05 |
 | BL-009 | EPIC-003 | CCAS: Quick Win #3 — Infrastructure Validation Enhancements | ccas | P2 | discovered | 2026-04-05 |

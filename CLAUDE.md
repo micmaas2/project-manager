@@ -141,6 +141,7 @@ Opus returns a recommendation; Builder/Reviewer continues with it and notes the 
 |-------|------|---------|
 | `/pm-start` | `pm-start.md` | Session startup: fetch, inbox, lessons, queue, phase gate, summary |
 | `/pm-status` | `pm-status.md` | Queue counts, kanban, phase status, token spend |
+| `/pm-plan` | `pm-plan.md` | PI/Refinement planning session: backlog review, MVP templates, queue tasks |
 | `/pm-propose` | `pm-propose.md` | End-of-session proposal review: scan, deduplicate, apply, bake |
 | `/pm-close` | `pm-close.md` | Sprint close: clean tree → proposals → merge → push → phase gate |
 | `/pm-lessons` | `pm-lessons.md` | Print last 10 lessons |
