@@ -26,7 +26,7 @@ _(items in backlog.md not yet in queue)_
 ## Ready
 _(in queue.json with status: pending)_
 
-_(empty)_
+- **task-014** Architecture review — MAS/Claude Code, pensieve, mas_agent (BL-047)
 
 ---
 
