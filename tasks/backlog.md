@@ -58,6 +58,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-045 | EPIC-003 | project_manager: Review Anthropic agent skills course — identify relevant skills, propose and task implementations | project_manager | P2 | new | 2026-04-11 |
 | BL-046 | EPIC-003 | project_manager: Mark resolved improvement_proposals.md files as done — add a Status: DONE marker (or rename) so /pm-propose skips already-resolved files without re-reading them | project_manager | P2 | new | 2026-04-11 |
 | BL-047 | EPIC-003 | project_manager: Architecture review — project_manager (MAS/Claude Code), pensieve (n8n + Pi4 + Obsidian), mas_agent (Docker containers) — identify improvements for less work, lower cost, better security, higher availability | project_manager | P1 | new | 2026-04-11 |
+| BL-048 | EPIC-003 | project_manager: Wire /claude-md-improver into periodic workflow — run on project_manager CLAUDE.md every N sessions or on demand via /pm-close; extend to managed project CLAUDE.md files (CCAS, pi-homelab, pensieve, genealogie, performance_HPT) | project_manager | P2 | new | 2026-04-11 |
 
 ---
 
