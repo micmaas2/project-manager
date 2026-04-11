@@ -11,8 +11,28 @@ Run `git status`. If any uncommitted changes exist: stop and tell the user to co
 Run /pm-propose (invoke the pm-propose skill — follow all steps in pm-propose.md).
 
 **3. Bake learnings**
-Invoke the revise-claude-md built-in agent (subagent_type: claude-md-management:revise-claude-md).
+Invoke `revise-claude-md` via the `Skill` tool (not `Agent` tool — `subagent_type` does not work for `claude-md-management:*`).
 Commit any resulting CLAUDE.md changes on the current branch with message `[DOCS] revise-claude-md: session learnings`.
+
+**3b. Session counter + CLAUDE.md improver**
+Read `docs/session-counter.json` (create it if absent with `{"closes": 0, "last_improver_run": null}`).
+Increment `closes` by 1. Write back.
+
+Print:
+```
+Session closes: <closes>
+Next /claude-md-improver run: session <next_multiple_of_5>  (<5 - (closes % 5)> sessions away)
+```
+
+If `closes % 5 == 0`: run `/claude-md-improver` via the `Skill` tool on the following CLAUDE.md files in sequence:
+- `CLAUDE.md` (project_manager)
+- `/opt/claude/CCAS/CLAUDE.md` (if file exists)
+- `/opt/claude/pi-homelab/CLAUDE.md` (if file exists)
+- `/opt/claude/pensieve/CLAUDE.md` (if file exists)
+- `/opt/claude/genealogie/CLAUDE.md` (if file exists)
+- `/opt/claude/performance_HPT/CLAUDE.md` (if file exists)
+
+Set `last_improver_run` to today's date (YYYY-MM-DD from system clock). Commit `docs/session-counter.json` with message `[DOCS] pm-close: session <closes>, ran claude-md-improver` (or omit "ran claude-md-improver" if not triggered). Commit to the current feature branch.
 
 **4. Merge feature branch**
 Read the current branch name: run `git branch --show-current`. Do not hardcode a branch name.
