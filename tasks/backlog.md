@@ -56,6 +56,8 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-043 | EPIC-003 | project_manager: Investigate why session-start telegram inbox check misses origin/main items (root cause: no git fetch before read) | project_manager | P2 | done | 2026-04-10 |
 | BL-044 | EPIC-003 | project_manager: Read CLAUDE_file_work_pm.md (branch: feature_claudemd_work_pm), extract improvements for our MAS setup, apply as self-improvement proposals | project_manager | P2 | done | 2026-04-10 |
 | BL-045 | EPIC-003 | project_manager: Review Anthropic agent skills course — identify relevant skills, propose and task implementations | project_manager | P2 | new | 2026-04-11 |
+| BL-046 | EPIC-003 | project_manager: Mark resolved improvement_proposals.md files as done — add a Status: DONE marker (or rename) so /pm-propose skips already-resolved files without re-reading them | project_manager | P2 | new | 2026-04-11 |
+| BL-047 | EPIC-003 | project_manager: Architecture review — project_manager (MAS/Claude Code), pensieve (n8n + Pi4 + Obsidian), mas_agent (Docker containers) — identify improvements for less work, lower cost, better security, higher availability | project_manager | P1 | new | 2026-04-11 |
 
 ---
 

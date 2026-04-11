@@ -20,7 +20,7 @@ Then re-create from develop.
 
 **Rationale**: If a planning session crashes or is interrupted after `git checkout -b` but before the merge, the next invocation on the same day will fail with "branch already exists". Making the recovery path explicit prevents a confusing failure mode.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -36,4 +36,4 @@ Then re-create from develop.
 
 **Rationale**: The Reviewer caught that queue.json was being written in Step 7 without being committed in Step 8. The fix was applied, but the general pattern — bundle all correlated writes into one commit — is worth recording as a lesson for future skill and agent development.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

@@ -21,7 +21,7 @@ Date: 2026-04-10
 
 **Rationale**: All four review-loop items in task-011 (CR-1 log guard, CR-2 SSH identity, m-2 flock, m-5 logrotate) are table-stakes for any cron-deployed shell script. They were not in the MVP template or acceptance criteria, so Builder omitted them and Reviewer caught them in pass 2. Adding them to the template surfaces the requirement at planning time (preflight), not at review time — eliminating the loop entirely for future cron tasks. This is the same systemic fix that was applied for outbound HTTP and YAML injection in earlier tasks.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -41,4 +41,4 @@ Date: 2026-04-10
 
 **Rationale**: The code-quality-reviewer caught log injection (M-1) and stash-pop conflict risk (M-2) that a simple self-review checklist would have surfaced before any review agent ran. Builder currently has no explicit pre-handoff verification step for shell scripts. Adding one reduces first-pass review findings for bash tasks to only genuine design-level issues, not missing-guard patterns. This parallels the "test with fixtures" lesson applied to Tester — the right agent should catch the obvious failures before passing the baton.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

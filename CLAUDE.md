@@ -118,10 +118,16 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 | revise-claude-md | built-in | Haiku | CLAUDE.md session learnings | CLAUDE.md updated |
 
 **Built-in Claude Code agents** (invoke via `Agent` tool with `subagent_type`):
-- `code-quality-reviewer` — security + quality review; runs parallel to Reviewer
+- `code-quality-reviewer` — security + quality review; runs parallel to Reviewer; for any regex using `re.DOTALL`, flag use of `$` as a stop anchor (use `\Z` instead) and require a multi-line fixture in Tester
 - `docs-readme-writer` — README/module docs; runs parallel to DocUpdater
 - `claude-md-management:revise-claude-md` — apply session learnings to CLAUDE.md (session end)
 - `claude-md-management:claude-md-improver` — full CLAUDE.md audit (on demand)
+
+**Shell script pre-submission check** (Builder must verify before handing off to Reviewer):
+- `bash -n <script>` must exit 0
+- If cron/daemon: log guard, flock, SSH identity, logrotate — all present?
+- If outbound git/SSH: auth path exported explicitly?
+- Log output sanitized (ANSI + control chars stripped) before writing to file?
 
 **Prompt writing discipline**: All agent prompts MUST use imperative voice addressed to the agent itself ("You will", "Do not", "Stop if"). Never narrate what other agents do — instead state this agent's responsibility relative to other agents' outputs. Orchestration sequencing (waiting, parallelism) belongs in design docs, not embedded in agent prompts.
 
@@ -197,6 +203,11 @@ Security/arch impact: <note>
     " with \" in YAML double-quoted scalars; strip ASCII control chars 0x00-0x1F, not just \n)
   - If an external ID (e.g. message ID, record ID) is passed to a downstream step: validate
     it is non-null/non-empty at point of use; throw a descriptive error if absent
+  - If the script runs under cron or systemd (no interactive terminal):
+      - Log writability guard: verify/create log file before first write; exit to stderr if unwritable
+      - Concurrency lock: use `flock -n` on a lock file at startup; skip (exit 0) if lock held
+      - SSH/auth identity: export `GIT_SSH_COMMAND` or equivalent explicitly — cron env has no agent
+      - Log rotation: document logrotate config as a **required** deploy step, not optional
 No external deps: true/false  (if true: stdlib/built-ins only; no pip/npm installs)
 Prerequisites: [tool >= version, ...]
 Tests: unit/integration/regression

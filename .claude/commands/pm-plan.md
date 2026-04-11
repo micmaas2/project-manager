@@ -118,6 +118,12 @@ For each new task:
 **8. Update tracking files**
 On a feature branch (`feature/pm-plan-<YYYY-MM-DD>`, where YYYY-MM-DD comes from the system clock):
 
+If the branch `feature/pm-plan-<YYYY-MM-DD>` already exists locally (interrupted prior session), delete it first:
+```bash
+git branch -D feature/pm-plan-<YYYY-MM-DD>
+```
+Then re-create from develop with `git checkout -b feature/pm-plan-<YYYY-MM-DD>`.
+
 a. **backlog.md**: for each planned BL item, update its `Status` column from its current value to `in_progress`. Lookup: column 7 (Status) of the matching BL-NNN row in `tasks/backlog.md`.
 
 b. **kanban.md**: add each new task to the **Ready** section. Format: `- **<task-id>** <title> (<BL-ID>)`. Read `tasks/kanban.md` first; find the `## Ready` section and append below existing entries.
