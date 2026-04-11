@@ -367,6 +367,8 @@ GitHub PAT for project-manager API calls: `/opt/n8n/github-pat` on Pi4.
 **Vault location**: `/opt/obsidian-vault/` exists on Pi4 only — not on the local host.
 Explore agents run locally; always use `ssh pi4 "find /opt/obsidian-vault ..."` for vault state.
 
+**dashboard-preview.md is cron-auto-updated**: `artefacts/task-006/dashboard-preview.md` is regenerated every 15 min by a Pi4 cron job. Expect it as a dirty unstaged file at session start and pm-close — commit it on a quick feature branch before proceeding (timestamp + done count update only).
+
 **Pi4 Python packages**: verify before deploying scripts: `ssh pi4 "python3 -c 'import X'"`.
 Install missing packages with `pip3 install <pkg> --break-system-packages` (Debian-managed env).
 `beautifulsoup4` installs as `beautifulsoup4` but imports as `bs4`.
