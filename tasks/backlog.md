@@ -55,6 +55,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-042 | EPIC-003 | project_manager: Investigate Caveman prompt technique — telegram-style instructions cut output tokens by 65% | project_manager | P2 | done | 2026-04-09 |
 | BL-043 | EPIC-003 | project_manager: Investigate why session-start telegram inbox check misses origin/main items (root cause: no git fetch before read) | project_manager | P2 | done | 2026-04-10 |
 | BL-044 | EPIC-003 | project_manager: Read CLAUDE_file_work_pm.md (branch: feature_claudemd_work_pm), extract improvements for our MAS setup, apply as self-improvement proposals | project_manager | P2 | done | 2026-04-10 |
+| BL-045 | EPIC-003 | project_manager: Review Anthropic agent skills course — identify relevant skills, propose and task implementations | project_manager | P2 | new | 2026-04-11 |
 
 ---
 
