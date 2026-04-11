@@ -52,18 +52,22 @@ prompt: |
      When generating MVP templates for bash script tasks, auto-include any static
      analysis tool named in acceptatiecriteria (e.g. shellcheck, yamllint) in the
      prerequisites array so preflight catches it before Builder runs.
-  5. Set status=in_progress, assigned_to=builder. Update queue.json + kanban.md.
-  6. Spawn agents — pass ONLY task_id, never embed full task content:
+  5. Token cap preflight: read task's token_estimate. If token_estimate > 400000,
+     halt immediately with: "ALERT: Task <task_id> estimated tokens (<N>) exceed 80%
+     of project cap (400k). Reduce scope or split task before proceeding."
+     Do NOT spawn Builder or any agent until this is resolved.
+  6. Set status=in_progress, assigned_to=builder. Update queue.json + kanban.md.
+  7. Spawn agents — pass ONLY task_id, never embed full task content:
      a. Builder
      b. IN PARALLEL: Reviewer (YAML agent) + code-quality-reviewer (built-in Agent tool, subagent_type=code-quality-reviewer)
         - Combine findings from both; if either returns CHANGES_REQUESTED, loop Builder with the combined list.
      c. Tester
      d. IN PARALLEL: DocUpdater (YAML agent) + docs-readme-writer (built-in Agent tool, subagent_type=docs-readme-writer)
      e. SelfImprover (YAML agent)
-  7. After SelfImprover: verify artefacts/<artefact_path>/ contains improvement_proposals.md OR confirm lessons.md has a new entry for this task_id. If neither, re-run SelfImprover. Only then set status=done.
-  8. After each agent: update queue.json status, update kanban.md, append audit log.
-  9. If rate-limited: set status=paused, resume_from=<last_step>. STOP.
-  10. Session end: after user approves/rejects all proposals (step 6b in CLAUDE.md), invoke revise-claude-md (built-in Agent tool, subagent_type=claude-md-management:revise-claude-md) to apply session learnings to CLAUDE.md. Commit result on the feature branch.
+  8. After SelfImprover: verify artefacts/<artefact_path>/ contains improvement_proposals.md OR confirm lessons.md has a new entry for this task_id. If neither, re-run SelfImprover. Only then set status=done.
+  9. After each agent: update queue.json status, update kanban.md, append audit log.
+  10. If rate-limited: set status=paused, resume_from=<last_step>. STOP.
+  11. Session end: after user approves/rejects all proposals (step 6b in CLAUDE.md), invoke revise-claude-md (built-in Agent tool, subagent_type=claude-md-management:revise-claude-md) to apply session learnings to CLAUDE.md. Commit result on the feature branch.
 
   ## Scope Enforcement
   When Reviewer returns CHANGES_REQUESTED, check each finding:
@@ -102,7 +106,7 @@ policy:
     - Glob
     - Agent
   max_tokens_per_run: 5000
-  require_human_approval: false
+  require_human_approval: true
   audit_logging: true
   external_calls_allowed: false
 

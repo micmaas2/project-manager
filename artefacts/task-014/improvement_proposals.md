@@ -8,7 +8,7 @@
 
 **Rationale**: task-014 discovered that ProjectManager has `require_human_approval: false` despite having Write/Edit tools, meaning it can silently modify production files (queue.json, backlog.md) without a human review gate. The CLAUDE.md comment on line 168 documents the rule ("set to TRUE for any agent that has Bash in allowed_tools") but this is not enforced in the actual agent YAMLs. Agents with file-write capabilities should require explicit human approval before execution.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ## Proposal 2: Add automated M-1 consistency check to pre-commit hooks
 
@@ -18,7 +18,7 @@
 
 **Rationale**: task-014's architecture review noted that "The M-1 pattern (mirrored rules between CLAUDE.md and agent YAMLs) is manual and error-prone." This has been a known issue since task-007 (documented in lessons.md row 17). An automated check at pre-commit time would catch drifts immediately rather than relying on human memory during future edits.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ## Proposal 3: Add runtime token cap guard before agent spawn
 
@@ -28,4 +28,4 @@
 
 **Rationale**: task-014 identified that "project_manager defines a 500k token cap in CLAUDE.md but has no runtime enforcement; mas_agent has budget config fields but `check_budget()` is report-only (no blocking)." The 500k cap exists as documentation only — a runaway agent can silently exceed budget. This proposal adds a hard check at task launch time, preventing overspend before it happens. CLAUDE.md already documents the 80% preflight alert (line 241) but does not implement it.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

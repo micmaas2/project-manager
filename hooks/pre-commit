@@ -43,5 +43,27 @@ if [[ -n "$STAGED" ]]; then
   done <<< "$STAGED"
 fi
 
+# 3. Agent YAML policy-schema consistency check (M-1 guard)
+# Every .claude/agents/*.yaml must have all required policy fields.
+REQUIRED_POLICY_FIELDS=("allowed_tools" "max_tokens_per_run" "require_human_approval" "audit_logging" "external_calls_allowed")
+AGENT_DIR=".claude/agents"
+
+if [[ -d "$AGENT_DIR" ]]; then
+  YAML_FAIL=0
+  for yaml_file in "$AGENT_DIR"/*.yaml; do
+    [[ -f "$yaml_file" ]] || continue
+    for field in "${REQUIRED_POLICY_FIELDS[@]}"; do
+      if ! grep -q "^  ${field}:" "$yaml_file"; then
+        printf "%b[pre-commit] ERROR: Agent YAML missing policy field '%s': %s%b\n" "$RED" "$field" "$yaml_file" "$NC"
+        YAML_FAIL=1
+      fi
+    done
+  done
+  if [[ $YAML_FAIL -ne 0 ]]; then
+    printf "  Fix: add missing fields to the policy: block in the agent YAML.\n"
+    exit 1
+  fi
+fi
+
 printf "%b[pre-commit] All checks passed.%b\n" "$YELLOW" "$NC"
 exit 0
