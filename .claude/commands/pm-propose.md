@@ -35,4 +35,9 @@ For each rejected proposal number:
 - Update the proposal's Status line to `REJECTED: <reason from user or "user rejected">`.
 
 **7. Bake learnings**
-After all proposals are resolved: invoke the revise-claude-md built-in agent (subagent_type: claude-md-management:revise-claude-md) to apply session learnings to CLAUDE.md.
+After all proposals are resolved: invoke `revise-claude-md` via the `Skill` tool (not `Agent`) to apply session learnings to CLAUDE.md.
+
+**Next step suggestion**
+Print one line after baking learnings:
+- If pending or paused tasks remain → `Suggested next: /pm-run  (proposals resolved — continue execution)`
+- Else → `Suggested next: /pm-close  (all done — close the sprint)`

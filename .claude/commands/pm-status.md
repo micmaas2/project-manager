@@ -15,3 +15,10 @@ Read tasks/epics.md. Find the epic with status=in_progress. For each of its stor
 
 **4. Token spend**
 Read logs/token_log.jsonl if it exists (skip silently if absent). Read the last 50 lines. Sum token_estimate grouped by task_id. Print per-task totals, then grand total.
+
+**Next step suggestion**
+Print one line after the token summary:
+- If any task has status=paused → `Suggested next: /pm-run  (resume paused task)`
+- Else if any task has status=pending → `Suggested next: /pm-run  (execute next pending task)`
+- Else if plannable backlog items exist (status: new) → `Suggested next: /pm-plan  (queue is empty — plan new work)`
+- Else → `Suggested next: /pm-propose  (all tasks done — review improvement proposals)`

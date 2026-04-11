@@ -23,3 +23,9 @@ Read token_estimate from the task. If token_estimate > 400000: halt with:
 
 **5. Execute pipeline**
 Invoke the ProjectManager YAML agent with the task_id. The ProjectManager will run the full pipeline: Builder → [Reviewer + code-quality-reviewer] → Tester → [DocUpdater + docs-readme-writer] → SelfImprover.
+
+**Next step suggestion**
+After the pipeline completes, print one line:
+- If more paused or pending tasks remain in queue.json → `Suggested next: /pm-run  (N tasks remaining)`
+- Else if improvement proposals are pending → `Suggested next: /pm-propose  (all tasks done — review proposals)`
+- Else → `Suggested next: /pm-close  (queue clear — close the sprint)`

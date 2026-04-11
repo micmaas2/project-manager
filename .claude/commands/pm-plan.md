@@ -150,5 +150,5 @@ Tasks queued: <count>
 ...
 Total tokens this sprint: <sum>
 
-Next step: run /pm-run to start executing the queue.
+Next step: /pm-run  (start executing the queued tasks)
 ```

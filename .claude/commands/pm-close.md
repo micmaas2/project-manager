@@ -50,3 +50,7 @@ Run `git branch -r | grep feature/<branch-name>` — if the remote branch still 
 
 **7. Phase gate check**
 Read tasks/epics.md. Find the epic with status=in_progress. If all its stories have status=done: announce the phase gate has been reached and await explicit human approval before queuing any next-phase work.
+
+**Next step suggestion**
+Print one line after the phase gate check:
+`Suggested next: /pm-start  (begin next session)`

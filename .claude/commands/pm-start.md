@@ -28,3 +28,10 @@ Read tasks/epics.md. Find the epic with status=in_progress. Check if all its sto
 **6. Summary**
 Present: inbox items promoted (count), top 3 lessons, paused tasks, catch-up needed, phase status.
 Await user confirmation before executing any task work.
+
+**Next step suggestion**
+After the summary, print one line:
+- If paused tasks exist → `Suggested next: /pm-run  (resume paused task)`
+- Else if pending tasks exist → `Suggested next: /pm-run  (execute next pending task)`
+- Else if plannable backlog items exist (status: new) → `Suggested next: /pm-plan  (queue is empty — plan new work from backlog)`
+- Else → `Suggested next: /pm-status  (nothing queued — review overall status)`
