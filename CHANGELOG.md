@@ -9,6 +9,8 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 ## [Unreleased]
 
 ### Added
+- `scripts/token_cap_enforcer.py`: CLI preflight script; reads `token_estimate` from `tasks/queue.json` for a given `--task-id`; exits 1 with ALERT if estimate exceeds 400,000 (80% of 500k cap), exits 0 with OK otherwise; 9/9 unit tests passing (BL-050, S-003-4)
+- `.claude/agents/manager.yaml`: step 5 updated to explicitly invoke `python3 scripts/token_cap_enforcer.py --task-id <task_id>` as part of token cap preflight before task execution
 - `scripts/pm-priority.py`: multi-project priority ranking; reads queue.json + backlog.md, outputs ranked markdown table (paused → project_manager → P1>P2>P3 → oldest)
 - `/pm-status` (pm-status.md): now invokes pm-priority.py as step 1 for ranked task view
 

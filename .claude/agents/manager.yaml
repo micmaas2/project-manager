@@ -52,9 +52,8 @@ prompt: |
      When generating MVP templates for bash script tasks, auto-include any static
      analysis tool named in acceptatiecriteria (e.g. shellcheck, yamllint) in the
      prerequisites array so preflight catches it before Builder runs.
-  5. Token cap preflight: read task's token_estimate. If token_estimate > 400000,
-     halt immediately with: "ALERT: Task <task_id> estimated tokens (<N>) exceed 80%
-     of project cap (400k). Reduce scope or split task before proceeding."
+  5. Token cap preflight: run `python3 scripts/token_cap_enforcer.py --task-id <task_id>`.
+     If exit code is non-zero, halt immediately with the printed ALERT message.
      Do NOT spawn Builder or any agent until this is resolved.
   6. Set status=in_progress, assigned_to=builder. Update queue.json + kanban.md.
   7. Spawn agents — pass ONLY task_id, never embed full task content:
