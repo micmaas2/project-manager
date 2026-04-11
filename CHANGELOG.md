@@ -9,6 +9,13 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 ## [Unreleased]
 
 ### Added
+- `scripts/pm-priority.py`: multi-project priority ranking; reads queue.json + backlog.md, outputs ranked markdown table (paused → project_manager → P1>P2>P3 → oldest)
+- `/pm-status` (pm-status.md): now invokes pm-priority.py as step 1 for ranked task view
+
+### Fixed
+- `tasks/queue.json`: task-015/016/017 titles updated to include BL-NNN references for priority lookup
+
+### Added
 - task-013: `/pm-plan` skill — PI/Refinement planning session workflow; guides user through backlog review, epic/story mapping, MVP template drafting, and queue.json commit in one repeatable flow. All placeholders resolved from named sources; feature branch commit includes queue.json + backlog.md + kanban.md + epics.md (BL-003, S-003-2)
 
 ### Fixed

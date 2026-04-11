@@ -26,7 +26,6 @@ _(items in backlog.md not yet in queue)_
 ## Ready
 _(in queue.json with status: pending)_
 
-- **task-015** project_manager: Multi-project priority ranking in PM (BL-004, S-003-1)
 - **task-016** project_manager: Python token-cap-enforcer script (BL-050, S-003-4)
 - **task-017** project_manager: Cross-project kanban view script (BL-064, S-003-3)
 - **task-018** mas_agent: Fix mas-frontend Docker healthcheck (BL-059)
@@ -58,6 +57,7 @@ _(empty)_
 ## Done
 _(status: done — pipeline complete, artefact delivered)_
 
+- **task-015** project_manager: Multi-project priority ranking in PM (BL-004, S-003-1) [2026-04-11]
 - **task-014** Architecture review — MAS/Claude Code, pensieve, mas_agent (BL-047) [2026-04-11]
 - **task-013** PM: /pm-plan skill — PI/Refinement planning session (BL-003, S-003-2) [2026-04-11]
 - **task-012** project_manager: Fix MAS daily facts — birth-date match + 7-day dedup (BL-039) [2026-04-11]
