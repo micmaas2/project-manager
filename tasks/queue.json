@@ -2,8 +2,238 @@
   "$schema": "./queue.schema.json",
   "tasks": [
     {
+      "id": "task-015",
+      "title": "project_manager: Multi-project priority ranking in PM (S-003-1)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": "S-003-1",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-015/",
+      "created": "2026-04-11",
+      "updated": "2026-04-11T00:00:00Z",
+      "token_estimate": 6000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Add scripts/pm-priority.py that reads queue.json and outputs a ranked markdown table of all tasks sorted by the PM multi-project priority order: paused first, then project_manager tasks, then P1>P2>P3, then oldest created date.",
+        "niet_in_scope": [
+          "Automatic reordering of queue.json itself",
+          "UI or web dashboard",
+          "New priority tiers beyond existing P1/P2/P3"
+        ],
+        "acceptatiecriteria": [
+          "scripts/pm-priority.py reads tasks/queue.json and outputs a ranked markdown table (rank, task-id, project, priority, status, title)",
+          "Paused tasks always appear first regardless of project or priority",
+          "project_manager tasks outrank same-priority tasks from other projects",
+          "Within same project+priority, oldest created date wins",
+          "/pm-status skill updated to invoke pm-priority.py"
+        ],
+        "security_arch_impact": "None — reads local files only; no outbound HTTP; no path construction",
+        "tests_required": "Unit — fixture queue.json with mixed projects/priorities/statuses; assert output order matches ranking rules for each scenario",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "scripts/pm-priority.py present and committed",
+          "pm-status.md updated to call pm-priority.py",
+          "epics.md S-003-1 → done"
+        ],
+        "rollback_plan": "Delete scripts/pm-priority.py; revert pm-status.md edit — Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-016",
+      "title": "project_manager: Python token-cap-enforcer script (S-003-4)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": "S-003-4",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-016/",
+      "created": "2026-04-11",
+      "updated": "2026-04-11T00:00:00Z",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Implement scripts/token_cap_enforcer.py that reads a task's token_estimate from queue.json by task_id and exits with a structured error if it exceeds 400,000 (80% of the 500k project cap).",
+        "niet_in_scope": [
+          "Per-agent token tracking",
+          "Cumulative spend dashboard (BL-052)",
+          "Modifying queue.json"
+        ],
+        "acceptatiecriteria": [
+          "Script accepts --task-id argument; reads tasks/queue.json",
+          "If token_estimate > 400000: prints 'ALERT: Task <id> estimated tokens (<n>) exceed 80% of project cap (400k)' and exits code 1",
+          "If token_estimate <= 400000: prints 'OK: <id> token_estimate=<n>' and exits 0",
+          "manager.yaml step 5 references scripts/token_cap_enforcer.py explicitly by path"
+        ],
+        "security_arch_impact": "None — reads queue.json only; no outbound; no path construction",
+        "tests_required": "Unit — fixture queue.json with tasks above and below threshold; assert exit code and output message for each case",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "scripts/token_cap_enforcer.py present and committed",
+          "manager.yaml step 5 updated to name script explicitly",
+          "epics.md S-003-4 → done"
+        ],
+        "rollback_plan": "Delete scripts/token_cap_enforcer.py; revert manager.yaml — Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-017",
+      "title": "project_manager: Cross-project kanban view script (S-003-3)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": "S-003-3",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-017/",
+      "created": "2026-04-11",
+      "updated": "2026-04-11T00:00:00Z",
+      "token_estimate": 6000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Implement scripts/cross-kanban.py that generates a unified markdown kanban across all managed projects by reading queue.json and docs/project-registry.md, grouped by project then by status column.",
+        "niet_in_scope": [
+          "Real-time updates or file watching",
+          "Web UI",
+          "Modifying kanban.md (output is stdout only)"
+        ],
+        "acceptatiecriteria": [
+          "Script outputs markdown with one section per project, each containing a kanban table (status | task-id | title) for that project's tasks",
+          "Projects with no active tasks are omitted from output",
+          "Output callable from /pm-status (one line added to pm-status.md)",
+          "Script handles queue.json with 0 tasks gracefully (prints 'No active tasks')"
+        ],
+        "security_arch_impact": "None — reads local files only; no outbound HTTP; no path construction",
+        "tests_required": "Unit — fixture queue.json with tasks across 3 projects; assert each project section present, correct tasks in correct status columns",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "scripts/cross-kanban.py present and committed",
+          "pm-status.md updated to invoke cross-kanban.py",
+          "epics.md S-003-3 → done"
+        ],
+        "rollback_plan": "Delete scripts/cross-kanban.py; revert pm-status.md — Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-018",
+      "title": "mas_agent: Fix mas-frontend Docker healthcheck (BL-059)",
+      "project": "pi-homelab",
+      "target_project_path": "/opt/mas",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-018/",
+      "created": "2026-04-11",
+      "updated": "2026-04-11T00:00:00Z",
+      "token_estimate": 4000,
+      "resume_from": null,
+      "notes": [
+        "Root cause confirmed: BusyBox wget resolves localhost to [::1] (IPv6), nginx listens on 0.0.0.0:80 (IPv4) only. Fix: change healthcheck to 127.0.0.1"
+      ],
+      "mvp_template": {
+        "doel": "Fix the mas-frontend Docker healthcheck by changing `localhost` to `127.0.0.1` in docker-compose.yml (or Dockerfile), resolving the IPv6/IPv4 mismatch that caused 82,000+ consecutive false-unhealthy reports over 4+ months.",
+        "niet_in_scope": [
+          "nginx config changes",
+          "Frontend code changes",
+          "Docker networking changes"
+        ],
+        "acceptatiecriteria": [
+          "docker-compose.yml healthcheck directive uses 127.0.0.1 instead of localhost",
+          "After docker-compose up -d --build mas-frontend on Pi4: docker ps shows mas-frontend as healthy",
+          "Consecutive healthcheck failure count resets to 0",
+          "Commit pushed to micmaas2/mas_personal_assistant repo"
+        ],
+        "security_arch_impact": "None — change confined to healthcheck directive; no outbound HTTP beyond localhost",
+        "tests_required": "Post-deploy: ssh pi4 'docker inspect mas-frontend --format={{.State.Health.Status}}' returns healthy; docker ps shows (healthy)",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "artefacts/task-018/verification.md contains PASS + docker ps output",
+          "mas_personal_assistant commit merged to main"
+        ],
+        "rollback_plan": "Revert healthcheck line in docker-compose.yml, rebuild container — Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "ssh pi4 access",
+          "git access to micmaas2/mas_personal_assistant (private)"
+        ]
+      }
+    },
+    {
+      "id": "task-019",
+      "title": "mas_agent: Telegram sender chat_id auth guard (BL-060)",
+      "project": "pi-homelab",
+      "target_project_path": "/opt/mas",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-019/",
+      "created": "2026-04-11",
+      "updated": "2026-04-11T00:00:00Z",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [
+        "Security gap: any Telegram user who discovers the bot token can send commands and receive responses"
+      ],
+      "mvp_template": {
+        "doel": "Add inbound chat_id validation to telegram_listener.py in mas_personal_assistant — drop and log any Telegram message whose chat_id does not match settings.telegram_chat_id.",
+        "niet_in_scope": [
+          "Multi-user support or allowlists",
+          "Telegram group/channel support",
+          "Changes to command routing logic"
+        ],
+        "acceptatiecriteria": [
+          "At top of _process_update(), compare message['chat']['id'] (int) against settings.telegram_chat_id",
+          "Unauthorized chat_id: log WARNING 'Unauthorized chat_id <id> — dropping' and return without processing",
+          "Authorized chat_id: processed exactly as before (no behaviour change)",
+          "Unit test with authorized + unauthorized chat_id fixture payloads; both cases assert correctly",
+          "settings.telegram_chat_id verified present in .env.production before Builder runs"
+        ],
+        "security_arch_impact": "Closes active P1 security gap — restricts bot to a single authorised chat_id; settings.telegram_chat_id must be set in .env.production (Builder must verify before proceeding)",
+        "tests_required": "Unit — mock _process_update with authorized and unauthorized chat_id payloads; assert authorized → processed, unauthorized → dropped + WARNING logged",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "mas_personal_assistant commit merged to main",
+          "Verified via ssh pi4 docker logs mas-telegram shows no unauthorized processing"
+        ],
+        "rollback_plan": "Revert telegram_listener.py change and redeploy — Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "No — chat_id is a non-personal Telegram identifier",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "ssh pi4 access",
+          "settings.telegram_chat_id set in /opt/mas/.env.production",
+          "git access to micmaas2/mas_personal_assistant (private)"
+        ]
+      }
+    },
+    {
       "id": "task-014",
-      "title": "project_manager: Architecture review \u2014 MAS/Claude Code, pensieve, mas_agent (Telegram daily facts)",
+      "title": "project_manager: Architecture review — MAS/Claude Code, pensieve, mas_agent (Telegram daily facts)",
       "project": "project_manager",
       "target_project_path": "/opt/claude/project_manager",
       "epic_id": "EPIC-003",
@@ -31,7 +261,7 @@
           "Each proposal cross-references an existing BL item or proposes a new BL-NNN entry",
           "Reviewer APPROVED; no unresolved open questions in the document"
         ],
-        "security_arch_impact": "None \u2014 read-only analysis; no code written, no external API calls required. If Architect reads Pi4 state via SSH: read-only commands only (no writes).",
+        "security_arch_impact": "None — read-only analysis; no code written, no external API calls required. If Architect reads Pi4 state via SSH: read-only commands only (no writes).",
         "tests_required": "Reviewer agent verifies: all 4 dimensions covered per component; proposals are actionable and scoped (not vague); cross-references present. No automated tests (document-only output).",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -39,9 +269,9 @@
           "artefacts/task-014/architecture-review.md present and committed",
           "improvement_proposals.md present (SelfImprover run)"
         ],
-        "rollback_plan": "N/A \u2014 document only; no system state changed. Delete artefact dir if needed.",
+        "rollback_plan": "N/A — document only; no system state changed. Delete artefact dir if needed.",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No \u2014 reviews infrastructure architecture; no personal data processed",
+        "privacy_dpia": "No — reviews infrastructure architecture; no personal data processed",
         "cost_estimate": "EUR 0",
         "prerequisites": [
           "Read access to /opt/claude/project_manager, /opt/claude/pensieve",
@@ -51,7 +281,7 @@
     },
     {
       "id": "task-011",
-      "title": "pi-homelab: Pi4 vault sync \u2014 pull pensieve repo into Obsidian vault",
+      "title": "pi-homelab: Pi4 vault sync — pull pensieve repo into Obsidian vault",
       "project": "pi-homelab",
       "target_project_path": "/opt/claude/pi-homelab",
       "epic_id": "EPIC-003",
@@ -77,7 +307,7 @@
           "On pull failure, does NOT overwrite local files; logs error and exits non-zero",
           "Deploy script and cron entry documented in artefacts/task-011/deploy-notes.md"
         ],
-        "security_arch_impact": "Low \u2014 read-only git pull; no secrets beyond SSH key already on Pi4. No outbound HTTP; no user-controlled path values.",
+        "security_arch_impact": "Low — read-only git pull; no secrets beyond SSH key already on Pi4. No outbound HTTP; no user-controlled path values.",
         "tests_required": "Unit test for error-exit behaviour; integration test via ssh pi4 dry run; shellcheck on deploy script",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -85,9 +315,9 @@
           "sync script deployed on Pi4 and cron entry active",
           "deploy-notes.md present in artefacts/task-011/"
         ],
-        "rollback_plan": "Remove cron entry and script from Pi4 \u2014 no vault data is modified by the sync (read-only pull)",
+        "rollback_plan": "Remove cron entry and script from Pi4 — no vault data is modified by the sync (read-only pull)",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No \u2014 syncing personal notes to local device only",
+        "privacy_dpia": "No — syncing personal notes to local device only",
         "cost_estimate": "EUR 0",
         "prerequisites": [
           "git >= 2.0",
@@ -98,7 +328,7 @@
     },
     {
       "id": "task-012",
-      "title": "project_manager: Fix MAS daily facts \u2014 enforce birth-date match and 7-day dedup",
+      "title": "project_manager: Fix MAS daily facts — enforce birth-date match and 7-day dedup",
       "project": "project_manager",
       "target_project_path": "/opt/claude/project_manager",
       "epic_id": "EPIC-003",
@@ -111,7 +341,7 @@
       "token_estimate": 8000,
       "resume_from": null,
       "notes": [
-        "Bug: same person appears multiple days in a row \u2014 person selection not gated on birth date"
+        "Bug: same person appears multiple days in a row — person selection not gated on birth date"
       ],
       "mvp_template": {
         "doel": "Fix the daily-facts personal assistant so each fact is about a person born on today's calendar date, with no person repeated within a 7-day rolling window.",
@@ -127,7 +357,7 @@
           "Dedup guard: same person does not appear within a 7-day rolling window (persisted across runs)",
           "Fix deployed to n8n on Pi4 and verified with a manual trigger test"
         ],
-        "security_arch_impact": "Low \u2014 may use external birthday dataset or Wikipedia API; if so: timeout set, private IP ranges blocked, no secrets in workflow JSON.",
+        "security_arch_impact": "Low — may use external birthday dataset or Wikipedia API; if so: timeout set, private IP ranges blocked, no secrets in workflow JSON.",
         "tests_required": "Fixture test with mocked date verifies correct birth-date filtering; dedup test verifies repeat rejected within 7-day window",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -135,9 +365,9 @@
           "Fixed workflow deployed and active on Pi4",
           "build_notes.md documents discovery findings and fix approach"
         ],
-        "rollback_plan": "Restore previous workflow version from git or n8n export \u2014 no persistent data loss",
+        "rollback_plan": "Restore previous workflow version from git or n8n export — no persistent data loss",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No \u2014 historical public figures only",
+        "privacy_dpia": "No — historical public figures only",
         "cost_estimate": "EUR 0.01 (Claude API per daily trigger)",
         "prerequisites": [
           "ssh pi4 access",
@@ -148,7 +378,7 @@
     },
     {
       "id": "task-013",
-      "title": "project_manager: /pm-plan skill \u2014 PI/Refinement planning session workflow (S-003-2)",
+      "title": "project_manager: /pm-plan skill — PI/Refinement planning session workflow (S-003-2)",
       "project": "project_manager",
       "target_project_path": "/opt/claude/project_manager",
       "epic_id": "EPIC-003",
@@ -162,7 +392,7 @@
       "resume_from": null,
       "notes": [],
       "mvp_template": {
-        "doel": "Implement a /pm-plan skill that guides the user through a repeatable PI planning session: backlog review, epic/story mapping, sprint goal setting, and task queuing \u2014 producing a committed sprint plan in queue.json.",
+        "doel": "Implement a /pm-plan skill that guides the user through a repeatable PI planning session: backlog review, epic/story mapping, sprint goal setting, and task queuing — producing a committed sprint plan in queue.json.",
         "niet_in_scope": [
           "SAFe/Agile ceremony tooling or external integrations",
           "Automated capacity planning or velocity tracking",
@@ -174,7 +404,7 @@
           "All angle-bracket placeholders include explicit resolution instructions naming source file and lookup pattern",
           "Skill dry-run tested end-to-end: all placeholders resolve without ambiguity in a simulated fresh session"
         ],
-        "security_arch_impact": "None \u2014 file reads and queue.json writes only; no external calls; no user-controlled values used in file paths.",
+        "security_arch_impact": "None — file reads and queue.json writes only; no external calls; no user-controlled values used in file paths.",
         "tests_required": "Manual dry-run walkthrough; verify placeholder resolution; verify output queue.json is schema-valid",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -182,7 +412,7 @@
           ".claude/commands/pm-plan.md present and committed",
           "Skill listed in CLAUDE.md PM Skills table"
         ],
-        "rollback_plan": "Delete .claude/commands/pm-plan.md \u2014 no system state changed beyond the file",
+        "rollback_plan": "Delete .claude/commands/pm-plan.md — no system state changed beyond the file",
         "incident_owner": "Michel Maas",
         "privacy_dpia": "No",
         "cost_estimate": "EUR 0",
@@ -219,7 +449,7 @@
           "Output written to vault as YAML frontmatter note matching current template (source:email, date, title, summary, key_points, tags, topic)",
           "Manual import test on Pi4 documented in artefacts/task-009/deploy-notes.md; workflow JSON validates via python3 -m json.tool"
         ],
-        "security_arch_impact": "Medium \u2014 Gmail OAuth credentials stored in n8n credential store; no secrets in workflow JSON; Claude API key via n8n env var",
+        "security_arch_impact": "Medium — Gmail OAuth credentials stored in n8n credential store; no secrets in workflow JSON; Claude API key via n8n env var",
         "tests_required": "JSON validation; manual import test on Pi4; dry-run with fixture email payload",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -227,9 +457,9 @@
           "workflows/gmail-capture.json present and JSON-valid",
           "deploy-notes.md documents import steps"
         ],
-        "rollback_plan": "Delete workflow from n8n UI \u2014 no vault writes occur until workflow is active and triggered",
+        "rollback_plan": "Delete workflow from n8n UI — no vault writes occur until workflow is active and triggered",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "Yes \u2014 email content is personal data; processed locally on Pi4, not sent to external services beyond Claude API; Gmail OAuth scoped to read-only",
+        "privacy_dpia": "Yes — email content is personal data; processed locally on Pi4, not sent to external services beyond Claude API; Gmail OAuth scoped to read-only",
         "cost_estimate": "EUR 0.01 (Claude Haiku per captured email)",
         "prerequisites": [
           "n8n running on Pi4 with Gmail OAuth credential configured",
@@ -253,7 +483,7 @@
       "token_estimate": 8000,
       "resume_from": null,
       "notes": [
-        "Demo priority \u2014 implement for demo purposes"
+        "Demo priority — implement for demo purposes"
       ],
       "mvp_template": {
         "doel": "Enable capturing backlog items and Pensieve notes from a laptop (browser bookmarklet, CLI script, or email) so that captures are not limited to Telegram/phone.",
@@ -265,12 +495,12 @@
         ],
         "acceptatiecriteria": [
           "At least one capture path implemented: browser bookmarklet OR CLI script OR email-to-backlog",
-          "Captured items land in tasks/telegram-inbox.md (backlog items) or Obsidian vault (Pensieve notes) via GitHub API commit \u2014 same path as Telegram captures",
+          "Captured items land in tasks/telegram-inbox.md (backlog items) or Obsidian vault (Pensieve notes) via GitHub API commit — same path as Telegram captures",
           "Capture includes: title, source URL (if applicable), date, type (backlog or pensieve)",
           "deploy-notes.md documents how to set up and use the capture mechanism on a laptop",
           "Works without requiring Claude Code or SSH access from the laptop"
         ],
-        "security_arch_impact": "Low-medium \u2014 GitHub API token required for commit; token scoped to repo write only; no secrets stored client-side beyond token",
+        "security_arch_impact": "Low-medium — GitHub API token required for commit; token scoped to repo write only; no secrets stored client-side beyond token",
         "tests_required": "End-to-end test: capture an item from laptop, verify it appears in telegram-inbox.md or vault",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -280,7 +510,7 @@
         ],
         "rollback_plan": "Delete artefact; revoke GitHub token if bookmarklet/CLI was distributed",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No \u2014 captures are personal notes, no third-party personal data",
+        "privacy_dpia": "No — captures are personal notes, no third-party personal data",
         "cost_estimate": "EUR 0",
         "prerequisites": [
           "GitHub PAT with repo write scope",
@@ -303,7 +533,7 @@
       "token_estimate": 7000,
       "resume_from": null,
       "notes": [
-        "MVP2 closeout \u2014 required before further MVP3 expansion"
+        "MVP2 closeout — required before further MVP3 expansion"
       ],
       "mvp_template": {
         "doel": "After each pipeline run, SelfImprover produces concrete improvement proposals (CLAUDE.md updates, agent YAML changes); a human must explicitly approve each proposal before it is written.",
@@ -319,7 +549,7 @@
           "Only approved proposals are applied; rejected proposals logged with reason",
           "CLAUDE.md updated to document this human-gate workflow step"
         ],
-        "security_arch_impact": "Low \u2014 no automated writes to CLAUDE.md or agent YAMLs without explicit approval",
+        "security_arch_impact": "Low — no automated writes to CLAUDE.md or agent YAMLs without explicit approval",
         "tests_required": "Fixture run: SelfImprover produces a proposal; simulate approve + verify file updated; simulate reject + verify file unchanged",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -349,7 +579,7 @@
       "token_estimate": 4000,
       "resume_from": null,
       "notes": [
-        "MVP2 closeout \u2014 required before further MVP3 expansion"
+        "MVP2 closeout — required before further MVP3 expansion"
       ],
       "mvp_template": {
         "doel": "Update the PM session workflow so that tasks/lessons.md is read at the start of every session and the top lessons inform task planning and agent decisions.",
@@ -363,7 +593,7 @@
           "PM surfaces the 3 most recent lessons as context when planning new tasks",
           "lessons.md format documented (if not already) so future SelfImprover runs append correctly"
         ],
-        "security_arch_impact": "None \u2014 read-only change to workflow documentation",
+        "security_arch_impact": "None — read-only change to workflow documentation",
         "tests_required": "Review CLAUDE.md diff; manually verify lessons.md is consulted in next PM session",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -402,14 +632,14 @@
         ],
         "acceptatiecriteria": [
           "Migrates old-format notes (# heading + **bold** fields + #hashtag tags) to YAML frontmatter matching the current template",
-          "Normalises concatenated tags to hyphenated lowercase (e.g. aiagents \u2192 ai-agents)",
+          "Normalises concatenated tags to hyphenated lowercase (e.g. aiagents → ai-agents)",
           "For source:link notes with non-LinkedIn URLs: fetches page content (requests + BeautifulSoup), re-calls Claude API with improved prompt, rewrites summary/key_points/tags",
           "For LinkedIn or unresolvable URLs: adds needs-review tag without modifying existing content",
           "Supports --dry-run flag that prints planned changes without writing files",
           "Passes pylint / flake8 with no errors",
           "Script runs on Pi 4 via: ssh pi4 python3 /tmp/migrate-vault.py --vault /opt/obsidian-vault [--dry-run]"
         ],
-        "security_arch_impact": "Low \u2014 reads/writes local vault files; Claude API key passed via ANTHROPIC_API_KEY env var, never hardcoded; URL fetching uses requests with 10s timeout and no redirect to private IPs",
+        "security_arch_impact": "Low — reads/writes local vault files; Claude API key passed via ANTHROPIC_API_KEY env var, never hardcoded; URL fetching uses requests with 10s timeout and no redirect to private IPs",
         "tests_required": "Unit tests with fixture notes covering: old-format migration, tag normalisation, LinkedIn detection, dry-run mode",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -417,9 +647,9 @@
           "script exists in artefacts/task-005/migrate-vault.py",
           "fixtures present in artefacts/task-005/fixtures/"
         ],
-        "rollback_plan": "Script makes in-place edits \u2014 run with --dry-run first; vault is synced to OneDrive so files can be restored from OneDrive version history if needed",
+        "rollback_plan": "Script makes in-place edits — run with --dry-run first; vault is synced to OneDrive so files can be restored from OneDrive version history if needed",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No \u2014 notes are personal knowledge captures, no third-party personal data",
+        "privacy_dpia": "No — notes are personal knowledge captures, no third-party personal data",
         "cost_estimate": "EUR 0.01 (Claude API calls for URL re-enrichment of ~5-10 existing URL notes)",
         "prerequisites": [
           "python3 >= 3.9",
@@ -430,7 +660,7 @@
     },
     {
       "id": "task-004",
-      "title": "pensieve: Improved captures \u2014 richer summaries, better tagging, topic folders",
+      "title": "pensieve: Improved captures — richer summaries, better tagging, topic folders",
       "project": "pensieve",
       "target_project_path": "/opt/claude/pensieve",
       "epic_id": "EPIC-003",
@@ -461,7 +691,7 @@
           "workflow JSON validates: python3 -m json.tool workflows/telegram-capture.json",
           "prompts/claude-processor.txt and templates/note-template.md updated to reflect new schema"
         ],
-        "security_arch_impact": "None \u2014 same Claude API call, same vault write path; topic slug validated against [a-z0-9-]+ before use in path construction",
+        "security_arch_impact": "None — same Claude API call, same vault write path; topic slug validated against [a-z0-9-]+ before use in path construction",
         "tests_required": "Manual import test in n8n; fixture-based unit test of Parse Claude Response and Build Markdown Note JS logic; validate JSON",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -470,9 +700,9 @@
           "prompts/claude-processor.txt updated",
           "templates/note-template.md updated"
         ],
-        "rollback_plan": "git revert in pensieve repo \u2014 workflow JSON is version-controlled; re-import previous version in n8n",
+        "rollback_plan": "git revert in pensieve repo — workflow JSON is version-controlled; re-import previous version in n8n",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No \u2014 no change to data handling",
+        "privacy_dpia": "No — no change to data handling",
         "cost_estimate": "EUR 0",
         "prerequisites": [
           "python3 >= 3.0 (for JSON validation only)"
@@ -506,7 +736,7 @@
           "Jenkinsfile-HANA-OS-Users and README-HANA-OS-Users.md present on ccas-jenkins develop",
           "ccas-jenkins develop pushed to remote"
         ],
-        "security_arch_impact": "None \u2014 merge only, no new code introduced",
+        "security_arch_impact": "None — merge only, no new code introduced",
         "tests_required": "git log verify merge commit present; ls verify pipeline files present on develop",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -516,7 +746,7 @@
         ],
         "rollback_plan": "git revert merge commit on ccas-jenkins develop",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No \u2014 no personal data",
+        "privacy_dpia": "No — no personal data",
         "cost_estimate": "EUR 0",
         "prerequisites": [
           "git >= 2.0"
@@ -551,7 +781,7 @@
           "Handles missing or empty audit.jsonl gracefully (zero counts, no errors)",
           "Passes bash -n and shellcheck with no warnings"
         ],
-        "security_arch_impact": "None \u2014 read-only, no secrets, no network calls",
+        "security_arch_impact": "None — read-only, no secrets, no network calls",
         "tests_required": "bash -n; shellcheck; run with missing file; run with empty file; run with seeded fixture",
         "definition_of_done": [
           "review.md contains APPROVED",
@@ -559,9 +789,9 @@
           "script exists in artefacts/task-002/",
           "fixtures present in artefacts/task-002/fixtures/"
         ],
-        "rollback_plan": "Delete artefacts/task-002/ \u2014 no system state changed",
+        "rollback_plan": "Delete artefacts/task-002/ — no system state changed",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No \u2014 no personal data processed",
+        "privacy_dpia": "No — no personal data processed",
         "cost_estimate": "EUR 0",
         "prerequisites": [
           "jq >= 1.6"
@@ -596,16 +826,16 @@
           "Handles empty queue gracefully (zero counts, no errors)",
           "Passes bash -n and shellcheck with no warnings"
         ],
-        "security_arch_impact": "None \u2014 read-only, no secrets, no network calls",
+        "security_arch_impact": "None — read-only, no secrets, no network calls",
         "tests_required": "bash -n; shellcheck; run with empty queue.json; run with seeded queue.json",
         "definition_of_done": [
           "review.md contains APPROVED",
           "test_report.md contains PASS with >=90% pass rate",
           "script exists in artefacts/task-001/"
         ],
-        "rollback_plan": "Delete artefacts/task-001/ \u2014 no system state changed",
+        "rollback_plan": "Delete artefacts/task-001/ — no system state changed",
         "incident_owner": "Michel Maas",
-        "privacy_dpia": "No \u2014 no personal data processed",
+        "privacy_dpia": "No — no personal data processed",
         "cost_estimate": "EUR 0"
       }
     }

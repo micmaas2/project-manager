@@ -26,7 +26,11 @@ _(items in backlog.md not yet in queue)_
 ## Ready
 _(in queue.json with status: pending)_
 
-_(empty)_
+- **task-015** project_manager: Multi-project priority ranking in PM (BL-004, S-003-1)
+- **task-016** project_manager: Python token-cap-enforcer script (BL-050, S-003-4)
+- **task-017** project_manager: Cross-project kanban view script (BL-064, S-003-3)
+- **task-018** mas_agent: Fix mas-frontend Docker healthcheck (BL-059)
+- **task-019** mas_agent: Telegram sender chat_id auth guard (BL-060)
 
 ---
 

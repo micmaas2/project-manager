@@ -53,10 +53,10 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 | Story ID | Title | Queue Task | Status |
 |---|---|---|---|
-| S-003-1 | Global priority ranking across projects | — | planned |
+| S-003-1 | Global priority ranking across projects | task-015 | in_progress |
 | S-003-2 | PI/Refinement planning session (user + PM) | task-013 | done |
-| S-003-3 | Cross-project kanban view | — | planned |
-| S-003-4 | Token budget enforcement per project | — | planned |
+| S-003-3 | Cross-project kanban view | task-017 | in_progress |
+| S-003-4 | Token budget enforcement per project | task-016 | in_progress |
 
 ---
 

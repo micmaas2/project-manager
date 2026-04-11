@@ -20,7 +20,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | ID | Epic | Title | Project | Priority | Status | Added |
 |---|---|---|---|---|---|---|
 | BL-003 | EPIC-003 | PI/Refinement planning session workflow | project_manager | P2 | done | 2026-04-05 |
-| BL-004 | EPIC-003 | Multi-project priority ranking in PM | project_manager | P2 | planned | 2026-04-05 |
+| BL-004 | EPIC-003 | Multi-project priority ranking in PM | project_manager | P2 | in_progress | 2026-04-05 |
 | BL-007a | EPIC-003 | CCAS: Merge feature/hana-os-users → ccas-jenkins develop | ccas | P1 | done | 2026-04-05 |
 | BL-009 | EPIC-003 | CCAS: Quick Win #3 — Infrastructure Validation Enhancements | ccas | P2 | discovered | 2026-04-05 |
 | BL-010 | EPIC-003 | CCAS: BW/4HANA inventory parametrization — final ~10% | ccas | P2 | discovered | 2026-04-05 |
@@ -60,7 +60,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-047 | EPIC-003 | project_manager: Architecture review — project_manager (MAS/Claude Code), pensieve (n8n + Pi4 + Obsidian), mas_agent (Docker containers) — identify improvements for less work, lower cost, better security, higher availability | project_manager | P1 | done | 2026-04-11 |
 | BL-048 | EPIC-003 | project_manager: Wire /claude-md-improver into /pm-close — run every 5th session close on project_manager + all managed project CLAUDE.md files; /pm-close shows session counter and next scheduled run | project_manager | P2 | new | 2026-04-11 |
 | BL-049 | EPIC-003 | project_manager: Estimate token reduction from applying caveman/telegram-style prompts to CLAUDE.md and agent YAMLs — measure before/after token counts, identify highest-impact sections, propose a rewrite plan | project_manager | P2 | new | 2026-04-11 |
-| BL-050 | EPIC-003 | project_manager: Implement Python token-cap-enforcer script — hard runtime guard before agent spawn; halt with structured error if task token_estimate > 400k (arch-review PM-P1) | project_manager | P2 | new | 2026-04-11 |
+| BL-050 | EPIC-003 | project_manager: Implement Python token-cap-enforcer script — hard runtime guard before agent spawn; halt with structured error if task token_estimate > 400k (arch-review PM-P1) | project_manager | P2 | in_progress | 2026-04-11 |
 | BL-051 | EPIC-003 | project_manager: Create pm-healthcheck.sh — verify hooks symlinked, queue.json validates against schema, all agent YAMLs parse, logs writable; run at pm-start (arch-review PM-P4) | project_manager | P3 | new | 2026-04-11 |
 | BL-052 | EPIC-003 | project_manager: Add token spend dashboard to /pm-status — cumulative spend per agent per task from token_log.jsonl; warn at 80% of token_estimate (arch-review PM-P5) | project_manager | P3 | new | 2026-04-11 |
 | BL-053 | EPIC-003 | pensieve: Deploy gmail-capture.json workflow to n8n on Pi4 — built in task-009, deploy steps in artefacts/task-009/deploy-notes.md; requires Gmail OAuth credential + Pensieve label re-selection after import (arch-review pensieve-P1) | pensieve | P1 | new | 2026-04-11 |
@@ -69,11 +69,12 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-056 | EPIC-003 | pensieve: Clean up stale inactive workflow copies in n8n — delete 3 duplicate "Pensieve — Telegram Capture" entries + unnamed "My workflow" entries (arch-review pensieve-P4) | pensieve | P3 | new | 2026-04-11 |
 | BL-057 | EPIC-003 | pensieve: Document PAT rotation runbook in pensieve/docs/pat-rotation.md + add quarterly calendar reminder (arch-review pensieve-P5) | pensieve | P3 | new | 2026-04-11 |
 | BL-058 | EPIC-003 | pensieve: Create deploy-gmail.sh — non-interactive 3-step deploy wrapper for gmail-capture.json (prep → import → restart) (arch-review pensieve-P6) | pensieve | P3 | new | 2026-04-11 |
-| BL-059 | EPIC-003 | mas_agent: Fix mas-frontend healthcheck — change `localhost` to `127.0.0.1` in docker-compose healthcheck; resolves 4+ months of false unhealthy state (arch-review mas-P1) | pi-homelab | P1 | new | 2026-04-11 |
-| BL-060 | EPIC-003 | mas_agent: Add Telegram sender chat_id validation in telegram_listener.py — drop updates from unauthorized chat IDs with warning log (arch-review mas-P2) | pi-homelab | P1 | new | 2026-04-11 |
+| BL-059 | EPIC-003 | mas_agent: Fix mas-frontend healthcheck — change `localhost` to `127.0.0.1` in docker-compose healthcheck; resolves 4+ months of false unhealthy state (arch-review mas-P1) | pi-homelab | P1 | in_progress | 2026-04-11 |
+| BL-060 | EPIC-003 | mas_agent: Add Telegram sender chat_id validation in telegram_listener.py — drop updates from unauthorized chat IDs with warning log (arch-review mas-P2) | pi-homelab | P1 | in_progress | 2026-04-11 |
 | BL-061 | EPIC-003 | mas_agent: Upgrade LLM_PRIMARY_MODEL from claude-3-5-sonnet-20240620 to claude-sonnet-4-6 in mas_personal_assistant (arch-review mas-P3) | pi-homelab | P2 | new | 2026-04-11 |
 | BL-062 | EPIC-003 | mas_agent: Add hard budget enforcement to LLMClient.chat() — call check_budget() before each API call; raise BudgetExceededError and log if exceeded (arch-review mas-P4) | pi-homelab | P2 | new | 2026-04-11 |
 | BL-063 | EPIC-003 | mas_agent: Configure external uptime monitoring for mas-backend /health endpoint — UptimeRobot or Uptime-Kuma; Telegram alert if non-200 for >5 min (arch-review mas-P5) | pi-homelab | P2 | new | 2026-04-11 |
+| BL-064 | EPIC-003 | project_manager: Cross-project kanban view script — generate a unified markdown kanban across all managed projects from queue.json + project-registry.md; callable from /pm-status (S-003-3) | project_manager | P2 | in_progress | 2026-04-11 |
 
 ---
 
