@@ -20,6 +20,7 @@ Full project registry: `docs/project-registry.md` (authoritative — update ther
 | `/opt/claude/genealogie/` | micmaas2/genealogie | Genealogy tooling |
 | `/opt/claude/performance_HPT/` | micmaas2/performance-twin | Performance / HPT tooling |
 | `/opt/claude/project1/` | (no remote) | Generic project skeleton |
+| Pi4: `/opt/mas/` | micmaas2/mas_personal_assistant (private) | Personal assistant — Telegram bot, FastAPI, PostgreSQL, React (mas.femic.nl) |
 
 **Existing projects may already have plans, requirements, and in-progress work.**
 When a project is added or first onboarded, PM runs a discovery scan (see `manager.yaml`) and
@@ -141,6 +142,8 @@ Opus returns a recommendation; Builder/Reviewer continues with it and notes the 
 
 **Cross-file rule mirroring (M-1 pattern)**: Enumerated rules that appear in both CLAUDE.md and agent YAMLs can silently accumulate orphan entries. When editing either file, verify rule counts and text match in both directions. Tester must include a regression guard for any task that modifies mirrored content: (a) rule-count equality check across all copies, (b) absence check for any rule that was removed.
 
+**Agent YAML policy schema**: the pre-commit hook enforces that every `.claude/agents/*.yaml` contains all 5 required policy fields (`allowed_tools`, `max_tokens_per_run`, `require_human_approval`, `audit_logging`, `external_calls_allowed`). A commit that adds or modifies an agent YAML without all 5 fields will be rejected.
+
 **PM Skills** (invoke as `/pm-start`, `/pm-status`, etc. — files in `.claude/commands/`):
 
 | Skill | File | Purpose |
@@ -165,7 +168,7 @@ Agent definitions live in `.claude/agents/[name].yaml`. Required fields: `name`,
 policy:
   allowed_tools: [...]
   max_tokens_per_run: 10000
-  require_human_approval: false  # set to TRUE for any agent that has Bash in allowed_tools
+  require_human_approval: false  # set to TRUE for any agent that has Bash, Write, or Edit in allowed_tools
   audit_logging: true
   external_calls_allowed: false
 owner: "Role Name"
