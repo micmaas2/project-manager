@@ -26,7 +26,7 @@ _(items in backlog.md not yet in queue)_
 ## Ready
 _(in queue.json with status: pending)_
 
-- **task-014** Architecture review — MAS/Claude Code, pensieve, mas_agent (BL-047)
+_(empty)_
 
 ---
 
@@ -54,6 +54,7 @@ _(empty)_
 ## Done
 _(status: done — pipeline complete, artefact delivered)_
 
+- **task-014** Architecture review — MAS/Claude Code, pensieve, mas_agent (BL-047) [2026-04-11]
 - **task-013** PM: /pm-plan skill — PI/Refinement planning session (BL-003, S-003-2) [2026-04-11]
 - **task-012** project_manager: Fix MAS daily facts — birth-date match + 7-day dedup (BL-039) [2026-04-11]
 - **task-011** pi-homelab: Pi4 vault sync — pull pensieve into Obsidian vault (BL-036) [2026-04-11]
