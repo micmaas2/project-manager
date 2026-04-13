@@ -12,7 +12,7 @@ Task: Cross-project kanban view script (BL-064, S-003-3)
 
 **Rationale**: During task-017 Builder ran `bash -n scripts/cross-kanban.py` which failed with a syntax error (Python parens misread by bash). The correct check is `python3 -m py_compile`. Adding this note prevents the same mistake in future Python script tasks.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -23,4 +23,4 @@ Task: Cross-project kanban view script (BL-064, S-003-3)
 
 **Rationale**: Both DocUpdater and docs-readme-writer Explore agents correctly identified the required changes but could not write files. The parent agent had to apply the edits. This is expected but not documented — future PM sessions may wait for the agent to write rather than applying the output themselves.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

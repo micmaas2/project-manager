@@ -131,9 +131,10 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 - `docs-readme-writer` — README/module docs; runs parallel to DocUpdater
 - `claude-md-management:revise-claude-md` — apply session learnings to CLAUDE.md (session end); invoke via `Skill` tool, NOT `Agent` tool (`subagent_type` does not work for `claude-md-management:*`)
 - `claude-md-management:claude-md-improver` — full CLAUDE.md audit (on demand); invoke via `Skill` tool
+- **Explore-type subagents cannot write files**: when DocUpdater/docs-readme-writer are spawned as `subagent_type: Explore`, they return proposed content but cannot apply edits. The parent agent must read the agent's output and apply the file changes directly — do not wait for the Explore agent to write.
 
 **Shell script pre-submission check** (Builder must verify before handing off to Reviewer):
-- `bash -n <script>` must exit 0
+- `bash -n <script>` must exit 0 — **for shell scripts only**; Python scripts use `python3 -m py_compile <script>` instead (`bash -n` cannot parse Python and will spuriously fail)
 - If cron/daemon: log guard, flock, SSH identity, logrotate — all present?
 - If outbound git/SSH: auth path exported explicitly?
 - Log output sanitized (ANSI + control chars stripped) before writing to file?
