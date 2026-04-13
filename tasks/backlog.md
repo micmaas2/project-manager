@@ -74,7 +74,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-061 | EPIC-003 | mas_agent: Upgrade LLM_PRIMARY_MODEL from claude-3-5-sonnet-20240620 to claude-sonnet-4-6 in mas_personal_assistant (arch-review mas-P3) | pi-homelab | P2 | new | 2026-04-11 |
 | BL-062 | EPIC-003 | mas_agent: Add hard budget enforcement to LLMClient.chat() — call check_budget() before each API call; raise BudgetExceededError and log if exceeded (arch-review mas-P4) | pi-homelab | P2 | new | 2026-04-11 |
 | BL-063 | EPIC-003 | mas_agent: Configure external uptime monitoring for mas-backend /health endpoint — UptimeRobot or Uptime-Kuma; Telegram alert if non-200 for >5 min (arch-review mas-P5) | pi-homelab | P2 | new | 2026-04-11 |
-| BL-064 | EPIC-003 | project_manager: Cross-project kanban view script — generate a unified markdown kanban across all managed projects from queue.json + project-registry.md; callable from /pm-status (S-003-3) | project_manager | P2 | in_progress | 2026-04-11 |
+| BL-064 | EPIC-003 | project_manager: Cross-project kanban view script — generate a unified markdown kanban across all managed projects from queue.json + project-registry.md; callable from /pm-status (S-003-3) | project_manager | P2 | done | 2026-04-11 |
 
 ---
 

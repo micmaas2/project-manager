@@ -1,0 +1,1 @@
+{"tasks": [{"id": "t1", "title": "Has project", "project": "proj_a", "status": "pending", "created": "2026-04-01"}, {"id": "t2", "title": "Missing project", "status": "pending", "created": "2026-04-02"}, {"id": "t3", "title": "Null project", "project": null, "status": "paused", "created": "2026-04-03"}]}
