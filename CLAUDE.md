@@ -367,6 +367,8 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 
 **queue.json stale-read fix**: if the Edit tool fails with "file modified since read", use `python3 -c "import json; q=json.load(open('tasks/queue.json')); ...; json.dump(q,open('tasks/queue.json','w'),indent=2)"` to atomically update it.
 
+**Python datetime**: use `datetime.now(datetime.UTC).isoformat()` not `datetime.utcnow()` — deprecated in Python 3.12+; system runs 3.13.5.
+
 **Logs**:
 - `logs/audit.jsonl` — append-only, one JSON object per line: `{timestamp, agent, task_id, action, status}`
 - `logs/token_log.jsonl` — per-run token accounting: `{timestamp, agent, task_id, token_estimate}`
