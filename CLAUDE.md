@@ -389,10 +389,24 @@ Explore agents run locally; always use `ssh pi4 "find /opt/obsidian-vault ..."` 
 Install missing packages with `pip3 install <pkg> --break-system-packages` (Debian-managed env).
 `beautifulsoup4` installs as `beautifulsoup4` but imports as `bs4`.
 
+**Pi4 root-owned git repo** (`/opt/mas`): all git operations require sudo and explicit identity flags — root has no git config on Pi4. Pattern:
+```bash
+sudo git -C /opt/mas -c user.name='Michel Maas' -c user.email='michel@femic.nl' <cmd>
+```
+Use `-c` flags rather than permanently configuring root's git config.
+
+**Docker compose `--build` rebuilds depends_on chain**: `docker compose up -d --build <service>` also rebuilds services listed under `depends_on` for that service. On Pi4 ARM, a Python pip install layer can take 5+ minutes — plan for the full dependency chain build time, not just the target service.
+
 **Hyphenated script filenames**: `migrate-vault.py` cannot be imported directly in Python tests.
 Use `importlib.util.spec_from_file_location("name", "path/to/script.py")` instead.
 
 **Testing hyphenated-filename scripts**: Use `importlib.util.spec_from_file_location("module_name", path)` in all test files for scripts with hyphens in their names — this is the only safe import path. See `artefacts/task-005/test_migrate_vault.py` as the canonical example.
+
+**Testing Docker-only packages**: when a Python package (e.g. `src.integration`) exists only inside a Docker image and cannot be imported on the host, use `sys.modules` pre-injection:
+1. Copy the source file to `/tmp` on the host (`scp pi4:/opt/mas/src/integration/file.py /tmp/`).
+2. Pre-populate `sys.modules` with `MagicMock` entries for all transitive imports before loading the file. Use `type(name, (), {})` (not `MagicMock`) for mixin classes to satisfy Python's MRO.
+3. Load via `importlib.util.spec_from_file_location("module.name", "/tmp/file.py")`.
+This lets unit tests run locally without a Docker environment. See `artefacts/task-019/test_auth_guard.py` as the canonical example.
 
 **Task unit tests**: test files live in `artefacts/<task-id>/test_*.py`; run with `python3 -m pytest artefacts/<task-id>/test_*.py -v`. Use `importlib.util.spec_from_file_location` + `unittest.mock.patch.object` to test scripts without making them importable packages.
 

@@ -12,7 +12,7 @@ Task: mas_agent: Fix mas-frontend Docker healthcheck (BL-059)
 
 **Rationale**: `--build mas-frontend` also rebuilt `mas-backend` (a 5+ minute Python pip install on Pi4 ARM). The build took much longer than expected. This is predictable from the `depends_on` relationship — document it so future tasks can set realistic wait times.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -23,4 +23,4 @@ Task: mas_agent: Fix mas-frontend Docker healthcheck (BL-059)
 
 **Rationale**: Two separate git operations failed (branch creation, merge commit) because root's git identity is unconfigured. The `-c` flag pattern avoids permanently configuring root's git and is repeatable.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

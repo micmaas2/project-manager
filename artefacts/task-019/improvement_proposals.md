@@ -21,7 +21,7 @@ elif chat_id != settings.telegram_chat_id:
 
 **Rationale**: code-quality-reviewer flagged MEDIUM severity: fail-open auth guards hide misconfiguration. When `TELEGRAM_CHAT_ID` is absent, the bot silently accepts all senders with no log signal. A WARNING per message makes the open-mode state visible during log review. This is operational visibility, not a security regression.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -42,4 +42,4 @@ This lets unit tests run locally without a Docker environment. See
 
 **Rationale**: task-019 tests for `telegram_listener.py` could not import `src.integration` locally (only available in the Docker build). The sys.modules pre-injection pattern solved this but is not documented. Future Builder tasks testing Docker packages will encounter the same issue.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
