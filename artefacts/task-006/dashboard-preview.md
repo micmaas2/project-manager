@@ -1,16 +1,16 @@
 # Project Dashboard
-_Last updated: 2026-04-13 16:15_
+_Last updated: 2026-04-13 21:30_
 
 ## Queue Status
 
 | Status | Count |
 |---|---|
-| pending | 2 |
+| pending | 0 |
 | in_progress | 0 |
 | paused | 0 |
 | review | 0 |
 | test | 0 |
-| done | 16 |
+| done | 18 |
 
 ## Active Tasks
 
@@ -18,16 +18,15 @@ _No tasks currently in progress._
 
 ## Recently Completed
 
+- **task-019** mas_agent: Telegram sender chat_id auth guard (BL-060) [2026-04-13]
+- **task-018** mas_agent: Fix mas-frontend Docker healthcheck (BL-059) [2026-04-13]
 - **task-017** project_manager: Cross-project kanban view script (BL-064, S-003-3) [2026-04-13]
 - **task-016** project_manager: Python token-cap-enforcer script (BL-050, S-003-4) [2026-04-11]
 - **task-015** project_manager: Multi-project priority ranking in PM (BL-004, S-003-1) [2026-04-11]
-- **task-013** project_manager: /pm-plan skill — PI/Refinement planning session workflow (S-003-2) [2026-04-11]
-- **task-014** project_manager: Architecture review — MAS/Claude Code, pensieve, mas_agent (Telegram daily facts) [2026-04-11]
 
 ## Next Up (Pending)
 
-- **task-018** [pi-homelab] mas_agent: Fix mas-frontend Docker healthcheck (BL-059)
-- **task-019** [pi-homelab] mas_agent: Telegram sender chat_id auth guard (BL-060)
+_No pending tasks._
 
 ## Maintenance — Due Soon
 
