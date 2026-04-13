@@ -165,10 +165,17 @@ Standalone CLI scripts in `scripts/`:
 
 | Script | Description |
 |---|---|
+| `scripts/cross-kanban.py` | Unified cross-project kanban view; reads `tasks/queue.json`, groups active tasks by project, outputs one `### project` section per project with `\| Status \| Task ID \| Title \|` table; projects with no active tasks omitted |
 | `scripts/pm-priority.py` | Multi-project priority ranking; reads backlog and outputs ranked BL items (BL-004, S-003-1) |
 | `scripts/token_cap_enforcer.py` | Preflight cap check: reads `tasks/queue.json`, finds the given task, exits 1 with ALERT if `token_estimate` exceeds 400,000 (80% of 500k project cap), exits 0 otherwise |
 
 ```bash
+# Generate a unified kanban view grouped by project
+python3 scripts/cross-kanban.py
+
+# Override the queue path (e.g., for testing with a fixture)
+python3 scripts/cross-kanban.py --queue path/to/queue.json
+
 # Check whether a task's token estimate is within the project cap
 python3 scripts/token_cap_enforcer.py --task-id task-016
 

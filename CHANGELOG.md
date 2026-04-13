@@ -9,6 +9,8 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 ## [Unreleased]
 
 ### Added
+- `scripts/cross-kanban.py`: unified cross-project kanban view; reads queue.json, groups active tasks (paused/in_progress/review/test/pending) by project, outputs one `### project` section per project with status|task-id|title table; projects with no active tasks omitted; handles empty queue gracefully (task-017, S-003-3, BL-064, EPIC-003)
+- `.claude/commands/pm-status.md` step 3 updated to invoke `python3 scripts/cross-kanban.py` below the kanban
 - `scripts/token_cap_enforcer.py`: CLI preflight script; reads `token_estimate` from `tasks/queue.json` for a given `--task-id`; exits 1 with ALERT if estimate exceeds 400,000 (80% of 500k cap), exits 0 with OK otherwise; 9/9 unit tests passing (BL-050, S-003-4)
 - `.claude/agents/manager.yaml`: step 5 updated to explicitly invoke `python3 scripts/token_cap_enforcer.py --task-id <task_id>` as part of token cap preflight before task execution
 - `scripts/pm-priority.py`: multi-project priority ranking; reads queue.json + backlog.md, outputs ranked markdown table (paused → project_manager → P1>P2>P3 → oldest)

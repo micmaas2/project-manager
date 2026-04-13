@@ -11,7 +11,7 @@ Run `python3 scripts/pm-priority.py` (cwd: project_manager root). Print the outp
 Read tasks/queue.json. Count tasks grouped by status field. List any tasks with status=in_progress or status=paused — include id, title, assigned_to, and resume_from (if set).
 
 **3. Kanban**
-Read tasks/kanban.md and print it as-is.
+Read tasks/kanban.md and print it as-is. Then run `python3 scripts/cross-kanban.py` (cwd: project_manager root) and print its output below the kanban.
 
 **4. Phase status**
 Read tasks/epics.md. Find the epic with status=in_progress. For each of its stories, list: story id, title, status.
