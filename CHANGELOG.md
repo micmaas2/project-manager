@@ -6,6 +6,13 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-019] — 2026-04-13
+
+### Added
+- `mas_personal_assistant`: Telegram sender chat_id authentication guard in `telegram_listener.py` (BL-060). Inbound messages from unauthorized senders (chat_id ≠ TELEGRAM_CHAT_ID) are dropped with WARNING log. Fails open when TELEGRAM_CHAT_ID is not configured (backward-compatible). 8/8 unit tests passing. Committed to micmaas2/mas_personal_assistant main (1b3b139).
+
+---
+
 ## [Unreleased]
 
 ### Added
