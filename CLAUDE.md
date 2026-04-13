@@ -397,6 +397,10 @@ Use `-c` flags rather than permanently configuring root's git config.
 
 **Docker compose `--build` rebuilds depends_on chain**: `docker compose up -d --build <service>` also rebuilds services listed under `depends_on` for that service. On Pi4 ARM, a Python pip install layer can take 5+ minutes — plan for the full dependency chain build time, not just the target service.
 
+**`--no-deps` for targeted rebuilds**: add `--no-deps` to rebuild only the target service without triggering its `depends_on` chain: `docker compose up -d --no-deps --build mas-telegram`. Omit `--no-deps` only when dependency layers also changed.
+
+**Pi4 docker-compose env file**: `docker-compose.dev.yml` hardcodes `env_file: .env`. `/opt/mas/.env` does not exist — symlink before any compose command: `sudo ln -sf .env.production .env`. Without this, compose exits with "env file /opt/mas/.env not found".
+
 **Hyphenated script filenames**: `migrate-vault.py` cannot be imported directly in Python tests.
 Use `importlib.util.spec_from_file_location("name", "path/to/script.py")` instead.
 
