@@ -838,6 +838,232 @@
         "privacy_dpia": "No \u2014 no personal data processed",
         "cost_estimate": "EUR 0"
       }
+    },
+    {
+      "id": "task-020",
+      "title": "mas daily facts: birth-date regression fix (BL-065)",
+      "project": "pi-homelab",
+      "target_project_path": "/opt/claude/pi-homelab",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-020/",
+      "created": "2026-04-13",
+      "updated": "2026-04-13T19:58:18.166125+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Diagnose and fix the regression in the MAS daily facts feature where birth dates from yesterday and today are reported incorrectly, restoring accurate date-matching.",
+        "niet_in_scope": [
+          "Redesigning facts data source or format",
+          "Adding new fact categories",
+          "Changes to Telegram bot interface"
+        ],
+        "acceptatiecriteria": [
+          "Root cause identified and documented in build_notes.md",
+          "Running facts script returns facts with correct birth-date filtering (today's date matches person's birth month+day)",
+          "At least 2 manual spot-checks pass: one today case and one yesterday case",
+          "Regression test added to prevent recurrence"
+        ],
+        "security_arch_impact": "No outbound HTTP to external APIs. No user-controlled file paths. External ID (person ID): validate non-null before use.",
+        "tests_required": "Unit: birth-date matching logic with mock dates. Integration: trigger facts command, verify output. Regression: 7-day dedup still applies.",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Root cause documented in build_notes.md",
+          "Fix deployed to Pi4 mas_personal_assistant",
+          "Regression test committed"
+        ],
+        "rollback_plan": "Revert changed files in /opt/mas on Pi4 via git; restart container. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no \u2014 processes only public historical facts",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "SSH access to pi4",
+          "/opt/mas repo readable (sudo git -C /opt/mas)",
+          "Pi4 Docker container running"
+        ]
+      }
+    },
+    {
+      "id": "task-021",
+      "title": "pi-homelab: Migrate health-api base image bullseye \u2192 bookworm (BL-014)",
+      "project": "pi-homelab",
+      "target_project_path": "/opt/claude/pi-homelab",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-021/",
+      "created": "2026-04-13",
+      "updated": "2026-04-13T19:58:18.166125+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Update the health-api Docker base image from python:3.11-slim-bullseye to python:3.11-slim-bookworm to stay on a supported Debian release.",
+        "niet_in_scope": [
+          "Python version upgrade beyond bookworm default",
+          "Changes to health-api application logic or endpoints",
+          "Other pi-homelab services"
+        ],
+        "acceptatiecriteria": [
+          "Dockerfile updated to bookworm base image",
+          "Image builds successfully on Pi4 ARM (docker build exits 0)",
+          "health-api container starts and /health endpoint returns 200",
+          "No regressions in other pi-homelab services that depend on health-api"
+        ],
+        "security_arch_impact": "Base image upgrade: verify no known CVEs introduced. No outbound HTTP changes. No user-controlled paths.",
+        "tests_required": "Build: docker build on Pi4 exits 0. Integration: health endpoint returns 200 after container start. Regression: docker compose up returns all services healthy.",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Dockerfile updated and committed in pi-homelab repo",
+          "Deployed and verified on Pi4"
+        ],
+        "rollback_plan": "Revert Dockerfile to bullseye base; rebuild and redeploy. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no \u2014 health-api returns only system metrics",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "SSH access to pi4",
+          "Pi4 Docker daemon running",
+          "pi-homelab repo at /opt/claude/pi-homelab"
+        ]
+      }
+    },
+    {
+      "id": "task-022",
+      "title": "project_manager: Wire claude-md-improver into /pm-close every 5th session (BL-048)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-022/",
+      "created": "2026-04-13",
+      "updated": "2026-04-13T19:58:18.166125+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Modify the /pm-close skill to automatically invoke claude-md-improver every 5th session close, with a visible session counter showing when the next run is scheduled.",
+        "niet_in_scope": [
+          "Changing what claude-md-improver does internally",
+          "Triggering claude-md-improver on pm-start or pm-run",
+          "Running on projects other than project_manager (first iteration)"
+        ],
+        "acceptatiecriteria": [
+          "pm-close.md tracks a session counter persisted in a file (e.g. .claude/pm-close-count)",
+          "Every 5th close: claude-md-improver is invoked via the Skill tool",
+          "pm-close output shows 'Session close #N \u2014 next claude-md-improver run at session #M'",
+          "Counter resets after running claude-md-improver (or continues to next multiple of 5)"
+        ],
+        "security_arch_impact": "No outbound HTTP. Counter file path is fixed. No external data interpolated.",
+        "tests_required": "Unit: counter increment logic. Integration: run pm-close 5 times in sequence; verify claude-md-improver called on 5th. Regression: pm-close core flow still works.",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "pm-close.md updated and committed",
+          "Counter file approach documented in skill file"
+        ],
+        "rollback_plan": "Revert pm-close.md to previous version. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-023",
+      "title": "project_manager: Mark resolved improvement_proposals.md files as done \u2014 pm-propose skip logic (BL-046)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-023/",
+      "created": "2026-04-13",
+      "updated": "2026-04-13T19:58:18.166125+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Establish a convention for marking improvement_proposals.md files as fully resolved so /pm-propose skips them without re-reading, reducing noise in end-of-session reviews.",
+        "niet_in_scope": [
+          "Retroactively marking all historical proposals",
+          "Changing the improvement_proposals.md schema itself",
+          "Archiving or deleting resolved files"
+        ],
+        "acceptatiecriteria": [
+          "pm-propose.md updated to skip files where all proposals have Status: APPROVED or REJECTED",
+          "SelfImprover YAML updated to write the correct Status field values (if needed)",
+          "Scan logic uses the documented grep pattern matching Status lines only (not body text)",
+          "Cross-file consistency verified: pm-propose.md and self-improver.yaml use identical status values"
+        ],
+        "security_arch_impact": "No outbound HTTP. No user-controlled paths. Grep pattern must match Status lines only \u2014 existing CLAUDE.md rule re: false positives applies.",
+        "tests_required": "Unit: scan skips files with all proposals resolved. Unit: scan still finds files with at least one REQUIRES_HUMAN_APPROVAL Status line. Regression: pm-propose still presents pending proposals correctly.",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "pm-propose.md updated",
+          "self-improver.yaml updated if needed",
+          "CLAUDE.md cross-file consistency note updated if schema changed"
+        ],
+        "rollback_plan": "Revert pm-propose.md and self-improver.yaml. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-024",
+      "title": "project_manager: Review Anthropic agent skills course \u2014 identify applicable skills (BL-045)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-024/",
+      "created": "2026-04-13",
+      "updated": "2026-04-13T19:58:18.166125+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Review the Anthropic agent skills course, identify skills and patterns applicable to this MAS setup, and produce a prioritized proposal list with implementation tasks ready to queue.",
+        "niet_in_scope": [
+          "Implementing any identified skills (output is proposals + backlog items only)",
+          "Reviewing non-Anthropic agent frameworks"
+        ],
+        "acceptatiecriteria": [
+          "Course content reviewed and summarised in artefact",
+          ">=3 actionable skills/patterns identified with applicability rationale",
+          "Each identified skill has a proposed BL item (title, project, priority) ready to add",
+          "All NEW proposals registered as BL items in tasks/backlog.md before marking done"
+        ],
+        "security_arch_impact": "Research/docs task \u2014 no code, no outbound HTTP, no data processing.",
+        "tests_required": "Review: artefact contains all 4 acceptance criteria sections. Verification: BL items for all proposed skills exist in backlog.md.",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "artefacts/task-024/skills-review.md contains summary + proposals",
+          "All proposed BL items committed to tasks/backlog.md"
+        ],
+        "rollback_plan": "N/A \u2014 research-only task; no deployed artefacts.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "Access to Anthropic agent skills course materials"
+        ]
+      }
     }
   ]
 }

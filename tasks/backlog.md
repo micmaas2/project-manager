@@ -28,7 +28,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-012 | EPIC-003 | pi-homelab: Pi 4 passwd hardening + remove nopasswd sudoers | pi-homelab | P1 | blocked-manual | 2026-04-05 |
 | BL-013 | EPIC-003 | pi-homelab: Pi 5 manual security prereqs + apply-hardening.sh | pi-homelab | P1 | blocked-manual | 2026-04-05 |
 | BL-026 | EPIC-003 | pi-homelab: Regular patching — Pi 4 SSH fix + first patch run | pi-homelab | P1 | blocked-ssh | 2026-04-05 |
-| BL-014 | EPIC-003 | pi-homelab: Migrate python:3.11-slim-bullseye → bookworm (health-api) | pi-homelab | P2 | discovered | 2026-04-05 |
+| BL-014 | EPIC-003 | pi-homelab: Migrate python:3.11-slim-bullseye → bookworm (health-api) | pi-homelab | P2 | in_progress | 2026-04-05 |
 | BL-015 | EPIC-003 | pensieve: Activate Gmail capture workflow in n8n | pensieve | P1 | done | 2026-04-05 |
 | BL-016 | EPIC-003 | pensieve: Configure Obsidian Clipper | pensieve | P2 | discovered | 2026-04-05 |
 | BL-023 | EPIC-003 | pensieve: Improve article/blog summarisation quality | pensieve | P1 | done | 2026-04-05 |
@@ -55,10 +55,10 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-042 | EPIC-003 | project_manager: Investigate Caveman prompt technique — telegram-style instructions cut output tokens by 65% | project_manager | P2 | done | 2026-04-09 |
 | BL-043 | EPIC-003 | project_manager: Investigate why session-start telegram inbox check misses origin/main items (root cause: no git fetch before read) | project_manager | P2 | done | 2026-04-10 |
 | BL-044 | EPIC-003 | project_manager: Read CLAUDE_file_work_pm.md (branch: feature_claudemd_work_pm), extract improvements for our MAS setup, apply as self-improvement proposals | project_manager | P2 | done | 2026-04-10 |
-| BL-045 | EPIC-003 | project_manager: Review Anthropic agent skills course — identify relevant skills, propose and task implementations | project_manager | P2 | new | 2026-04-11 |
-| BL-046 | EPIC-003 | project_manager: Mark resolved improvement_proposals.md files as done — add a Status: DONE marker (or rename) so /pm-propose skips already-resolved files without re-reading them | project_manager | P2 | new | 2026-04-11 |
+| BL-045 | EPIC-003 | project_manager: Review Anthropic agent skills course — identify relevant skills, propose and task implementations | project_manager | P2 | in_progress | 2026-04-11 |
+| BL-046 | EPIC-003 | project_manager: Mark resolved improvement_proposals.md files as done — add a Status: DONE marker (or rename) so /pm-propose skips already-resolved files without re-reading them | project_manager | P2 | in_progress | 2026-04-11 |
 | BL-047 | EPIC-003 | project_manager: Architecture review — project_manager (MAS/Claude Code), pensieve (n8n + Pi4 + Obsidian), mas_agent (Docker containers) — identify improvements for less work, lower cost, better security, higher availability | project_manager | P1 | done | 2026-04-11 |
-| BL-048 | EPIC-003 | project_manager: Wire /claude-md-improver into /pm-close — run every 5th session close on project_manager + all managed project CLAUDE.md files; /pm-close shows session counter and next scheduled run | project_manager | P2 | new | 2026-04-11 |
+| BL-048 | EPIC-003 | project_manager: Wire /claude-md-improver into /pm-close — run every 5th session close on project_manager + all managed project CLAUDE.md files; /pm-close shows session counter and next scheduled run | project_manager | P2 | in_progress | 2026-04-11 |
 | BL-049 | EPIC-003 | project_manager: Estimate token reduction from applying caveman/telegram-style prompts to CLAUDE.md and agent YAMLs — measure before/after token counts, identify highest-impact sections, propose a rewrite plan | project_manager | P2 | new | 2026-04-11 |
 | BL-050 | EPIC-003 | project_manager: Implement Python token-cap-enforcer script — hard runtime guard before agent spawn; halt with structured error if task token_estimate > 400k (arch-review PM-P1) | project_manager | P2 | done | 2026-04-11 |
 | BL-051 | EPIC-003 | project_manager: Create pm-healthcheck.sh — verify hooks symlinked, queue.json validates against schema, all agent YAMLs parse, logs writable; run at pm-start (arch-review PM-P4) | project_manager | P3 | new | 2026-04-11 |
@@ -75,7 +75,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-062 | EPIC-003 | mas_agent: Add hard budget enforcement to LLMClient.chat() — call check_budget() before each API call; raise BudgetExceededError and log if exceeded (arch-review mas-P4) | pi-homelab | P2 | new | 2026-04-11 |
 | BL-063 | EPIC-003 | mas_agent: Configure external uptime monitoring for mas-backend /health endpoint — UptimeRobot or Uptime-Kuma; Telegram alert if non-200 for >5 min (arch-review mas-P5) | pi-homelab | P2 | new | 2026-04-11 |
 | BL-064 | EPIC-003 | project_manager: Cross-project kanban view script — generate a unified markdown kanban across all managed projects from queue.json + project-registry.md; callable from /pm-status (S-003-3) | project_manager | P2 | done | 2026-04-11 |
-| BL-065 | EPIC-003 | mas_agent: Daily facts still incorrect wrt birth dates — regression or new bug after task-012 fix | pi-homelab | P1 | new | 2026-04-13 |
+| BL-065 | EPIC-003 | mas_agent: Daily facts still incorrect wrt birth dates — regression or new bug after task-012 fix | pi-homelab | P1 | in_progress | 2026-04-13 |
 | BL-066 | EPIC-003 | New project proposal: ActiveControl-like SAP change and transport management platform (AI-powered) | ccas | P2 | new | 2026-04-13 |
 | BL-067 | EPIC-003 | New project proposal: Testimony-like SAP AI test automation — auto-generate and maintain SAP test cases | ccas | P2 | new | 2026-04-13 |
 | BL-068 | EPIC-003 | New project proposal: DataSync-like SAP data management — copy and synchronize SAP data across environments | ccas | P2 | new | 2026-04-13 |

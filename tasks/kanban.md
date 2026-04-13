@@ -3,7 +3,7 @@
 Updated by ProjectManager after every task status change.
 Source of truth: `tasks/queue.json`. This board is a human-readable view.
 
-Last updated: 2026-04-11T09:00:00Z
+Last updated: 2026-04-13T00:00:00Z
 
 ---
 
@@ -26,10 +26,11 @@ _(items in backlog.md not yet in queue)_
 ## Ready
 _(in queue.json with status: pending)_
 
-- **task-016** project_manager: Python token-cap-enforcer script (BL-050, S-003-4)
-- **task-017** project_manager: Cross-project kanban view script (BL-064, S-003-3)
-- **task-018** mas_agent: Fix mas-frontend Docker healthcheck (BL-059)
-- **task-019** mas_agent: Telegram sender chat_id auth guard (BL-060)
+- **task-020** mas daily facts: birth-date regression fix (BL-065)
+- **task-021** pi-homelab: Migrate health-api base image bullseye → bookworm (BL-014)
+- **task-022** project_manager: Wire claude-md-improver into /pm-close every 5th session (BL-048)
+- **task-023** project_manager: Mark resolved improvement_proposals.md files as done (BL-046)
+- **task-024** project_manager: Review Anthropic agent skills course (BL-045)
 
 ---
 
@@ -57,6 +58,10 @@ _(empty)_
 ## Done
 _(status: done — pipeline complete, artefact delivered)_
 
+- **task-019** mas_agent: Telegram sender chat_id auth guard (BL-060) [2026-04-13]
+- **task-018** mas_agent: Fix mas-frontend Docker healthcheck (BL-059) [2026-04-13]
+- **task-017** project_manager: Cross-project kanban view script (BL-064, S-003-3) [2026-04-13]
+- **task-016** project_manager: Python token-cap-enforcer script (BL-050, S-003-4) [2026-04-13]
 - **task-015** project_manager: Multi-project priority ranking in PM (BL-004, S-003-1) [2026-04-11]
 - **task-014** Architecture review — MAS/Claude Code, pensieve, mas_agent (BL-047) [2026-04-11]
 - **task-013** PM: /pm-plan skill — PI/Refinement planning session (BL-003, S-003-2) [2026-04-11]
