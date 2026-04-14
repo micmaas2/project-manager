@@ -488,6 +488,12 @@ drift), execute in `node:vm` with a mocked context (mock `require('fs')`, `requi
 `$()` helper). See `artefacts/task-009/test_gmail_workflow.js` as the canonical example.
 Run with: `/root/.nvm/versions/node/v24.12.0/bin/node artefacts/<task-id>/test_*.js`
 
+**n8n HTTP Request timeout**: always set `"options": {"timeout": 10000}` on HTTP Request nodes calling internal APIs (Pi4 localhost). Default is 300s — a hung n8n API stalls the workflow for 5 min.
+
+**Timezone in n8n Code nodes**: use `Intl.DateTimeFormat('nl-NL', {timeZone: 'Europe/Amsterdam', hour: 'numeric', hour12: false})` to get Amsterdam local hour. Handles DST automatically. Avoid raw UTC offsets.
+
+**Finding Telegram chat_id from n8n execution history**: `GET /api/v1/executions/{id}?includeData=true` → parse JSON for `"chat":{"id":...}` pattern. Useful when no config stores the chat_id and you need the user's personal ID.
+
 **n8n workflow JSON patterns**:
 - Use `specifyBody: "json"` + `jsonBody: "={{ $json.obj }}"` when passing an object — `specifyBody: "string"` silently mangles complex payloads (e.g. long base64 bodies)
 - Avoid `?.` optional chaining in IF node expressions — use `$json.commit ? 'ok' : ''` instead
