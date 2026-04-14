@@ -28,7 +28,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-012 | EPIC-003 | pi-homelab: Pi 4 passwd hardening + remove nopasswd sudoers | pi-homelab | P1 | blocked-manual | 2026-04-05 |
 | BL-013 | EPIC-003 | pi-homelab: Pi 5 manual security prereqs + apply-hardening.sh | pi-homelab | P1 | blocked-manual | 2026-04-05 |
 | BL-026 | EPIC-003 | pi-homelab: Regular patching — Pi 4 SSH fix + first patch run | pi-homelab | P1 | blocked-ssh | 2026-04-05 |
-| BL-014 | EPIC-003 | pi-homelab: Migrate python:3.11-slim-bullseye → bookworm (health-api) | pi-homelab | P2 | in_progress | 2026-04-05 |
+| BL-014 | EPIC-003 | pi-homelab: Migrate python:3.11-slim-bullseye → bookworm (health-api) | pi-homelab | P2 | done | 2026-04-05 |
 | BL-015 | EPIC-003 | pensieve: Activate Gmail capture workflow in n8n | pensieve | P1 | done | 2026-04-05 |
 | BL-016 | EPIC-003 | pensieve: Configure Obsidian Clipper | pensieve | P2 | discovered | 2026-04-05 |
 | BL-023 | EPIC-003 | pensieve: Improve article/blog summarisation quality | pensieve | P1 | done | 2026-04-05 |
