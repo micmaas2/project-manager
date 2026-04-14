@@ -1,0 +1,163 @@
+{
+  "id": "b5717a69-a46c-484e-ac44-aa65e143acfd",
+  "name": "n8n Health Check \u2014 Idle Workflow Alert",
+  "active": false,
+  "nodes": [
+    {
+      "id": "8a0b7d20-ef02-4400-a916-180ce53608e7",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-400, 0],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "87094fcd-4274-42a1-8d87-9be6f15ec07e",
+      "name": "Get Active Workflows",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [-200, 0],
+      "parameters": {
+        "url": "http://localhost:88/api/v1/workflows",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "active", "value": "true" },
+            { "name": "limit", "value": "100" }
+          ]
+        },
+        "options": { "timeout": 10000 }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "PLACEHOLDER_N8N_API_CRED",
+          "name": "n8n API Key"
+        }
+      }
+    },
+    {
+      "id": "f1e18f6b-0875-4061-961d-9d6521ad25da",
+      "name": "Time Check + Split",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "parameters": {
+        "jsCode": "// Check waking hours in Europe/Amsterdam timezone\nconst now = new Date();\nconst formatter = new Intl.DateTimeFormat('nl-NL', {\n  timeZone: 'Europe/Amsterdam',\n  hour: 'numeric',\n  hour12: false\n});\nconst amsterdamHour = parseInt(formatter.format(now), 10);\n\nif (amsterdamHour < 7 || amsterdamHour >= 23) {\n  // Outside waking hours (07:00-23:00) \u2014 skip all checks\n  return [];\n}\n\n// Get workflows from API response\nconst response = $input.first().json;\nconst workflows = response.data || [];\n\n// Exclude this health-check workflow itself (by UUID and name for robustness)\n// Assumes \u226410 active workflows per page (homelab). Pagination not implemented.\nconst SELF_ID   = 'b5717a69-a46c-484e-ac44-aa65e143acfd';\nconst SELF_NAME = 'n8n Health Check \u2014 Idle Workflow Alert';\nreturn workflows\n  .filter(w => w.id !== SELF_ID && w.name !== SELF_NAME)\n  .map(w => ({ json: { id: w.id, name: w.name } }));"
+      }
+    },
+    {
+      "id": "fb6f72b3-21ea-4968-af96-f0823a4e22bf",
+      "name": "Get Last Execution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [200, 0],
+      "continueOnFail": true,
+      "parameters": {
+        "url": "=http://localhost:88/api/v1/executions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "workflowId", "value": "={{ $json.id }}" },
+            { "name": "limit", "value": "1" }
+          ]
+        },
+        "options": { "timeout": 10000 }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "PLACEHOLDER_N8N_API_CRED",
+          "name": "n8n API Key"
+        }
+      }
+    },
+    {
+      "id": "89dd082c-9376-42eb-b9c3-7bb5092ea771",
+      "name": "Check Idle",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 0],
+      "parameters": {
+        "jsCode": "const TWO_HOURS_MS = 2 * 60 * 60 * 1000;\nconst now = Date.now();\nconst execItems = $input.all();\nconst wfItems = $('Time Check + Split').all();\nconst idle = [];\n\n// Guard: if counts differ, pairing is unsafe — stop chain (visible in n8n execution log)\nif (execItems.length !== wfItems.length) {\n  return [];\n}\n\nfor (let i = 0; i < execItems.length; i++) {\n  const execResponse = execItems[i].json;\n  const wf = wfItems[i].json;\n\n  // Skip if HTTP error\n  if (execResponse.error || !execResponse.data) continue;\n\n  const executions = execResponse.data;\n\n  // Per spec: no alert for workflows with no executions yet\n  if (executions.length === 0) continue;\n\n  const lastExec = executions[0];\n  const lastRunRaw = lastExec.startedAt || lastExec.stoppedAt;\n  if (!lastRunRaw) continue;\n\n  const lastRunTime = new Date(lastRunRaw).getTime();\n  const idleMs = now - lastRunTime;\n\n  if (idleMs > TWO_HOURS_MS) {\n    idle.push({\n      name: wf.name || ('Workflow ' + wf.id),\n      id: wf.id,\n      lastRun: lastExec.startedAt,\n      idleMinutes: Math.round(idleMs / 60000)\n    });\n  }\n}\n\nif (idle.length === 0) return [];\n\nreturn [{ json: { idleWorkflows: idle } }];"
+      }
+    },
+    {
+      "id": "a05f5385-9091-48f6-bc0d-3df0e824de88",
+      "name": "Format Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [600, 0],
+      "parameters": {
+        "jsCode": "const idle = $input.first().json.idleWorkflows;\nconst lines = idle.map(function(w) {\n  const h = Math.floor(w.idleMinutes / 60);\n  const m = w.idleMinutes % 60;\n  const timeStr = h > 0 ? (h + 'h ' + m + 'm') : (m + 'm');\n  let lastRunStr = 'unknown';\n  if (w.lastRun) {\n    lastRunStr = new Date(w.lastRun).toLocaleTimeString('nl-NL', {\n      timeZone: 'Europe/Amsterdam',\n      hour: '2-digit',\n      minute: '2-digit'\n    });\n  }\n  return '\\u2022 ' + w.name + ' \\u2014 idle ' + timeStr + ' (last: ' + lastRunStr + ')';\n});\nconst count = idle.length;\nconst text = '\\u26a0\\ufe0f n8n health check: ' + count + ' workflow' + (count > 1 ? 's' : '') + ' idle >2h\\n\\n' + lines.join('\\n');\nreturn [{ json: { text: text } }];"
+      }
+    },
+    {
+      "id": "ed1637dd-de40-4d8c-9e75-0ea0dcad32c9",
+      "name": "Send Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [800, 0],
+      "parameters": {
+        "chatId": "7761755508",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "NB55cLp798oiazqt",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [{ "node": "Get Active Workflows", "type": "main", "index": 0 }]
+      ]
+    },
+    "Get Active Workflows": {
+      "main": [
+        [{ "node": "Time Check + Split", "type": "main", "index": 0 }]
+      ]
+    },
+    "Time Check + Split": {
+      "main": [
+        [{ "node": "Get Last Execution", "type": "main", "index": 0 }]
+      ]
+    },
+    "Get Last Execution": {
+      "main": [
+        [{ "node": "Check Idle", "type": "main", "index": 0 }]
+      ]
+    },
+    "Check Idle": {
+      "main": [
+        [{ "node": "Format Alert", "type": "main", "index": 0 }]
+      ]
+    },
+    "Format Alert": {
+      "main": [
+        [{ "node": "Send Alert", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

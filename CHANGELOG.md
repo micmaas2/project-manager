@@ -6,6 +6,13 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-030] — 2026-04-14
+
+### Added
+- `pensieve/workflows/n8n-healthcheck.json`: Scheduled n8n workflow for monitoring idle workflows during waking hours (07:00–23:00 Amsterdam). Checks every 15 minutes if any active workflow has been idle >2h; sends Telegram alert to personal chat via main Telegram account. Deployed and active on Pi4 as workflow `b5717a69-a46c-484e-ac44-aa65e143acfd`. Unit tests: 20/20 passing (`artefacts/task-030/test_healthcheck_workflow.js`). Deploy notes: `artefacts/task-030/deploy-notes.md`.
+
+---
+
 ## [task-020] — 2026-04-14
 
 ### Fixed
