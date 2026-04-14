@@ -205,13 +205,20 @@ class DailyFactsAgent(BaseAgent):
             person_name = fact_data.get("person_name", "")
             logger.info(f"Retry yielded person: '{person_name}'")
 
+        # P2 (BL-065): when Wikipedia is unreachable, append a visible marker so the
+        # operator sees that this fact is unverified (LLM-only, may hallucinate dates).
+        fact_text = fact_data.get("fact_text", response)
+        wikipedia_verified = bool(candidates)
+        if not wikipedia_verified:
+            fact_text = fact_text.rstrip() + "\n\n_(onverified: geboortedatum niet bevestigd via Wikipedia)_"
+
         # Save to database — include person_name in generation_params (Change 3)
         with get_db() as db:
             fact = DailyFact(
-                fact_text=fact_data.get("fact_text", response),
+                fact_text=fact_text,
                 category=fact_data.get("category", category),
                 source=fact_data.get("source"),
-                word_count=len(fact_data.get("fact_text", "").split()),
+                word_count=len(fact_text.split()),
                 tags=[category],
                 generation_params={
                     # C-1: normalise to lowercase so dedup comparisons are case-insensitive
@@ -219,6 +226,7 @@ class DailyFactsAgent(BaseAgent):
                     "min_words": min_words,
                     "max_words": max_words,
                     "category": category,
+                    "wikipedia_verified": wikipedia_verified,
                 },
             )
             db.add(fact)

@@ -214,6 +214,9 @@ Security/arch impact: <note>
   - If any field value from external data (email headers, API responses, user input) is
     interpolated into YAML/JSON/Markdown: escape strings before interpolation (e.g. replace
     " with \" in YAML double-quoted scalars; strip ASCII control chars 0x00-0x1F, not just \n)
+  - If any free-text field from an external API (description, extract, title, etc.) is embedded
+    in an LLM prompt: strip ASCII control chars 0x00–0x1F (excluding \t and \n) — apply to ALL
+    fields passed to the prompt, not only to those written to files
   - If an external ID (e.g. message ID, record ID) is passed to a downstream step: validate
     it is non-null/non-empty at point of use; throw a descriptive error if absent
   - If the script runs under cron or systemd (no interactive terminal):
