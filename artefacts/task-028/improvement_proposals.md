@@ -13,7 +13,7 @@
 {"timestamp":"ISO8601","agent":"Builder","task_id":"task-028","action":"token_log","token_estimate":8000}
 ```
 **Rationale**: The current log has only 1 entry from `task-001` (ProjectManager-level). The dashboard is most useful when each sub-agent (Builder, Reviewer, Tester, etc.) logs its own token estimate. This would reveal which agent in the pipeline is the biggest consumer.
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 

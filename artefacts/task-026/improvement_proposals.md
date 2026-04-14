@@ -15,7 +15,7 @@
 ```
 
 **Rationale**: task-026 is analysis-only. The rewrite-plan.md identifies ~1,540 tokens of savings across 6 targets with specific per-item strategies. Without a follow-up task, the plan has no execution path.
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -25,4 +25,4 @@
 **Change**: Add a note that Python testing patterns in this section should be relocated to a separate `## Python Testing Patterns` section during the next rewrite pass, to improve navigability.
 
 **Rationale**: Lines 27–42 of the n8n section cover general Python testing gotchas unrelated to n8n. Developers searching for testing patterns look in the wrong section. Structural move has no token cost but improves search surface.
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

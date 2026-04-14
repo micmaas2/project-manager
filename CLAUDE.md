@@ -378,6 +378,7 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 **Logs**:
 - `logs/audit.jsonl` — append-only, one JSON object per line: `{timestamp, agent, task_id, action, status}`
 - `logs/token_log.jsonl` — per-run token accounting: `{timestamp, agent, task_id, token_estimate}`
+  Every sub-agent (Builder, Reviewer, Tester, DocUpdater, SelfImprover) must write one entry per invocation — not just ProjectManager. This enables per-agent token observability and identifies highest-cost pipeline stages.
 
 ---
 
@@ -420,17 +421,36 @@ This lets unit tests run locally without a Docker environment. See `artefacts/ta
 
 **Task unit tests**: test files live in `artefacts/<task-id>/test_*.py`; run with `python3 -m pytest artefacts/<task-id>/test_*.py -v`. Use `importlib.util.spec_from_file_location` + `unittest.mock.patch.object` to test scripts without making them importable packages.
 
+**Testing unwritable paths as root**: `chmod 0o444` does NOT prevent root from writing. To simulate an unwritable directory in tests, replace it with a regular file (so `touch <dir>/<file>` fails with "Not a directory"). Document this pattern at the top of any test file that uses it.
+
+**NOTE — Python testing patterns relocation**: The Python testing gotchas below (importlib, sys.modules, hyphenated filenames, Docker-only packages) are currently in the n8n section for historical reasons. During the next CLAUDE.md rewrite pass (BL-079), relocate them to a dedicated `## Python Testing Patterns` section for discoverability.
+
 **Fixture files for path-guarded scripts**: when writing tests for scripts that use `_safe_path()` workspace-root validation, place fixture files under `artefacts/<task-id>/_fixtures/` — not in `tmp_path` (which resolves to `/tmp`, outside the workspace root and therefore rejected by the path guard).
 
 **GitHub API commits (stdlib)**: read a file with `GET /repos/{repo}/contents/{path}?ref={branch}` → decode `base64.b64decode(resp["content"])`; write with `PUT /repos/{repo}/contents/{path}` + `{"content": base64.b64encode(...).decode(), "sha": <existing_sha_or_omit_for_new>, "branch": ...}`. No `requests` package needed — `urllib.request` suffices.
 
-**Deploy sequence** (all three steps required):
+**Credential-placeholder patching** (required before import if workflow JSON contains `"id": "PLACEHOLDER_*"`):
 ```bash
-# 1. Prep: inject workflow id + strip tags
+# 1. Create credential in n8n (example: httpHeaderAuth for an API key)
+API_KEY=$(ssh pi4 "cat /opt/n8n/api-key")
+CRED_ID=$(ssh pi4 "curl -s -X POST http://localhost:88/api/v1/credentials \
+  -H 'X-N8N-API-KEY: $API_KEY' -H 'Content-Type: application/json' \
+  -d '{\"name\": \"My Cred\", \"type\": \"httpHeaderAuth\", \"data\": {\"name\": \"X-Header\", \"value\": \"<value>\"}}'" \
+  | python3 -c "import json,sys; print(json.load(sys.stdin)['id'])")
+# 2. Patch JSON
+python3 -c "import json; wf=json.loads(open('workflow.json').read().replace('PLACEHOLDER_CRED', '$CRED_ID')); wf.pop('tags',None); json.dump(wf,open('/tmp/wf.json','w'),indent=2)"
+```
+
+**Deploy sequence** (all four steps required):
+```bash
+# 1. Prep: inject workflow id + strip tags + patch credential placeholders (see above)
 python3 -c "import json; wf=json.load(open('workflow.json')); wf['id']='<UUID>'; wf.pop('tags',None); json.dump(wf,open('/tmp/wf.json','w'))"
-# 2. Import + publish
-scp /tmp/wf.json pi4:/tmp/wf.json && ssh pi4 "docker cp /tmp/wf.json n8n:/tmp/wf.json && docker exec n8n n8n import:workflow --input=/tmp/wf.json && docker exec n8n n8n publish:workflow --id=<UUID>"
-# 3. Restart
+# 2. Import (NOTE: import:workflow always DEACTIVATES the workflow — activation is a separate step)
+scp /tmp/wf.json pi4:/tmp/wf.json && ssh pi4 "docker cp /tmp/wf.json n8n:/tmp/wf.json && docker exec n8n n8n import:workflow --input=/tmp/wf.json"
+# 3. Activate via REST API (publish:workflow does NOT activate — use REST API)
+API_KEY=$(ssh pi4 "cat /opt/n8n/api-key")
+ssh pi4 "curl -s -X POST http://localhost:88/api/v1/workflows/<UUID>/activate -H 'X-N8N-API-KEY: $API_KEY'"
+# 4. Restart (required for schedule triggers to register)
 ssh pi4 "docker restart n8n && sleep 5 && docker ps | grep n8n"
 ```
 
@@ -473,6 +493,8 @@ Run with: `/root/.nvm/versions/node/v24.12.0/bin/node artefacts/<task-id>/test_*
 - Avoid `?.` optional chaining in IF node expressions — use `$json.commit ? 'ok' : ''` instead
 - Never interpolate `$json.error` into Telegram `text` fields — GitHub API error strings contain backticks/underscores that trigger Telegram "can't parse entities"
 - `continueOnFail: true` at node level handles 404s gracefully (e.g. GET a file that may not exist yet)
+- **n8n REST API `limit=N` is a hard cap**: if querying `/api/v1/workflows` or `/api/v1/executions` with `limit=N`, add a comment noting the assumption (e.g. `// assumes ≤100 active workflows`). If the instance may exceed N, check `nextCursor` in the response and loop until null. Document the pagination requirement in `deploy-notes.md`.
+- **Code node returning `[]` stops the downstream chain**: no IF/Switch node needed for guard conditions (e.g. night hours, empty results, length mismatch). Return `[]` to halt; return `[{json: {...}}]` to continue.
 
 **main/develop divergence**: n8n commits via GitHub API go directly to `main` (default branch, no hooks).
 Operational files written by n8n (e.g. `tasks/telegram-inbox.md`) must exist on `main`, not just `develop`.

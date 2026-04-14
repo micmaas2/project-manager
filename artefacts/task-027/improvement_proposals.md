@@ -13,7 +13,7 @@
 > **Testing unwritable paths as root**: `chmod 0o444` does not prevent root from writing. To simulate an unwritable directory in tests, replace it with a regular file (so `touch <dir>/<file>` fails with "Not a directory") or use a mount namespace. Document this at the top of test files that use this pattern.
 
 **Rationale**: Task-027 hit this during test_unwritable_logs. Future test authors will hit it again unless the pattern is documented.
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -27,4 +27,4 @@
 ```
 
 **Rationale**: The MVP template explicitly notes "integration into pm-start skill" as out of scope for task-027. This is the natural follow-up to make the healthcheck automatic.
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
