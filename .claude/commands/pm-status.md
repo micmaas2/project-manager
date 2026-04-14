@@ -17,7 +17,7 @@ Read tasks/kanban.md and print it as-is. Then run `python3 scripts/cross-kanban.
 Read tasks/epics.md. Find the epic with status=in_progress. For each of its stories, list: story id, title, status.
 
 **5. Token spend**
-Read logs/token_log.jsonl if it exists (skip silently if absent). Read the last 50 lines. Sum token_estimate grouped by task_id. Print per-task totals, then grand total.
+Run `python3 scripts/token-dashboard.py` (cwd: project_manager root). Print the output table as-is. If the script is absent or the log is empty, print `(no token log entries)` and continue. The script shows cumulative spend per (task_id, agent) with a ⚠ WARN flag on rows where tokens used exceed 80% of the task's token_estimate cap.
 
 **Next step suggestion**
 Print one line after the token summary:
