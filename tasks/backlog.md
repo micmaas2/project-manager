@@ -55,7 +55,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-042 | EPIC-003 | project_manager: Investigate Caveman prompt technique — telegram-style instructions cut output tokens by 65% | project_manager | P2 | done | 2026-04-09 |
 | BL-043 | EPIC-003 | project_manager: Investigate why session-start telegram inbox check misses origin/main items (root cause: no git fetch before read) | project_manager | P2 | done | 2026-04-10 |
 | BL-044 | EPIC-003 | project_manager: Read CLAUDE_file_work_pm.md (branch: feature_claudemd_work_pm), extract improvements for our MAS setup, apply as self-improvement proposals | project_manager | P2 | done | 2026-04-10 |
-| BL-045 | EPIC-003 | project_manager: Review Anthropic agent skills course — identify relevant skills, propose and task implementations | project_manager | P2 | in_progress | 2026-04-11 |
+| BL-045 | EPIC-003 | project_manager: Review Anthropic agent skills course — identify relevant skills, propose and task implementations | project_manager | P2 | done | 2026-04-11 |
 | BL-046 | EPIC-003 | project_manager: Mark resolved improvement_proposals.md files as done — add a Status: DONE marker (or rename) so /pm-propose skips already-resolved files without re-reading them | project_manager | P2 | done | 2026-04-11 |
 | BL-047 | EPIC-003 | project_manager: Architecture review — project_manager (MAS/Claude Code), pensieve (n8n + Pi4 + Obsidian), mas_agent (Docker containers) — identify improvements for less work, lower cost, better security, higher availability | project_manager | P1 | done | 2026-04-11 |
 | BL-048 | EPIC-003 | project_manager: Wire /claude-md-improver into /pm-close — run every 5th session close on project_manager + all managed project CLAUDE.md files; /pm-close shows session counter and next scheduled run | project_manager | P2 | done | 2026-04-11 |
@@ -111,3 +111,8 @@ Items completed, rejected, or no longer relevant.
 | BL-021 | project1: SAP Security Risk Profile section 4A | project1 is sandbox — not a managed project | 2026-04-05 |
 | BL-022 | project1: Azure diagram generator | project1 is sandbox — not a managed project | 2026-04-05 |
 | BL-032 | test backlog routing via telegram | Test entry — confirmed pipeline working | 2026-04-06 |
+| BL-073 | EPIC-003 | project_manager: Install session-report skill — wire into /pm-status to show last-7-day token usage summary (interactive HTML report from session transcripts) | project_manager | P2 | new | 2026-04-14 |
+| BL-074 | EPIC-003 | project_manager: Use skill-creator to audit and iterate on pm-run, pm-propose, pm-close skills — run evals, fix weaknesses, optimize trigger descriptions | project_manager | P2 | new | 2026-04-14 |
+| BL-075 | EPIC-003 | project_manager: Evaluate hookify for MAS safety rules — create 2-3 hookify rules as proof-of-concept (e.g. no direct develop commit, no grep -rl on artefacts) | project_manager | P3 | new | 2026-04-14 |
+| BL-076 | EPIC-003 | project_manager: Add confidence scoring (1-100) to Reviewer YAML output format — Builder loops only on score >= 80 findings; low-confidence findings go to build_notes.md only | project_manager | P2 | new | 2026-04-14 |
+| BL-077 | EPIC-003 | project_manager: Research — evaluate whether ProjectManager or task-queue processor should be rebuilt as a Claude Agent SDK app (Python); prototype with /new-sdk-app | project_manager | P3 | new | 2026-04-14 |
