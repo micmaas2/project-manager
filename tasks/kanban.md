@@ -3,7 +3,7 @@
 Updated by ProjectManager after every task status change.
 Source of truth: `tasks/queue.json`. This board is a human-readable view.
 
-Last updated: 2026-04-13T00:00:00Z
+Last updated: 2026-04-14T00:00:00Z
 
 ---
 
@@ -26,11 +26,14 @@ _(items in backlog.md not yet in queue)_
 ## Ready
 _(in queue.json with status: pending)_
 
-- **task-020** mas daily facts: birth-date regression fix (BL-065)
-- **task-021** pi-homelab: Migrate health-api base image bullseye → bookworm (BL-014)
-- **task-022** project_manager: Wire claude-md-improver into /pm-close every 5th session (BL-048)
-- **task-023** project_manager: Mark resolved improvement_proposals.md files as done (BL-046)
-- **task-024** project_manager: Review Anthropic agent skills course (BL-045)
+- **task-025** genealogie: Merge develop to main, tag v2.x (BL-018)
+- **task-026** Token reduction analysis: CLAUDE.md + agent YAMLs (BL-049)
+- **task-027** pm-healthcheck.sh: hooks, schema, YAML, logs check (BL-051)
+- **task-028** Token spend dashboard in /pm-status (BL-052)
+- **task-029** pensieve: Refactor shared nodes into n8n sub-workflow (BL-054)
+- **task-030** pensieve: n8n health-check workflow (BL-055)
+- **task-031** pensieve: Clean up stale n8n workflows (BL-056)
+- **task-032** pensieve: PAT rotation runbook (BL-057)
 
 ---
 
@@ -58,6 +61,11 @@ _(empty)_
 ## Done
 _(status: done — pipeline complete, artefact delivered)_
 
+- **task-024** project_manager: Review Anthropic agent skills course (BL-045) [2026-04-14]
+- **task-023** project_manager: Mark resolved improvement_proposals.md files as done (BL-046) [2026-04-14]
+- **task-022** project_manager: Wire claude-md-improver into /pm-close every 5th session (BL-048) [2026-04-14]
+- **task-021** pi-homelab: Migrate health-api base image bullseye → bookworm (BL-014) [2026-04-14]
+- **task-020** mas daily facts: birth-date regression fix (BL-065) [2026-04-14]
 - **task-019** mas_agent: Telegram sender chat_id auth guard (BL-060) [2026-04-13]
 - **task-018** mas_agent: Fix mas-frontend Docker healthcheck (BL-059) [2026-04-13]
 - **task-017** project_manager: Cross-project kanban view script (BL-064, S-003-3) [2026-04-13]

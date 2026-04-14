@@ -1064,6 +1064,369 @@
           "Access to Anthropic agent skills course materials"
         ]
       }
+    },
+    {
+      "id": "task-025",
+      "title": "genealogie: Merge develop to main, tag v2.x (BL-018)",
+      "project": "genealogie",
+      "target_project_path": "/opt/claude/genealogie/",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-025/",
+      "created": "2026-04-14",
+      "updated": "2026-04-14T12:57:20.355613+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Merge the genealogie develop branch into main and create a versioned release tag.",
+        "niet_in_scope": [
+          "Code changes",
+          "feature work",
+          "CI/CD setup"
+        ],
+        "acceptatiecriteria": [
+          "develop merged into main with no unresolved conflicts",
+          "git tag v2.x.0 created and pushed to origin",
+          "verification.md captures git log --oneline main + git tag -l output with PASS verdict"
+        ],
+        "security_arch_impact": "Git-only - no outbound HTTP, no file writes, no user-controlled inputs. Low risk.",
+        "tests_required": "verification only - git log + tag list + clean working tree",
+        "definition_of_done": [
+          "develop merged to main",
+          "tag v2.x.0 pushed",
+          "verification.md PASS",
+          "review.md APPROVED"
+        ],
+        "rollback_plan": "git tag -d v2.x.0 && git push origin :refs/tags/v2.x.0; revert main to pre-merge SHA if needed.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "git SSH access to micmaas2/genealogie"
+        ]
+      }
+    },
+    {
+      "id": "task-026",
+      "title": "Token reduction analysis: CLAUDE.md + agent YAMLs (BL-049)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-026/",
+      "created": "2026-04-14",
+      "updated": "2026-04-14T12:57:20.355613+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Measure token counts per section of CLAUDE.md and per agent YAML, identify the top-5 highest-impact sections for caveman-style rewriting, and deliver a structured rewrite plan with before/after estimates.",
+        "niet_in_scope": [
+          "Actually rewriting CLAUDE.md or any YAML (plan only)",
+          "changes to agent behaviour"
+        ],
+        "acceptatiecriteria": [
+          "Token count table produced: file | section | current_tokens | reduction_estimate",
+          "Top 5 sections ranked by reduction potential with specific rewrite strategy per section",
+          "rewrite-plan.md produced in artefacts/task-026/"
+        ],
+        "security_arch_impact": "Read-only analysis - no outbound HTTP, no writes to production files. No risk.",
+        "tests_required": "regression - verify token count totals are internally consistent; review - confirm proposed rewrites preserve all semantic content",
+        "definition_of_done": [
+          "rewrite-plan.md with before/after token estimates per section",
+          "review.md APPROVED",
+          "test_report.md PASS"
+        ],
+        "rollback_plan": "No production file changes - rollback not applicable.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "python3"
+        ]
+      }
+    },
+    {
+      "id": "task-027",
+      "title": "pm-healthcheck.sh: hooks, schema, YAML, logs check (BL-051)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-027/",
+      "created": "2026-04-14",
+      "updated": "2026-04-14T12:57:20.355613+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Create pm-healthcheck.sh - a shell script that checks hooks are symlinked, queue.json validates against schema, all agent YAMLs parse, and logs/ is writable; exits 0 on pass, 1 with per-check output on failure.",
+        "niet_in_scope": [
+          "Auto-fixing detected issues",
+          "integration into pm-start skill",
+          "cron scheduling"
+        ],
+        "acceptatiecriteria": [
+          "Script exits 0 when all checks pass; exits 1 with labelled per-check output on any failure",
+          "Four checks implemented: hooks symlinks, queue.json schema, agent YAML parse, logs/ writability",
+          "bash -n pm-healthcheck.sh exits 0; script is idempotent"
+        ],
+        "security_arch_impact": "Read-only checks + log write probe; no outbound HTTP; no user-controlled path inputs. Low risk.",
+        "tests_required": "unit - mock missing hook symlink, invalid queue.json, malformed YAML, unwritable logs/; verify each triggers exit 1 with correct label",
+        "definition_of_done": [
+          "pm-healthcheck.sh in project root or scripts/",
+          "test_healthcheck.py with 4 unit tests",
+          "review.md APPROVED",
+          "test_report.md PASS",
+          "verification.md"
+        ],
+        "rollback_plan": "Delete pm-healthcheck.sh - no side effects.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "bash",
+          "python3",
+          "pyyaml (pip install pyyaml)"
+        ]
+      }
+    },
+    {
+      "id": "task-028",
+      "title": "Token spend dashboard in /pm-status (BL-052)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-028/",
+      "created": "2026-04-14",
+      "updated": "2026-04-14T12:57:20.355613+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Extend the /pm-status skill to display a cumulative token spend table per task/agent from token_log.jsonl, with a WARN flag on rows exceeding 80% of token_estimate.",
+        "niet_in_scope": [
+          "Modifying pm-start or other PM skills",
+          "real-time tracking",
+          "cross-project aggregation beyond token_log.jsonl"
+        ],
+        "acceptatiecriteria": [
+          "/pm-status output includes a token table: task_id | agent | tokens_used | token_estimate | %",
+          "Rows where tokens_used > 80% of token_estimate are marked WARN",
+          "pm-status.md updated with the token section and the script/command to generate it"
+        ],
+        "security_arch_impact": "Read-only from token_log.jsonl - no outbound HTTP, no user-controlled inputs in path. Low risk.",
+        "tests_required": "unit - empty log -> empty table; single task entry; multiple tasks; >80% threshold -> WARN flag present",
+        "definition_of_done": [
+          "token-dashboard.py or inline pm-status update",
+          "pm-status.md updated",
+          "review.md APPROVED",
+          "test_report.md PASS"
+        ],
+        "rollback_plan": "Revert pm-status.md changes; delete token-dashboard.py if created.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "python3",
+          "token_log.jsonl (may be empty - script must handle gracefully)"
+        ]
+      }
+    },
+    {
+      "id": "task-029",
+      "title": "pensieve: Refactor shared nodes into n8n sub-workflow (BL-054)",
+      "project": "pensieve",
+      "target_project_path": "/opt/claude/pensieve/",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-029/",
+      "created": "2026-04-14",
+      "updated": "2026-04-14T12:57:20.355613+00:00",
+      "token_estimate": 12000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Extract the shared Claude / Parse / Build / Write Code nodes from the Telegram and Gmail capture workflows into one reusable n8n sub-workflow, eliminating dual-maintenance.",
+        "niet_in_scope": [
+          "New capture features",
+          "trigger/credential changes",
+          "Gmail workflow deployment (BL-053 separate task)",
+          "Gmail sub-workflow integration if Gmail not yet deployed"
+        ],
+        "acceptatiecriteria": [
+          "Sub-workflow JSON created and deployed to n8n on Pi4",
+          "Telegram capture workflow updated to call sub-workflow - end-to-end test: Telegram message to vault write",
+          "Sub-workflow and updated Telegram workflow JSON committed to pensieve/workflows/"
+        ],
+        "security_arch_impact": "Outbound HTTP: Claude API (existing credential). Path construction: vault write path inherited - verify path guard not removed. Control char sanitization: verify not removed during refactor.",
+        "tests_required": "integration - send test Telegram message, verify vault file created with correct format; regression - compare output format to pre-refactor baseline",
+        "definition_of_done": [
+          "Sub-workflow JSON in pensieve/workflows/",
+          "Telegram workflow updated and functional",
+          "review.md APPROVED",
+          "test_report.md PASS",
+          "deploy-notes.md updated"
+        ],
+        "rollback_plan": "Re-import original Telegram workflow JSON from git; restart n8n.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "yes - Telegram messages processed; safeguard: vault stored locally on Pi4, no external egress beyond Claude API",
+        "cost_estimate": "EUR ~0.05",
+        "prerequisites": [
+          "SSH access to pi4",
+          "n8n running",
+          "Telegram capture workflow functional",
+          "git access to pensieve repo"
+        ]
+      }
+    },
+    {
+      "id": "task-030",
+      "title": "pensieve: n8n health-check workflow (BL-055)",
+      "project": "pensieve",
+      "target_project_path": "/opt/claude/pensieve/",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-030/",
+      "created": "2026-04-14",
+      "updated": "2026-04-14T12:57:20.355613+00:00",
+      "token_estimate": 10000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Create an n8n scheduled workflow that checks every 15 minutes whether any active workflow has had no execution in >2h during waking hours (07:00-23:00) and sends a Telegram alert if so.",
+        "niet_in_scope": [
+          "Monitoring n8n container health",
+          "per-node failure alerting",
+          "external service uptime checks"
+        ],
+        "acceptatiecriteria": [
+          "Workflow runs on 15-min schedule; queries n8n execution history for all active workflows",
+          "Telegram alert sent when active workflow idle >2h between 07:00-23:00",
+          "No alert sent 23:00-07:00 or for workflows with no executions yet"
+        ],
+        "security_arch_impact": "Outbound HTTP to n8n internal API only (Pi4 LAN - private IP; acceptable for internal monitoring). Outbound HTTP to Telegram API: timeout set. No user-controlled inputs.",
+        "tests_required": "unit (node:vm mock) - idle active workflow waking hours -> alert; idle during night -> no alert; new workflow no executions -> no alert; integration - deploy and verify schedule fires",
+        "definition_of_done": [
+          "workflow JSON in pensieve/workflows/",
+          "deployed and active on n8n",
+          "review.md APPROVED",
+          "test_report.md PASS",
+          "deploy-notes.md"
+        ],
+        "rollback_plan": "Deactivate or delete workflow in n8n.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "SSH to pi4",
+          "n8n running",
+          "Telegram bot token + chat_id in n8n credentials",
+          "n8n API key"
+        ]
+      }
+    },
+    {
+      "id": "task-031",
+      "title": "pensieve: Clean up stale n8n workflows (BL-056)",
+      "project": "pensieve",
+      "target_project_path": "/opt/claude/pensieve/",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-031/",
+      "created": "2026-04-14",
+      "updated": "2026-04-14T12:57:20.355613+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Delete duplicate Pensieve Telegram Capture entries and unnamed My workflow entries from n8n, leaving only the single active canonical workflow; verify capture still works after cleanup.",
+        "niet_in_scope": [
+          "Modifying active workflows",
+          "credential changes",
+          "new workflow features"
+        ],
+        "acceptatiecriteria": [
+          "Exactly one Pensieve - Telegram Capture workflow remains in n8n (the active one)",
+          "All unnamed My workflow entries deleted",
+          "Post-cleanup functional test: Telegram message to vault file created successfully"
+        ],
+        "security_arch_impact": "n8n admin delete operations - no outbound HTTP beyond Pi4 LAN n8n API. Pre-condition: export all workflows to git before deleting.",
+        "tests_required": "verification - n8n export:workflow --all shows 1 Telegram Capture entry; functional test send",
+        "definition_of_done": [
+          "Duplicate workflows deleted",
+          "verification.md: before/after workflow list + functional test PASS",
+          "review.md APPROVED"
+        ],
+        "rollback_plan": "Re-import deleted workflow JSON from git; restart n8n.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "SSH to pi4",
+          "n8n running",
+          "all workflow JSONs exported and committed to git first"
+        ]
+      }
+    },
+    {
+      "id": "task-032",
+      "title": "pensieve: PAT rotation runbook (BL-057)",
+      "project": "pensieve",
+      "target_project_path": "/opt/claude/pensieve/",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-032/",
+      "created": "2026-04-14",
+      "updated": "2026-04-14T12:57:20.355613+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Write a PAT rotation runbook in pensieve/docs/pat-rotation.md documenting the exact steps to rotate the GitHub PAT used by n8n on Pi4, and add a quarterly reminder.",
+        "niet_in_scope": [
+          "Automating PAT rotation",
+          "changing PAT permissions or scopes",
+          "modifying n8n credential storage format"
+        ],
+        "acceptatiecriteria": [
+          "pat-rotation.md exists in pensieve/docs/ with: step-by-step rotation procedure, affected systems list, verification steps post-rotation",
+          "Quarterly calendar reminder documented (manual step or Google Calendar link)",
+          "No actual PAT values in the file"
+        ],
+        "security_arch_impact": "Documentation only - no secrets written to files; reviewer must confirm no PAT values in output.",
+        "tests_required": "review - doc contains all sections (rotation steps, affected systems, verification, reminder); grep for secret patterns returns nothing",
+        "definition_of_done": [
+          "pensieve/docs/pat-rotation.md committed to pensieve repo",
+          "review.md APPROVED",
+          "test_report.md PASS"
+        ],
+        "rollback_plan": "Delete pat-rotation.md.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "Access to pensieve repo (micmaas2/pensieve)"
+        ]
+      }
     }
   ]
 }
