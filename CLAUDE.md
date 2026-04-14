@@ -165,6 +165,7 @@ Opus returns a recommendation; Builder/Reviewer continues with it and notes the 
 | `/pm-close` | `pm-close.md` | Sprint close: clean tree → proposals → merge → push → phase gate |
 | `/pm-lessons` | `pm-lessons.md` | Print last 10 lessons |
 | `/pm-run` | `pm-run.md` | Execute next pending task through full pipeline |
+| `skill-creator` | Marketplace | Eval-driven skill authoring; run for new/revised PM skills |
 
 **Skill authoring rules**: Skills are executable command prompts (`.claude/commands/*.md`).
 - Every angle-bracket placeholder must include an explicit resolution instruction naming the source file and lookup pattern — do not assume the reader will infer where data lives.

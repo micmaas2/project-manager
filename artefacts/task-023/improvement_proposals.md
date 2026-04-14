@@ -10,4 +10,4 @@ line (not embedded in body text) for the grep scan to work correctly:
 ```
 **Rationale**: Without this note, a future author editing the proposal template might embed
 the Status value in a multi-line Change block, silently breaking the scan.
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

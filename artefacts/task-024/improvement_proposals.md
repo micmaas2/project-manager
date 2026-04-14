@@ -10,4 +10,4 @@ using the `skill-creator` plugin for eval-driven development before shipping:
 Insert after the existing PM Skills table in the "PM Skills" section.
 **Rationale**: Without this pointer, future skill authors will continue hand-authoring
 without evals — repeating the quality gap identified in this review.
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
