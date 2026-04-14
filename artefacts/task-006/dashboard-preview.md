@@ -1,5 +1,5 @@
 # Project Dashboard
-_Last updated: 2026-04-13 21:45_
+_Last updated: 2026-04-14 11:45_
 
 ## Queue Status
 
@@ -10,7 +10,7 @@ _Last updated: 2026-04-13 21:45_
 | paused | 0 |
 | review | 0 |
 | test | 0 |
-| done | 18 |
+| done | 23 |
 
 ## Active Tasks
 
@@ -18,11 +18,11 @@ _No tasks currently in progress._
 
 ## Recently Completed
 
-- **task-019** mas_agent: Telegram sender chat_id auth guard (BL-060) [2026-04-13]
-- **task-018** mas_agent: Fix mas-frontend Docker healthcheck (BL-059) [2026-04-13]
-- **task-017** project_manager: Cross-project kanban view script (BL-064, S-003-3) [2026-04-13]
-- **task-016** project_manager: Python token-cap-enforcer script (BL-050, S-003-4) [2026-04-11]
-- **task-015** project_manager: Multi-project priority ranking in PM (BL-004, S-003-1) [2026-04-11]
+- **task-024** project_manager: Review Anthropic agent skills course — identify applicable skills (BL-045) [2026-04-14]
+- **task-023** project_manager: Mark resolved improvement_proposals.md files as done — pm-propose skip logic (BL-046) [2026-04-14]
+- **task-022** project_manager: Wire claude-md-improver into /pm-close every 5th session (BL-048) [2026-04-14]
+- **task-021** pi-homelab: Migrate health-api base image bullseye → bookworm (BL-014) [2026-04-14]
+- **task-020** mas daily facts: birth-date regression fix (BL-065) [2026-04-14]
 
 ## Next Up (Pending)
 
