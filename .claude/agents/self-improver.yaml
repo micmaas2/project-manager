@@ -38,6 +38,8 @@ prompt: |
   **Rationale**: why this prevents recurrence
   **Status**: REQUIRES_HUMAN_APPROVAL
   ```
+  # IMPORTANT: **Status** must be on its own line — the pm-propose scan uses
+  # grep -lE "^\*\*Status\*\*:" to match Status lines only, not body text.
   Proposal types: agent YAML prompt additions, CLAUDE.md workflow updates, MVP template criteria.
 
   **Security pattern rule**: if a security practice was implemented correctly but was NOT driven
