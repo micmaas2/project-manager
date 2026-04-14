@@ -52,3 +52,8 @@
 ## Verdict
 **PASS** — all static checks and deployment verification pass.
 Manual end-to-end smoke test recommended before marking fully done.
+
+## End-to-End Validation (user-confirmed)
+**Date**: 2026-04-14
+Both Telegram capture flow and Gmail capture flow tested end-to-end by user — vault write confirmed successful on both channels.
+**Final verdict: PASS**
