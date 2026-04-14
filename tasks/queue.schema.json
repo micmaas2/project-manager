@@ -51,13 +51,13 @@
           "description": "Optional epic reference, e.g. EPIC-001"
         },
         "story_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "pattern": "^S-[0-9]+-[0-9]+$",
           "description": "Optional story reference, e.g. S-001-5"
         },
         "assigned_to": {
           "type": ["string", "null"],
-          "enum": ["manager", "builder", "reviewer", "tester", "doc-updater", "self-improver", null]
+          "enum": ["manager", "builder", "reviewer", "reviewer+code-quality-reviewer", "tester", "doc-updater", "doc-updater+docs-readme-writer", "self-improver", "done", null]
         },
         "status": {
           "type": "string",
@@ -80,7 +80,8 @@
         "token_estimate": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 10000
+          "maximum": 500000,
+          "description": "Estimated total tokens for entire task pipeline; per-agent cap is 10000"
         },
         "resume_from": {
           "type": ["string", "null"],
@@ -112,10 +113,10 @@
             },
             "acceptatiecriteria": {
               "type": "array",
-              "items": { "type": "string", "maxLength": 300 },
+              "items": { "type": "string", "maxLength": 500 },
               "minItems": 3,
-              "maxItems": 5,
-              "description": "Measurable acceptance criteria (3–5 items)"
+              "maxItems": 10,
+              "description": "Measurable acceptance criteria (3–10 items)"
             },
             "security_arch_impact": {
               "type": "string",
