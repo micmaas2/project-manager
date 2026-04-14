@@ -75,7 +75,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-062 | EPIC-003 | mas_agent: Add hard budget enforcement to LLMClient.chat() — call check_budget() before each API call; raise BudgetExceededError and log if exceeded (arch-review mas-P4) | pi-homelab | P2 | new | 2026-04-11 |
 | BL-063 | EPIC-003 | mas_agent: Configure external uptime monitoring for mas-backend /health endpoint — UptimeRobot or Uptime-Kuma; Telegram alert if non-200 for >5 min (arch-review mas-P5) | pi-homelab | P2 | new | 2026-04-11 |
 | BL-064 | EPIC-003 | project_manager: Cross-project kanban view script — generate a unified markdown kanban across all managed projects from queue.json + project-registry.md; callable from /pm-status (S-003-3) | project_manager | P2 | done | 2026-04-11 |
-| BL-065 | EPIC-003 | mas_agent: Daily facts still incorrect wrt birth dates — regression or new bug after task-012 fix | pi-homelab | P1 | in_progress | 2026-04-13 |
+| BL-065 | EPIC-003 | mas_agent: Daily facts still incorrect wrt birth dates — regression or new bug after task-012 fix | pi-homelab | P1 | done | 2026-04-13 |
 | BL-066 | EPIC-003 | New project proposal: ActiveControl-like SAP change and transport management platform (AI-powered) | ccas | P2 | new | 2026-04-13 |
 | BL-067 | EPIC-003 | New project proposal: Testimony-like SAP AI test automation — auto-generate and maintain SAP test cases | ccas | P2 | new | 2026-04-13 |
 | BL-068 | EPIC-003 | New project proposal: DataSync-like SAP data management — copy and synchronize SAP data across environments | ccas | P2 | new | 2026-04-13 |

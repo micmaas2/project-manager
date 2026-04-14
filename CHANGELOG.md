@@ -6,6 +6,13 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-020] — 2026-04-14
+
+### Fixed
+- `mas_personal_assistant`: LLM birth-date hallucination in the daily facts feature (BL-065). `DailyFactsAgent` now fetches verified born-today candidates from the Wikipedia REST API before building the LLM prompt. New `_get_born_today_candidates()` method parses all births for the current date, sorts intellectuals/scientists first (ranked by `_INTELLECTUAL_KEYWORDS` frozenset) then oldest-first, and returns the top 12 candidates. ASCII control characters are stripped from `description` and `extract` fields before returning (prompt injection guard). `_build_fact_generation_prompt()` extended with a `candidates` parameter — when candidates are available the prompt lists verified names; falls back to free-form generation if the Wikipedia call returns empty. 11/11 unit tests passing (`artefacts/task-020/test_daily_facts_regression.py`).
+
+---
+
 ## [task-019] — 2026-04-13
 
 ### Added
