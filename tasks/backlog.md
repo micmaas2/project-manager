@@ -116,3 +116,4 @@ Items completed, rejected, or no longer relevant.
 | BL-075 | EPIC-003 | project_manager: Evaluate hookify for MAS safety rules — create 2-3 hookify rules as proof-of-concept (e.g. no direct develop commit, no grep -rl on artefacts) | project_manager | P3 | new | 2026-04-14 |
 | BL-076 | EPIC-003 | project_manager: Add confidence scoring (1-100) to Reviewer YAML output format — Builder loops only on score >= 80 findings; low-confidence findings go to build_notes.md only | project_manager | P2 | new | 2026-04-14 |
 | BL-077 | EPIC-003 | project_manager: Research — evaluate whether ProjectManager or task-queue processor should be rebuilt as a Claude Agent SDK app (Python); prototype with /new-sdk-app | project_manager | P3 | new | 2026-04-14 |
+| BL-078 | EPIC-003 | project_manager: Review project manager claude — audit CLAUDE.md, agent YAMLs, skills, and overall PM system for quality and gaps | project_manager | P2 | new | 2026-04-14 |

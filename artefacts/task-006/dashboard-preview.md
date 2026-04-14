@@ -1,16 +1,16 @@
 # Project Dashboard
-_Last updated: 2026-04-14 20:00_
+_Last updated: 2026-04-14 21:00_
 
 ## Queue Status
 
 | Status | Count |
 |---|---|
-| pending | 5 |
+| pending | 3 |
 | in_progress | 0 |
 | paused | 0 |
 | review | 0 |
 | test | 0 |
-| done | 26 |
+| done | 28 |
 
 ## Active Tasks
 
@@ -18,16 +18,14 @@ _No tasks currently in progress._
 
 ## Recently Completed
 
+- **task-029** pensieve: Refactor shared nodes into n8n sub-workflow (BL-054) [2026-04-14]
+- **task-028** Token spend dashboard in /pm-status (BL-052) [2026-04-14]
 - **task-027** pm-healthcheck.sh: hooks, schema, YAML, logs check (BL-051) [2026-04-14]
 - **task-026** Token reduction analysis: CLAUDE.md + agent YAMLs (BL-049) [2026-04-14]
 - **task-025** genealogie: Merge develop to main, tag v2.x (BL-018) [2026-04-14]
-- **task-024** project_manager: Review Anthropic agent skills course — identify applicable skills (BL-045) [2026-04-14]
-- **task-023** project_manager: Mark resolved improvement_proposals.md files as done — pm-propose skip logic (BL-046) [2026-04-14]
 
 ## Next Up (Pending)
 
-- **task-028** [project_manager] Token spend dashboard in /pm-status (BL-052)
-- **task-029** [pensieve] pensieve: Refactor shared nodes into n8n sub-workflow (BL-054)
 - **task-030** [pensieve] pensieve: n8n health-check workflow (BL-055)
 - **task-031** [pensieve] pensieve: Clean up stale n8n workflows (BL-056)
 - **task-032** [pensieve] pensieve: PAT rotation runbook (BL-057)
