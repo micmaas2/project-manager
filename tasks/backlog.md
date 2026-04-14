@@ -36,7 +36,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-025 | EPIC-003 | pensieve: Store files in topic-based folders for better search | pensieve | P1 | done | 2026-04-05 |
 | BL-027 | EPIC-003 | pensieve: Retroactive vault quality improvement — format migration, tag normalization, URL re-enrichment | pensieve | P1 | done | 2026-04-05 |
 | BL-017 | EPIC-003 | genealogie: Implement MyHeritageAgent write-back via MyHeritage API | genealogie | P2 | discovered | 2026-04-05 |
-| BL-018 | EPIC-003 | genealogie: Merge develop → main and tag v2.x release | genealogie | P3 | in_progress | 2026-04-05 |
+| BL-018 | EPIC-003 | genealogie: Merge develop → main and tag v2.x release | genealogie | P3 | done | 2026-04-05 |
 | BL-019 | EPIC-003 | performance_HPT: Scaffold performance-twin repo + deploy HPT Dashboard | performance_HPT | P2 | discovered | 2026-04-05 |
 | BL-020 | EPIC-003 | performance_HPT: HPT Dashboard Fase 1 — move from /opt/claude/future/ into repo (imperative-wobbling-newell.md) | performance_HPT | P2 | discovered | 2026-04-05 |
 | BL-028 | EPIC-003 | project_manager: Merge Boris Cherny CLAUDE.md principles + archive original | project_manager | P2 | done | 2026-04-06 |

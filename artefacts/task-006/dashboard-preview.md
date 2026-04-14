@@ -1,11 +1,11 @@
 # Project Dashboard
-_Last updated: 2026-04-14 11:45_
+_Last updated: 2026-04-14 15:00_
 
 ## Queue Status
 
 | Status | Count |
 |---|---|
-| pending | 0 |
+| pending | 8 |
 | in_progress | 0 |
 | paused | 0 |
 | review | 0 |
@@ -26,7 +26,14 @@ _No tasks currently in progress._
 
 ## Next Up (Pending)
 
-_No pending tasks._
+- **task-025** [genealogie] genealogie: Merge develop to main, tag v2.x (BL-018)
+- **task-026** [project_manager] Token reduction analysis: CLAUDE.md + agent YAMLs (BL-049)
+- **task-027** [project_manager] pm-healthcheck.sh: hooks, schema, YAML, logs check (BL-051)
+- **task-028** [project_manager] Token spend dashboard in /pm-status (BL-052)
+- **task-029** [pensieve] pensieve: Refactor shared nodes into n8n sub-workflow (BL-054)
+- **task-030** [pensieve] pensieve: n8n health-check workflow (BL-055)
+- **task-031** [pensieve] pensieve: Clean up stale n8n workflows (BL-056)
+- **task-032** [pensieve] pensieve: PAT rotation runbook (BL-057)
 
 ## Maintenance — Due Soon
 
