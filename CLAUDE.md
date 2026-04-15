@@ -471,6 +471,15 @@ ssh pi4 "docker restart n8n && sleep 5 && docker ps | grep n8n"
 ssh pi4 "docker exec n8n n8n export:workflow --all --output=/home/node/wf.json && docker cp n8n:/home/node/wf.json /tmp/wf.json" && python3 -c "import json; [print(w['id'],'|',w['name'],'|',w.get('active')) for w in json.load(open('/tmp/wf.json'))]"
 ssh pi4 "docker exec n8n n8n export:credentials --all --output=/home/node/creds.json && docker cp n8n:/home/node/creds.json /tmp/creds.json" && python3 -c "import json; [print(c['id'],'|',c['name'],'|',c['type']) for c in json.load(open('/tmp/creds.json'))]"
 ```
+**Note**: `n8n export:workflow --all` only exports **non-archived** (active or inactive-but-not-deleted) workflows. Workflows deleted via the REST API are soft-archived and excluded from the export — a reduced count after deletion is expected behaviour, not data loss.
+
+**Deleting a workflow** (soft-archive via REST — excluded from future exports):
+```bash
+# Pre-condition: commit a full export as backup before deleting (git-tracked artefact)
+API_KEY=$(ssh pi4 "cat /opt/n8n/api-key")
+ssh pi4 "curl -s -X DELETE 'http://localhost:88/api/v1/workflows/<id>' -H 'X-N8N-API-KEY: $API_KEY'"
+# Verify: re-export and confirm count = (before − deleted)
+```
 
 **Updating workflow JSON programmatically**: when modifying n8n workflow nodes that contain
 multi-line `jsCode` or `jsonBody` strings, use Python to load/modify/dump — avoids JSON

@@ -5,7 +5,7 @@
 **Target file:** `CLAUDE.md`  
 **Change:** Add a note to the "n8n Workflow Deployment" section that `n8n export:workflow --all` only exports **active** (non-archived) workflows. Soft-deleted (archived) workflows are excluded. If true deletion is needed, the REST `DELETE /api/v1/workflows/{id}` endpoint archives them and they disappear from the export — this is expected behaviour, not data loss.  
 **Rationale:** The difference between "export shows N workflows" and "n8n has N+K archived workflows" was not documented. Future cleanup tasks should know that a reduced export count after deletion is expected and correct.  
-**Status:** REQUIRES_HUMAN_APPROVAL
+**Status:** APPROVED
 
 ---
 
@@ -22,4 +22,4 @@ API_KEY=$(ssh pi4 "cat /opt/n8n/api-key")
 ssh pi4 "curl -s -X DELETE 'http://localhost:88/api/v1/workflows/<id>' -H 'X-N8N-API-KEY: $API_KEY'"
 ```
 **Rationale:** The DELETE pattern was pieced together from first principles during task-031. It should be a first-class documented operation alongside the existing "deploy sequence" and "quick health check" patterns.  
-**Status:** REQUIRES_HUMAN_APPROVAL
+**Status:** APPROVED
