@@ -6,6 +6,13 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-032] — 2026-04-15
+
+### Added
+- `pensieve/docs/pat-rotation.md`: GitHub PAT rotation runbook for n8n on Pi4. Documents affected systems (n8n credential `GitHub PAT — project-manager`, Telegram Capture workflow, `/opt/n8n/github-pat` file), step-by-step rotation procedure with fine-grained PAT guidance, post-rotation verification (UI test, end-to-end Telegram test, file prefix check), quarterly reminder template, rollback path with time-to-restore estimate, and troubleshooting table (BL-057).
+
+---
+
 ## [task-031] — 2026-04-15
 
 ### Removed
