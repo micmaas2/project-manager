@@ -6,6 +6,13 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-031] — 2026-04-15
+
+### Removed
+- `n8n (Pi4)`: Deleted 5 stale workflows — 3 duplicate inactive "Pensieve — Telegram Capture" entries (IDs: LXNulqGKD9lVgkCy, E1d8DxnKUHokwMh8, hqMPoEDxmHYxprhd) and 2 unnamed placeholder workflows ("My workflow", "My workflow 2"). Full backup committed before deletion (`artefacts/task-031/wf_backup_before.json`). Active canonical workflow `WgIO3y4KvGOxHWu0` retained and verified operational (execution 309, 2026-04-15T06:37 UTC). n8n now has 5 workflows total, all with clear purpose and ownership. Review: `artefacts/task-031/review.md` APPROVED.
+
+---
+
 ## [task-030] — 2026-04-14
 
 ### Added
