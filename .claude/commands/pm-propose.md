@@ -5,7 +5,7 @@ Collect, deduplicate, present, and apply improvement proposals. Run at session e
 ## Steps
 
 **1. Find pending proposals**
-Pre-filter: `find artefacts -name "improvement_proposals.md" | xargs grep -lE "^\*\*Status\*\*: REQUIRES_HUMAN_APPROVAL"` to get only files with at least one pending Status line.
+Pre-filter: `find artefacts -name "improvement_proposals.md" | xargs grep -lE "^\*\*Status:\*\* REQUIRES_HUMAN_APPROVAL"` to get only files with at least one pending Status line.
 Skip any file not returned by this command — it has no pending proposals (all resolved or absent).
 For each returned file: read it and collect all `## Proposal N` sections where the `**Status**` field equals `REQUIRES_HUMAN_APPROVAL`.
 Do NOT use `grep -rl` across the whole artefacts directory — test files may contain the string as an assertion and produce false positives.
