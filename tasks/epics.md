@@ -46,7 +46,7 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 **Goal**: Enable ProjectManager to orchestrate tasks across all /opt/claude/* projects.
 **Project**: project_manager
-**Status**: in_progress
+**Status**: done
 **MVP Phase**: MVP3
 
 ### Stories

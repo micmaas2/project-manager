@@ -1,11 +1,11 @@
 # Project Dashboard
-_Last updated: 2026-04-16 09:45_
+_Last updated: 2026-04-16 11:45_
 
 ## Queue Status
 
 | Status | Count |
 |---|---|
-| pending | 0 |
+| pending | 4 |
 | in_progress | 0 |
 | paused | 0 |
 | review | 0 |
@@ -26,7 +26,10 @@ _No tasks currently in progress._
 
 ## Next Up (Pending)
 
-_No pending tasks._
+- **task-033** [pensieve] pensieve: Debug missing Obsidian md files since 2026-04-09 (BL-083)
+- **task-034** [project_manager] project_manager: Explore Claude Code optimization repo — 108 skills + 25 agents (BL-084)
+- **task-035** [project_manager] project_manager: Execute CLAUDE.md + agent YAML token reduction rewrites (BL-079)
+- **task-036** [project_manager] project_manager: Add confidence scoring to Reviewer YAML output (BL-076)
 
 ## Maintenance — Due Soon
 
