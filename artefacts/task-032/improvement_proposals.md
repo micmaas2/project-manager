@@ -9,7 +9,7 @@
 
 **Rationale**: code-quality-reviewer identified M-1 in task-032: the rollback section warned of "no automatic rollback" but omitted quantified downtime. An operator under pressure deciding whether to escalate needs this estimate. The fix was simple (one added sentence) but this is a pattern that should be baked into the template for all future credential-rotation tasks to prevent re-discovery.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -21,7 +21,7 @@
 
 **Rationale**: code-quality-reviewer flagged L-1: task-032 recommends fine-grained PATs as preferred but Step 2's bash snippet only shows classic format (`ghp_<YOUR_NEW_TOKEN>`). A first-time operator following the "preferred" recommendation could be confused by an example that doesn't match. This is low-severity but recurs in any multi-option documentation. Baking this into the Builder/Reviewer checklist prevents the gap.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -35,4 +35,4 @@
 
 **Rationale**: code-quality-reviewer noted L-2: Step 4c's safe command (`head -c 4`) is correct, but the surrounding verification section doesn't warn against accidentally running the full command without the pipe. While low-severity (operator must explicitly remove the safety), this is a good operational hygiene pattern for any secret-verification step. Including it in the template prevents silent exposure windows.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

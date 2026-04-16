@@ -127,7 +127,7 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 | revise-claude-md | built-in | Haiku | CLAUDE.md session learnings | CLAUDE.md updated |
 
 **Built-in Claude Code agents** (invoke via `Agent` tool with `subagent_type`):
-- `code-quality-reviewer` — security + quality review; runs parallel to Reviewer; for any regex using `re.DOTALL`, flag use of `$` as a stop anchor (use `\Z` instead) and require a multi-line fixture in Tester
+- `code-quality-reviewer` — security + quality review; runs parallel to Reviewer; for any regex using `re.DOTALL`, flag use of `$` as a stop anchor (use `\Z` instead) and require a multi-line fixture in Tester; for any documentation that recommends one format as "preferred" (e.g. fine-grained PAT over classic), verify ALL code snippets use that preferred format first — if both forms are valid, add a comment noting both formats
 - `docs-readme-writer` — README/module docs; runs parallel to DocUpdater
 - `claude-md-management:revise-claude-md` — apply session learnings to CLAUDE.md (session end); invoke via `Skill` tool, NOT `Agent` tool (`subagent_type` does not work for `claude-md-management:*`)
 - `claude-md-management:claude-md-improver` — full CLAUDE.md audit (on demand); invoke via `Skill` tool
@@ -227,6 +227,9 @@ Security/arch impact: <note>
       - Concurrency lock: use `flock -n` on a lock file at startup; skip (exit 0) if lock held
       - SSH/auth identity: export `GIT_SSH_COMMAND` or equivalent explicitly — cron env has no agent
       - Log rotation: document logrotate config as a **required** deploy step, not optional
+  - If the task rotates a credential or secret (PAT, API key, token):
+      - Rollback section must include "Estimated time-to-restore: N-M minutes"
+      - Estimate covers worst-case manual steps (e.g. generate new token + 2 config updates)
 No external deps: true/false  (if true: stdlib/built-ins only; no pip/npm installs)
 Prerequisites: [tool >= version, ...]
 Tests: unit/integration/regression
@@ -250,6 +253,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 - Secrets only via central vault; never in prompts or logs
 - RBAC for agent spawn and policy changes
 - Prompt sanitization; adversarial tests for prompt injection
+- Runbook verification commands that read secret files: always pipe through `head -c N` or `grep -c`; add a warning note discouraging bare `cat` on recorded/shared terminals (shell history risk)
 
 **Observability**:
 - Audit trail: who, agent, action, time, artefact
