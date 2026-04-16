@@ -1,16 +1,16 @@
 # Project Dashboard
-_Last updated: 2026-04-15 12:45_
+_Last updated: 2026-04-16 09:45_
 
 ## Queue Status
 
 | Status | Count |
 |---|---|
-| pending | 2 |
+| pending | 0 |
 | in_progress | 0 |
 | paused | 0 |
 | review | 0 |
 | test | 0 |
-| done | 29 |
+| done | 31 |
 
 ## Active Tasks
 
@@ -18,16 +18,15 @@ _No tasks currently in progress._
 
 ## Recently Completed
 
+- **task-032** pensieve: PAT rotation runbook (BL-057) [2026-04-15]
+- **task-031** pensieve: Clean up stale n8n workflows (BL-056) [2026-04-15]
 - **task-030** pensieve: n8n health-check workflow (BL-055) [2026-04-14]
 - **task-029** pensieve: Refactor shared nodes into n8n sub-workflow (BL-054) [2026-04-14]
 - **task-028** Token spend dashboard in /pm-status (BL-052) [2026-04-14]
-- **task-027** pm-healthcheck.sh: hooks, schema, YAML, logs check (BL-051) [2026-04-14]
-- **task-026** Token reduction analysis: CLAUDE.md + agent YAMLs (BL-049) [2026-04-14]
 
 ## Next Up (Pending)
 
-- **task-031** [pensieve] pensieve: Clean up stale n8n workflows (BL-056)
-- **task-032** [pensieve] pensieve: PAT rotation runbook (BL-057)
+_No pending tasks._
 
 ## Maintenance — Due Soon
 
