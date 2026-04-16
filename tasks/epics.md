@@ -60,6 +60,24 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 ---
 
+## EPIC-004 — System Quality & Optimization
+
+**Goal**: Improve system reliability, reduce token overhead, and integrate best-practice patterns from the Claude Code ecosystem.
+**Project**: project_manager
+**Status**: in_progress
+**MVP Phase**: MVP4
+
+### Stories
+
+| Story ID | Title | Queue Task | Status |
+|---|---|---|---|
+| S-004-1 | Pensieve pipeline stability debug | task-033 | done |
+| S-004-2 | CLAUDE.md + agent YAML token reduction rewrites | task-035 | pending |
+| S-004-3 | Reviewer confidence scoring | task-036 | pending |
+| S-004-4 | Claude Code skills & agents integration research | task-034 | pending |
+
+---
+
 ## Projects in Scope
 
 | Short name | Path | GitHub | Domain |
