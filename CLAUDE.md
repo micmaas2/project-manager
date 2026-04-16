@@ -269,7 +269,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 0. **Session start — mandatory checklist (run in order before any task work)**:
    - [ ] **Fetch remote**: Run `git fetch origin` before reading any operational file. n8n commits go directly to `origin/main` via GitHub API — without fetching, inbox items are invisible.
-   - [ ] **Telegram inbox**: Run `git show origin/main:tasks/telegram-inbox.md` to read the live inbox (not the local checkout). If items exist below the header, promote each to `tasks/backlog.md` (next BL ID, EPIC-003, project_manager, P2, new, today), then clear: if local `tasks/telegram-inbox.md` is already the clean header, just `git push origin develop:main --force-with-lease`; otherwise commit the cleared file on a feature branch first, merge to develop, then push.
+   - [ ] **Telegram inbox**: Run `git show origin/main:tasks/telegram-inbox.md` to read the live inbox (not the local checkout). If items exist below the header, promote each to `tasks/backlog.md` (next BL ID, EPIC-003, project_manager, P2, new, today), then clear: if local `tasks/telegram-inbox.md` is already the clean header, just `git push origin develop:main --force-with-lease`; otherwise commit the cleared file on a feature branch first, merge to develop, then push. **Deduplication**: before adding each item, check if a BL entry with the same title already exists (`grep -i "<keyword>" tasks/backlog.md`) — prior sessions may have promoted the item without clearing the inbox; skip duplicates.
    - [ ] **Lessons**: Read `tasks/lessons.md`; state the 3 most recent rows before planning. Lessons govern tooling choices and approach — do not repeat captured mistakes.
    - [ ] **Catch-up SelfImprover**: For every `status: done` task in `tasks/queue.json`, verify `artefacts/<artefact_path>/improvement_proposals.md` exists. If absent (directory may not exist either), run SelfImprover for that task — it must create the directory and file from the task definition in queue.json.
    - [ ] **ExitPlanMode denial**: if the user denies ExitPlanMode, use AskUserQuestion to clarify intent before re-attempting — the user may be redirecting to a side task first, not rejecting the plan outright.
@@ -393,6 +393,8 @@ GitHub PAT for project-manager API calls: `/opt/n8n/github-pat` on Pi4.
 
 **Vault location**: `/opt/obsidian-vault/` exists on Pi4 only — not on the local host.
 Explore agents run locally; always use `ssh pi4 "find /opt/obsidian-vault ..."` for vault state.
+
+**Pensieve repo active branch**: always run `git -C /opt/claude/pensieve branch --show-current` before committing to the pensieve repo — it may be on a long-lived feature branch (e.g. `feature/task-029-capture-subworkflow`) rather than `main`. Doc commits intended for `main` must target the correct branch.
 
 **dashboard-preview.md is cron-auto-updated**: `artefacts/task-006/dashboard-preview.md` is regenerated every 15 min by a Pi4 cron job. Expect it as a dirty unstaged file at session start and pm-close — commit it on a quick feature branch before proceeding (timestamp + done count update only).
 
