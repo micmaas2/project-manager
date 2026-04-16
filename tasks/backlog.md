@@ -122,3 +122,4 @@ Items completed, rejected, or no longer relevant.
 | BL-081 | EPIC-003 | project_manager: AI-powered personal learning guide — research and prototype a system to help user learn effectively (avoid distraction, stay focused, beginner-to-understanding path) | project_manager | P2 | new | 2026-04-15 |
 | BL-082 | EPIC-003 | project_manager: Research MCP server usage with Playwright — feasibility and integration approach | project_manager | P3 | new | 2026-04-15 |
 | BL-083 | EPIC-003 | pensieve: Debug missing Obsidian md files since 2026-04-09 — investigate n8n vault write pipeline gap | pensieve | P1 | new | 2026-04-16 |
+| BL-084 | EPIC-003 | project_manager: Explore and integrate Claude Code optimization repo — 108 skills + 25 specialized agents + token optimization techniques | project_manager | P2 | new | 2026-04-16 |
