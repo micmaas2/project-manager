@@ -17,10 +17,15 @@ Read the following files to build current state — read them in this order:
 - `tasks/lessons.md` — read last 5 rows; surface any lessons that are relevant to prioritization or MVP design decisions
 
 **2. Report current state**
+Find the epic with `status: in_progress` in `tasks/epics.md`. If no epic has `status: in_progress`:
+- **STOP**. State: "No in_progress epic found. All epics are done. A new epic must be defined before queuing tasks."
+- Ask: "What should EPIC-N+1 be called and what is its goal?" (N = highest existing epic number)
+- Once the user provides a name and goal, add the new epic to `tasks/epics.md` (status: `in_progress`, MVP Phase: next phase, Stories table empty for now), commit it, then continue to Step 3.
+
 Display a concise summary:
 
 ```
-## EPIC-003 — <title from epics.md>  [<status>]
+## EPIC-NNN — <title from epics.md>  [in_progress]
 
 | Story ID | Title | Status |
 |---|---|---|
@@ -100,7 +105,7 @@ For each new task:
   "title": "<title from BL item>",
   "project": "<project column from backlog.md>",
   "target_project_path": "<look up in CLAUDE.md workspace table: match project short name to Path column>",
-  "epic_id": "EPIC-003",
+  "epic_id": "<ID of the in_progress epic from epics.md, e.g. EPIC-004>",
   "story_id": "<story ID or null>",
   "assigned_to": "builder",
   "status": "pending",
