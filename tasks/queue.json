@@ -1427,6 +1427,183 @@
           "Access to pensieve repo (micmaas2/pensieve)"
         ]
       }
+    },
+    {
+      "id": "task-033",
+      "title": "pensieve: Debug missing Obsidian md files since 2026-04-09 (BL-083)",
+      "project": "pensieve",
+      "target_project_path": "/opt/claude/pensieve",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-033/",
+      "created": "2026-04-16",
+      "updated": "2026-04-16T08:24:56.000000+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Diagnose and fix the n8n vault write pipeline gap causing .md files to not appear in the Obsidian vault since 2026-04-09.",
+        "niet_in_scope": [
+          "New capture features",
+          "Claude API prompt changes",
+          "Gmail workflow"
+        ],
+        "acceptatiecriteria": [
+          "Root cause identified and documented in build_notes.md",
+          "Fix applied: Telegram capture \u2192 vault file successfully created post-fix",
+          "Files dated after fix confirmed present in vault on Pi4"
+        ],
+        "security_arch_impact": "Outbound HTTP to Claude API (existing credential). Vault write path: verify path guard not removed. Control-char sanitization: verify intact after any node edits.",
+        "tests_required": "Integration \u2014 send Telegram test message, verify vault file created; regression \u2014 sub-workflow still functional after fix",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "build_notes.md documents root cause",
+          "Vault write verified on Pi4 post-fix"
+        ],
+        "rollback_plan": "Re-import previous workflow JSON from git; restart n8n. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "yes \u2014 Telegram messages processed; vault stored locally on Pi4 only",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "SSH to pi4",
+          "n8n running",
+          "git access to pensieve repo"
+        ]
+      }
+    },
+    {
+      "id": "task-034",
+      "title": "project_manager: Explore Claude Code optimization repo \u2014 108 skills + 25 agents (BL-084)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-034/",
+      "created": "2026-04-16",
+      "updated": "2026-04-16T08:24:56.000000+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Review the Claude Code optimization repository (108 skills + 25 specialized agents + token optimization), identify applicable patterns for this MAS setup, and produce a prioritized integration list ready to queue.",
+        "niet_in_scope": [
+          "Implementing any skills (proposals + BL items only)",
+          "Modifying existing PM skills or agent YAMLs"
+        ],
+        "acceptatiecriteria": [
+          "Repo reviewed and summarised in skills-review.md (skills inventory, agent patterns, token techniques)",
+          ">=5 applicable patterns/skills identified with rationale and fit assessment",
+          "Each identified item has a proposed BL entry (title, project, priority)",
+          "All NEW proposals registered as BL items in tasks/backlog.md before marking done"
+        ],
+        "security_arch_impact": "Research task \u2014 no code, no outbound HTTP (repo reading only), no data processing.",
+        "tests_required": "Review \u2014 artefact contains all 4 sections; verification \u2014 BL items for all proposed integrations exist in backlog.md",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "artefacts/task-034/skills-review.md present",
+          "All proposed BL items committed to tasks/backlog.md"
+        ],
+        "rollback_plan": "N/A \u2014 research only; no deployed artefacts.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "Access to the Claude Code optimization repository URL"
+        ]
+      }
+    },
+    {
+      "id": "task-035",
+      "title": "project_manager: Execute CLAUDE.md + agent YAML token reduction rewrites (BL-079)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-035/",
+      "created": "2026-04-16",
+      "updated": "2026-04-16T08:24:56.000000+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Apply the 5 rewrite targets from artefacts/task-026/rewrite-plan.md, reducing CLAUDE.md + agent YAML token count by ~1,540 tokens (18%) while preserving all semantic content.",
+        "niet_in_scope": [
+          "Changing agent behaviour or logic",
+          "Modifying PM skill files",
+          "Rewriting sections not in the top-5 list from rewrite-plan.md"
+        ],
+        "acceptatiecriteria": [
+          "All 5 targets applied: CLAUDE.md \u00a7n8n, \u00a7Agent Roles, \u00a7Workflow Orchestration, \u00a7Git Branching + manager.yaml + reviewer.yaml",
+          "Post-rewrite token total <= 11,510 (from 13,609 baseline)",
+          "Semantic preservation checklist from rewrite-plan.md passes: rule counts match, security rules intact, M-1 mirrored rules consistent",
+          "Pre-commit hook passes; all agent YAMLs parse cleanly"
+        ],
+        "security_arch_impact": "All security rules must be preserved verbatim. M-1 cross-file rule mirroring: verify rule counts in both directions before and after each rewrite section.",
+        "tests_required": "Regression \u2014 rule count before/after per section; yaml parse check; token re-measurement with analysis script",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Token count verified <= 11,510",
+          "All 5 targets committed on feature branch"
+        ],
+        "rollback_plan": "git revert on feature branch; no system state changed. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "python3",
+          "artefacts/task-026/rewrite-plan.md"
+        ]
+      }
+    },
+    {
+      "id": "task-036",
+      "title": "project_manager: Add confidence scoring to Reviewer YAML output (BL-076)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-003",
+      "story_id": null,
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-036/",
+      "created": "2026-04-16",
+      "updated": "2026-04-16T08:24:56.000000+00:00",
+      "token_estimate": 6000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Update reviewer.yaml so each finding includes a confidence score (1-100); Builder loops only on findings >=80, routing lower-confidence findings to build_notes.md only.",
+        "niet_in_scope": [
+          "Changes to Tester, DocUpdater, or built-in code-quality-reviewer",
+          "Changes to Builder beyond the loop threshold logic"
+        ],
+        "acceptatiecriteria": [
+          "reviewer.yaml: each finding includes confidence: N (1-100) field",
+          "builder.yaml: loop on findings >=80; log <80 findings to build_notes.md only",
+          "CLAUDE.md: Reviewer output format updated with confidence field definition",
+          "M-1 consistency: reviewer.yaml and CLAUDE.md confidence field definition match exactly"
+        ],
+        "security_arch_impact": "No outbound HTTP. No user-controlled inputs. M-1 mirroring check required before commit.",
+        "tests_required": "Unit \u2014 reviewer.yaml fixture with mixed confidence scores; assert Builder loops on >=80, skips <80; regression \u2014 existing pipeline flow unchanged",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "reviewer.yaml + builder.yaml + CLAUDE.md updated and consistent"
+        ],
+        "rollback_plan": "Revert reviewer.yaml, builder.yaml, CLAUDE.md. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
     }
   ]
 }

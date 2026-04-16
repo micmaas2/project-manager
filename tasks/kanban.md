@@ -3,7 +3,7 @@
 Updated by ProjectManager after every task status change.
 Source of truth: `tasks/queue.json`. This board is a human-readable view.
 
-Last updated: 2026-04-14T00:00:00Z
+Last updated: 2026-04-16T08:24:56Z
 
 ---
 
@@ -26,14 +26,10 @@ _(items in backlog.md not yet in queue)_
 ## Ready
 _(in queue.json with status: pending)_
 
-- **task-025** genealogie: Merge develop to main, tag v2.x (BL-018)
-- **task-026** Token reduction analysis: CLAUDE.md + agent YAMLs (BL-049)
-- **task-027** pm-healthcheck.sh: hooks, schema, YAML, logs check (BL-051)
-- **task-028** Token spend dashboard in /pm-status (BL-052)
-- **task-029** pensieve: Refactor shared nodes into n8n sub-workflow (BL-054)
-- **task-030** pensieve: n8n health-check workflow (BL-055)
-- **task-031** pensieve: Clean up stale n8n workflows (BL-056)
-- **task-032** pensieve: PAT rotation runbook (BL-057)
+- **task-033** pensieve: Debug missing Obsidian md files since 2026-04-09 (BL-083)
+- **task-034** project_manager: Explore Claude Code optimization repo — 108 skills + 25 agents (BL-084)
+- **task-035** project_manager: Execute CLAUDE.md + agent YAML token reduction rewrites (BL-079)
+- **task-036** project_manager: Add confidence scoring to Reviewer YAML output (BL-076)
 
 ---
 
