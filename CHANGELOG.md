@@ -6,6 +6,13 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-034] — 2026-04-17
+
+### Added
+- `artefacts/task-034/skills-review.md`: Research review of the Claude Code optimization repo (`affaan-m/everything-claude-code`). Repo contains 183+ skills and 48 specialized agents. Identified 11 applicable patterns for this MAS setup across learning, token cost, eval, debugging, and onboarding categories. Registered BL-085 to BL-095 in `tasks/backlog.md`. Notable findings: continuous-learning-v2 instinct model (BL-085), context budget MCP server accounting (BL-086), agent eval harness (BL-087), hooks-over-prompts principle (BL-088), strategic compaction at stage boundaries (BL-092), cost-aware model routing with prompt caching (BL-093), agent introspection debugging protocol (BL-094), structured 4-phase project onboarding (BL-095). Review: APPROVED. Tests: 5/5 PASS.
+
+---
+
 ## [task-032] — 2026-04-15
 
 ### Added
