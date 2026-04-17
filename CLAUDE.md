@@ -59,11 +59,8 @@ feature/* (work)      ← New features, bug fixes, planned work
 
 **Git remote**: SSH-based (`git@github.com:micmaas2/project-manager.git`). Run `git remote -v` before adding — it already exists. HTTPS will fail.
 
-**Releasing to main**: `git push origin develop:main` — the only working release path.
-The pre-commit hook blocks ALL commits on `main` and `develop` (including merge commits), so
-`git checkout main && git merge develop` always fails locally. Use the refspec push instead.
-If main has GitHub API commits that develop lacks (diverged), use `--force-with-lease` after
-syncing via a feature branch: `git checkout -b feature/sync && git checkout origin/main -- <file> && git commit ... && merge into develop`, then `git push origin develop:main --force-with-lease`.
+**Releasing to main**: `git push origin develop:main` — pre-commit hook blocks direct commits on main/develop, so local merge always fails. Use refspec push only.
+If main has GitHub API commits that develop lacks (diverged), use `--force-with-lease` after syncing via a feature branch: `git checkout -b feature/sync && git checkout origin/main -- <file> && git commit ... && merge into develop`, then `git push origin develop:main --force-with-lease`.
 
 **Merging feature branches with conflicts into develop**: conflict-free `git merge --no-ff -m "..."` on develop works (git internal path bypasses the hook). When a merge has conflicts, `git commit` after resolution is blocked. Pattern:
 1. `git merge --abort` on develop
@@ -71,7 +68,7 @@ syncing via a feature branch: `git checkout -b feature/sync && git checkout orig
 3. `git merge feature/X` — resolve conflicts here, `git commit` (allowed on feature branch)
 4. `git push origin feature/sync-X:develop` — pushes resolved state to remote develop
 5. `git checkout develop && git pull origin develop` — sync local
-Avoid `git stash && checkout && stash pop` when branches have diverged — it creates cascading conflicts.
+Avoid `git stash` when branches have diverged — cascading conflicts.
 
 **Git hooks** (in `hooks/`, symlinked to `.git/hooks/`):
 - `pre-commit` — branch protection (blocks main/develop) + sensitive file detection
@@ -142,30 +139,13 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 
 **Prompt writing discipline**: All agent prompts MUST use imperative voice addressed to the agent itself ("You will", "Do not", "Stop if"). Never narrate what other agents do — instead state this agent's responsibility relative to other agents' outputs. Orchestration sequencing (waiting, parallelism) belongs in design docs, not embedded in agent prompts.
 
-**Opus advisor escalation**: When Builder or Reviewer hits an ambiguous architectural or security decision that context alone cannot resolve, spawn a focused Opus sub-agent (model: claude-opus-4-6) with ONE question. Format:
-```
-ADVISOR_CONSULT: <single specific question>
-Context: <2-3 sentences of relevant background>
-Options considered: <list>
-```
-Opus returns a recommendation; Builder/Reviewer continues with it and notes the escalation in `build_notes.md` under "Advisor Consults". Triggers: architecture tradeoff with no clear winner; security decision outside established patterns; scope ambiguity where both interpretations are defensible. Do NOT use for routine decisions.
+**Opus advisor escalation**: For ambiguous arch/security decisions, spawn Opus sub-agent (model: claude-opus-4-6) with single `ADVISOR_CONSULT: <question>` + Context + Options. Note in `build_notes.md` under "Advisor Consults". Triggers: architecture tradeoff with no clear winner; security decision outside established patterns; scope ambiguity. Do NOT use for routine decisions.
 
 **Cross-file rule mirroring (M-1 pattern)**: Enumerated rules that appear in both CLAUDE.md and agent YAMLs can silently accumulate orphan entries. When editing either file, verify rule counts and text match in both directions. Tester must include a regression guard for any task that modifies mirrored content: (a) rule-count equality check across all copies, (b) absence check for any rule that was removed.
 
 **Agent YAML policy schema**: the pre-commit hook enforces that every `.claude/agents/*.yaml` contains all 5 required policy fields (`allowed_tools`, `max_tokens_per_run`, `require_human_approval`, `audit_logging`, `external_calls_allowed`). A commit that adds or modifies an agent YAML without all 5 fields will be rejected.
 
-**PM Skills** (invoke as `/pm-start`, `/pm-status`, etc. — files in `.claude/commands/`):
-
-| Skill | File | Purpose |
-|-------|------|---------|
-| `/pm-start` | `pm-start.md` | Session startup: fetch, inbox, lessons, queue, phase gate, summary |
-| `/pm-status` | `pm-status.md` | Queue counts, kanban, phase status, token spend |
-| `/pm-plan` | `pm-plan.md` | PI/Refinement planning session: backlog review, MVP templates, queue tasks |
-| `/pm-propose` | `pm-propose.md` | End-of-session proposal review: scan, deduplicate, apply, bake |
-| `/pm-close` | `pm-close.md` | Sprint close: clean tree → proposals → merge → push → phase gate |
-| `/pm-lessons` | `pm-lessons.md` | Print last 10 lessons |
-| `/pm-run` | `pm-run.md` | Execute next pending task through full pipeline |
-| `skill-creator` | Marketplace | Eval-driven skill authoring; run for new/revised PM skills |
+**PM Skills** (`.claude/commands/`): `/pm-start` `/pm-run` `/pm-status` `/pm-plan` `/pm-propose` `/pm-close` `/pm-lessons` — and `skill-creator` (Marketplace, for new/revised PM skills).
 
 **Plugin marketplace**: official Anthropic plugins at `/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/` — browse with `ls` for available commands, agents, and skills; check `README.md` in each plugin dir.
 
@@ -176,17 +156,7 @@ Opus returns a recommendation; Builder/Reviewer continues with it and notes the 
 
 Agent definitions live in `.claude/agents/[name].yaml`. Required fields: `name`, `prompt`, `policy`, `owner`, `incident_owner`.
 
-**Policy schema per agent**:
-```yaml
-policy:
-  allowed_tools: [...]
-  max_tokens_per_run: 10000
-  require_human_approval: false  # set to TRUE for any agent that has Bash, Write, or Edit in allowed_tools
-  audit_logging: true
-  external_calls_allowed: false
-owner: "Role Name"
-incident_owner: "Role Name"
-```
+**Policy schema per agent** (5 required fields): `allowed_tools`, `max_tokens_per_run`, `require_human_approval` (TRUE if Bash/Write/Edit in tools), `audit_logging`, `external_calls_allowed`.
 
 ---
 
@@ -269,7 +239,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 0. **Session start — mandatory checklist (run in order before any task work)**:
    - [ ] **Fetch remote**: Run `git fetch origin` before reading any operational file. n8n commits go directly to `origin/main` via GitHub API — without fetching, inbox items are invisible.
-   - [ ] **Telegram inbox**: Run `git show origin/main:tasks/telegram-inbox.md` to read the live inbox (not the local checkout). If items exist below the header, promote each to `tasks/backlog.md` (next BL ID, EPIC-003, project_manager, P2, new, today), then clear: if local `tasks/telegram-inbox.md` is already the clean header, just `git push origin develop:main --force-with-lease`; otherwise commit the cleared file on a feature branch first, merge to develop, then push. **Deduplication**: before adding each item, check if a BL entry with the same title already exists (`grep -i "<keyword>" tasks/backlog.md`) — prior sessions may have promoted the item without clearing the inbox; skip duplicates. **Backlog routing prefix**: the n8n capture workflow matches exact prefix `BACKLOG: ` (uppercase, colon, trailing space) — `backlog` or `BACKLOG:item` are silently dropped; inform user if they report missing backlog items.
+   - [ ] **Telegram inbox**: Run `git show origin/main:tasks/telegram-inbox.md`. Promote each item below the header to `tasks/backlog.md` (next BL ID, EPIC-003, project_manager, P2, new, today), then clear inbox (commit on feature branch → develop → push main). **Dedup**: `grep -i "<keyword>" tasks/backlog.md` before adding. **Routing prefix**: n8n matches exact `BACKLOG: ` (uppercase, colon, space) — `backlog` or `BACKLOG:item` silently dropped.
    - [ ] **Lessons**: Read `tasks/lessons.md`; state the 3 most recent rows before planning. Lessons govern tooling choices and approach — do not repeat captured mistakes.
    - [ ] **Catch-up SelfImprover**: For every `status: done` task in `tasks/queue.json`, verify `artefacts/<artefact_path>/improvement_proposals.md` exists. If absent (directory may not exist either), run SelfImprover for that task — it must create the directory and file from the task definition in queue.json.
    - [ ] **ExitPlanMode denial**: if the user denies ExitPlanMode, use AskUserQuestion to clarify intent before re-attempting — the user may be redirecting to a side task first, not rejecting the plan outright.
@@ -294,13 +264,13 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
    - `docs-readme-writer` — creates/updates README and module docs for code-producing tasks
 
    **Doc stage file ownership**: when DocUpdater and docs-readme-writer run in parallel, assign ownership explicitly: DocUpdater → `CHANGELOG.md`; docs-readme-writer → `README.md`. This prevents overwrite conflicts when both agents target the same file.
-6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval. After all proposals are resolved, invoke `revise-claude-md` via the `Skill` tool (not `Agent`) to bake session learnings into CLAUDE.md and commit the result. **Cross-file consistency check**: when a proposal introduces a format definition (e.g. improvement_proposals.md schema), verify the format is identical in both CLAUDE.md and the relevant agent YAML before presenting to the user. **Proposal response format**: user replies `APPROVE: P1, P3 / REJECT: P2` — apply all approved in one pass, log rejections. **SelfImprover dedup**: when running SelfImprover for multiple tasks in a session, collect all proposals before presenting — remove duplicates and proposals targeting text already present in the target file. **Scanning for pending proposals**: use `find artefacts -name "improvement_proposals.md" | xargs grep -lE "^\*\*Status\*\*: REQUIRES_HUMAN_APPROVAL"` — the `^` anchor matches only lines that start with `**Status**:`, preventing false positives from test files or proposal body text that quote the pattern. Do NOT use `grep -rl` on the whole artefacts dir. **pm-propose commit discipline**: after applying approved proposals that edit CLAUDE.md, immediately commit on the current feature branch before proceeding — do not leave session-learning edits unstaged across a context boundary.
+6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval. After all proposals are resolved, invoke `revise-claude-md` via the `Skill` tool (not `Agent`) to bake session learnings into CLAUDE.md and commit the result. **Cross-file consistency check**: when a proposal introduces a format definition (e.g. improvement_proposals.md schema), verify the format is identical in both CLAUDE.md and the relevant agent YAML before presenting to the user. **Proposal response format**: user replies `APPROVE: P1, P3 / REJECT: P2` — apply all approved in one pass, log rejections. **SelfImprover dedup**: when running SelfImprover for multiple tasks in a session, collect all proposals before presenting — remove duplicates and proposals targeting text already present in the target file. **Scanning for pending proposals**: `find artefacts -name "improvement_proposals.md" | xargs grep -lE "^\*\*Status\*\*: REQUIRES_HUMAN_APPROVAL"` — `^` prevents false positives from body text quoting the pattern; do NOT use `grep -rl`. **pm-propose commit discipline**: after applying approved proposals that edit CLAUDE.md, immediately commit on the current feature branch before proceeding — do not leave session-learning edits unstaged across a context boundary.
 7. **Autonomous bug fixing**: when given a bug report, fix it — point at logs/errors, then resolve.
 8. **Demand elegance (balanced)**: pause and ask "Is there a more elegant way?" before finalising any non-trivial design. Skip for simple fixes — do not over-engineer.
 9. **Minimal impact**: touch only what is strictly necessary; avoid side effects on untouched code or config. If you must change something adjacent, flag it explicitly.
 10. **Explain with diagrams**: when explaining architecture or non-obvious decisions, prefer ASCII diagrams over prose where they add clarity.
 
-**PM Planning Session**: invoke ProjectManager with "planning" intent to review backlog, reprioritize, and onboard new projects. PM presents backlog and asks for user confirmation before queuing tasks. **Preflight**: run `ls artefacts/` before assigning any task ID — use a descriptive suffix (e.g. `task-007-gate/`) if the target path already exists.
+**PM Planning Session**: invoke ProjectManager with "planning" intent to review, reprioritize, and onboard. PM asks for confirmation before queuing. **Preflight**: `ls artefacts/` before assigning IDs — use descriptive suffix if path exists.
 **Phase gate announcement rule**: when /pm-start detects a phase gate is reached, the announcement section must end with an explicit yes/no approval question before printing the queue summary — do not leave the user with a statement and no prompt.
 **MVP ordering gate**: During PM planning, check epics.md for any stories with status `planned` in lower MVP phases before queuing higher-phase work. All stories in a phase must be `done` before the next phase is prioritized.
 
@@ -397,7 +367,7 @@ Explore agents run locally; always use `ssh pi4 "find /opt/obsidian-vault ..."` 
 
 **Pensieve repo active branch**: always run `git -C /opt/claude/pensieve branch --show-current` before committing to the pensieve repo — it may be on a long-lived feature branch (e.g. `feature/task-029-capture-subworkflow`) rather than `main`. Doc commits intended for `main` must target the correct branch.
 
-**dashboard-preview.md is cron-auto-updated**: `artefacts/task-006/dashboard-preview.md` is regenerated every 15 min by a Pi4 cron job. Expect it as a dirty unstaged file at session start and pm-close — commit it on a quick feature branch before proceeding (timestamp + done count update only).
+**dashboard-preview.md**: cron-updated every 15 min on Pi4 — commit on feature branch before pm-close (timestamp + done count only).
 
 **Pi4 Python packages**: verify before deploying scripts: `ssh pi4 "python3 -c 'import X'"`.
 Install missing packages with `pip3 install <pkg> --break-system-packages` (Debian-managed env).
@@ -415,26 +385,8 @@ Use `-c` flags rather than permanently configuring root's git config.
 
 **Pi4 docker-compose env file**: `docker-compose.dev.yml` hardcodes `env_file: .env`. `/opt/mas/.env` does not exist — symlink before any compose command: `sudo ln -sf .env.production .env`. Without this, compose exits with "env file /opt/mas/.env not found".
 
-**Hyphenated script filenames**: `migrate-vault.py` cannot be imported directly in Python tests.
-Use `importlib.util.spec_from_file_location("name", "path/to/script.py")` instead.
 
-**Testing hyphenated-filename scripts**: Use `importlib.util.spec_from_file_location("module_name", path)` in all test files for scripts with hyphens in their names — this is the only safe import path. See `artefacts/task-005/test_migrate_vault.py` as the canonical example.
-
-**Testing Docker-only packages**: when a Python package (e.g. `src.integration`) exists only inside a Docker image and cannot be imported on the host, use `sys.modules` pre-injection:
-1. Copy the source file to `/tmp` on the host (`scp pi4:/opt/mas/src/integration/file.py /tmp/`).
-2. Pre-populate `sys.modules` with `MagicMock` entries for all transitive imports before loading the file. Use `type(name, (), {})` (not `MagicMock`) for mixin classes to satisfy Python's MRO.
-3. Load via `importlib.util.spec_from_file_location("module.name", "/tmp/file.py")`.
-This lets unit tests run locally without a Docker environment. See `artefacts/task-019/test_auth_guard.py` as the canonical example.
-
-**Task unit tests**: test files live in `artefacts/<task-id>/test_*.py`; run with `python3 -m pytest artefacts/<task-id>/test_*.py -v`. Use `importlib.util.spec_from_file_location` + `unittest.mock.patch.object` to test scripts without making them importable packages.
-
-**Testing unwritable paths as root**: `chmod 0o444` does NOT prevent root from writing. To simulate an unwritable directory in tests, replace it with a regular file (so `touch <dir>/<file>` fails with "Not a directory"). Document this pattern at the top of any test file that uses it.
-
-**NOTE — Python testing patterns relocation**: The Python testing gotchas below (importlib, sys.modules, hyphenated filenames, Docker-only packages) are currently in the n8n section for historical reasons. During the next CLAUDE.md rewrite pass (BL-079), relocate them to a dedicated `## Python Testing Patterns` section for discoverability.
-
-**Fixture files for path-guarded scripts**: when writing tests for scripts that use `_safe_path()` workspace-root validation, place fixture files under `artefacts/<task-id>/_fixtures/` — not in `tmp_path` (which resolves to `/tmp`, outside the workspace root and therefore rejected by the path guard).
-
-**GitHub API commits (stdlib)**: read a file with `GET /repos/{repo}/contents/{path}?ref={branch}` → decode `base64.b64decode(resp["content"])`; write with `PUT /repos/{repo}/contents/{path}` + `{"content": base64.b64encode(...).decode(), "sha": <existing_sha_or_omit_for_new>, "branch": ...}`. No `requests` package needed — `urllib.request` suffices.
+**GitHub API commits (stdlib)**: read: `GET /repos/{repo}/contents/{path}?ref={branch}` → `base64.b64decode(resp["content"])`; write: `PUT /repos/{repo}/contents/{path}` + `{"content": base64.b64encode(...).decode(), "sha": <sha_or_omit>, "branch": ...}`. Use `urllib.request`.
 
 **Credential-placeholder patching** (required before import if workflow JSON contains `"id": "PLACEHOLDER_*"`):
 ```bash
@@ -467,11 +419,8 @@ ssh pi4 "docker restart n8n && sleep 5 && docker ps | grep n8n"
 - `--userId=1` (numeric) fails; use UUID string or omit entirely
 - No `sqlite3` in the n8n container; use `docker exec n8n n8n export:workflow --all` to inspect
 - Find active workflow ID: export all + filter by `active: true` and most recent `updatedAt`
-- **Credential IDs in workflow JSON are placeholders** — n8n resolves credentials by internal UUID, not name. A mismatched or placeholder ID (e.g. `anthropic-cred`) causes silent auth failures; the HTTP node sends no credential header. After every import, verify each node's credential `id` matches a real credential (`n8n export:credentials --all`). Patch with Python before import if needed.
+- **Credential IDs are internal UUIDs** — a placeholder/mismatched ID causes silent auth failure (no credential header sent). After import, verify each node's `id` matches a real credential (`n8n export:credentials --all`); patch with Python before import.
 - `export:workflow --id=X --output=file.json` wraps output in a JSON array — use `data[0]` when loading a single exported workflow in Python.
-
-**Pending deployments** (not yet imported into n8n on Pi4):
-- `pensieve/workflows/gmail-capture.json` — built in task-009; deploy steps in `artefacts/task-009/deploy-notes.md`; requires Gmail OAuth credential + Pensieve label re-selection after import.
 
 **Quick health check** (verify active workflows + credentials):
 ```bash
@@ -525,3 +474,17 @@ Run with: `/root/.nvm/versions/node/v24.12.0/bin/node artefacts/<task-id>/test_*
 **main/develop divergence**: n8n commits via GitHub API go directly to `main` (default branch, no hooks).
 Operational files written by n8n (e.g. `tasks/telegram-inbox.md`) must exist on `main`, not just `develop`.
 When creating such files locally, also push them to `main` via the GitHub API or a fast-track merge.
+
+---
+
+## Python Testing Patterns
+
+**Testing hyphenated-filename scripts**: Use `importlib.util.spec_from_file_location("module_name", path)` for any script with hyphens in its name — direct Python import fails. See `artefacts/task-005/test_migrate_vault.py`.
+
+**Testing Docker-only packages**: Pre-populate `sys.modules` with `MagicMock` entries for transitive imports; use `type(name, (), {})` (not `MagicMock`) for mixin classes (Python MRO). Load via `importlib.util.spec_from_file_location`. See `artefacts/task-019/test_auth_guard.py`.
+
+**Testing unwritable paths as root**: `chmod 0o444` does NOT prevent root from writing. To simulate an unwritable directory in tests, replace it with a regular file (so `touch <dir>/<file>` fails with "Not a directory"). Document this pattern at the top of any test file that uses it.
+
+**Fixture files for path-guarded scripts**: when writing tests for scripts that use `_safe_path()` workspace-root validation, place fixture files under `artefacts/<task-id>/_fixtures/` — not in `tmp_path` (which resolves to `/tmp`, outside the workspace root and therefore rejected by the path guard).
+
+**Task unit tests**: run with `python3 -m pytest artefacts/<task-id>/test_*.py -v`.

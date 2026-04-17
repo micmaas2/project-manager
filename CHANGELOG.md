@@ -6,6 +6,20 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-035] — 2026-04-17
+
+### Changed
+- `CLAUDE.md`: Applied 5 token-reduction rewrites from `artefacts/task-026/rewrite-plan.md` — saved ~930 tokens from CLAUDE.md baseline. Key changes: PM Skills table → 1 line, Opus advisor escalation condensed, policy schema YAML → 1 line, Telegram inbox step shortened, Python testing patterns moved to new `## Python Testing Patterns` section, Pending deployments removed, dashboard-preview note shortened.
+- `.claude/agents/manager.yaml`: Multi-Project Priority Order condensed to 1 line; redundant onboarding note removed.
+- `.claude/agents/reviewer.yaml`: Opus Advisor Escalation condensed from 9 lines to 2 lines.
+
+### Added
+- `CLAUDE.md ## Python Testing Patterns`: New dedicated section consolidating Python testing gotchas previously scattered in n8n section (importlib, sys.modules pre-injection, unwritable paths, fixture files).
+- `artefacts/task-035/`: build_notes.md, review.md (APPROVED), test_report.md (21/21 PASS).
+- `tasks/backlog.md`: BL-097 (/pm-run plan mode design review), BL-098 (model version pins review).
+
+---
+
 ## [task-034] — 2026-04-17
 
 ### Added

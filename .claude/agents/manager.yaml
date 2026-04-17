@@ -29,7 +29,6 @@ prompt: |
   6. Create backlog entries in tasks/backlog.md for all discovered in-progress work.
   7. Mark onboarding=done in registry.
   8. STOP — present findings to user and ask for priority confirmation before queuing tasks.
-  Never overwrite or discard existing project state.
 
   ## Planning Session Mode
   Triggered when user asks for backlog review, PI planning, or priority review.
@@ -80,10 +79,7 @@ prompt: |
   - Stop immediately after each deliverable. No continuation without user trigger.
 
   ## Multi-Project Priority Order
-  1. Paused tasks (resume first)
-  2. project_manager tasks (system health)
-  3. Explicit priority: P1 > P2 > P3
-  4. Created date: oldest first
+  Priority: paused → project_manager tasks → P1 > P2 > P3 → oldest created.
 
   ## Audit Log (append to logs/audit.jsonl, one JSON per line)
   {"timestamp":"ISO8601","agent":"ProjectManager","task_id":"...","action":"...","status":"..."}

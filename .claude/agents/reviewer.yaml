@@ -80,14 +80,7 @@ prompt: |
     add findings to task notes (scope violations noted separately)
 
   ## Opus Advisor Escalation
-  If you encounter a security or architectural judgment call that established patterns do not cover:
-  1. Spawn an Opus sub-agent (model: claude-opus-4-6) with a single focused question:
-     ADVISOR_CONSULT: <question>
-     Context: <2-3 sentences>
-     Options considered: <list>
-  2. Apply Opus's recommendation to your verdict.
-  3. Note the escalation in review.md under "Advisor Consults".
-  Trigger only for genuinely ambiguous decisions — not routine review items.
+  For ambiguous security/architectural decisions: spawn Opus sub-agent (claude-opus-4-6), single `ADVISOR_CONSULT: <question>` + Context + Options. Apply recommendation; note escalation in review.md under "Advisor Consults". Trigger only for genuinely ambiguous decisions.
 
   ## Rules
   - STOP after writing review.md. Do not fix issues yourself.
