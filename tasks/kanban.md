@@ -3,7 +3,7 @@
 Updated by ProjectManager after every task status change.
 Source of truth: `tasks/queue.json`. This board is a human-readable view.
 
-Last updated: 2026-04-16T08:24:56Z
+Last updated: 2026-04-17T12:06:44Z
 
 ---
 
@@ -30,6 +30,13 @@ _(in queue.json with status: pending)_
 - **task-034** project_manager: Explore Claude Code optimization repo — 108 skills + 25 agents (BL-084)
 - **task-035** project_manager: Execute CLAUDE.md + agent YAML token reduction rewrites (BL-079)
 - **task-036** project_manager: Add confidence scoring to Reviewer YAML output (BL-076)
+- **task-037** project_manager: CLAUDE.md size reduction — target ≤35k chars (BL-096)
+- **task-038** project_manager: Add /compact calls at pm-run stage boundaries (BL-092)
+- **task-039** project_manager: Cost-aware model routing design (BL-093)
+- **task-040** project_manager: Agent model usage audit — cost reduction (BL-099)
+- **task-041** project_manager: /pm-run plan-mode gate evaluation (BL-097)
+- **task-042** project_manager: Model version pins review and update (BL-098)
+- **task-043** project_manager: Claude Code skills investigation — cross-project fit (BL-100)
 
 ---
 

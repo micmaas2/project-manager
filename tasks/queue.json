@@ -1604,6 +1604,299 @@
         "cost_estimate": "EUR 0",
         "prerequisites": []
       }
+    },
+    {
+      "id": "task-037",
+      "title": "project_manager: CLAUDE.md size reduction \u2014 target \u226435k chars (BL-096)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-005",
+      "story_id": "S-005-1",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-037/",
+      "created": "2026-04-17",
+      "updated": "2026-04-17T12:08:31.592891+00:00",
+      "token_estimate": 10000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Reduce CLAUDE.md from ~41.3k chars to \u226435k by auditing for duplication and moving stable reference content to linked docs, without losing any operational rule.",
+        "niet_in_scope": [
+          "changing agent YAML content",
+          "rewriting skills",
+          "changing operational rules"
+        ],
+        "acceptatiecriteria": [
+          "wc -c CLAUDE.md reports \u226435,000 chars after edits",
+          "No operational rule deleted \u2014 rules moved to linked docs remain reachable from CLAUDE.md",
+          "Pre-commit hook passes on the resulting CLAUDE.md",
+          "M-1 mirrors unaffected: rule counts verified across CLAUDE.md + relevant agent YAMLs"
+        ],
+        "security_arch_impact": "None \u2014 local file edits only; no outbound HTTP",
+        "no_external_deps": true,
+        "prerequisites": [],
+        "tests_required": "regression \u2014 grep key rule phrases before/after; char-count assertion; pre-commit dry-run",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "wc -c CLAUDE.md \u2264 35000",
+          "Linked docs committed alongside CLAUDE.md edits"
+        ],
+        "rollback_plan": "git revert the commit \u2014 owner: Michel Maas. Est. time-to-restore: 2 min",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-038",
+      "title": "project_manager: Add /compact calls at pm-run stage boundaries (BL-092)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-005",
+      "story_id": "S-005-2",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-038/",
+      "created": "2026-04-17",
+      "updated": "2026-04-17T12:08:31.592891+00:00",
+      "token_estimate": 3000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Add /compact instructions to pm-run.md at Builder\u2192Reviewer and Reviewer\u2192Tester boundaries to reduce context carry-over between pipeline stages.",
+        "niet_in_scope": [
+          "other skills",
+          "automated/scheduled compaction",
+          "pipeline logic changes"
+        ],
+        "acceptatiecriteria": [
+          "pm-run.md contains a /compact step after Builder deliverable is confirmed, before Reviewer is spawned",
+          "pm-run.md contains a /compact step after Reviewer findings are processed, before Tester is spawned",
+          "Instructions are correctly placed \u2014 after prior stage closes, before next stage opens"
+        ],
+        "security_arch_impact": "None",
+        "no_external_deps": true,
+        "prerequisites": [],
+        "tests_required": "read pm-run.md; verify /compact appears at both stage boundaries",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "pm-run.md updated and committed"
+        ],
+        "rollback_plan": "git revert \u2014 owner: Michel Maas. Est. time-to-restore: 1 min",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-039",
+      "title": "project_manager: Cost-aware model routing design (BL-093)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-005",
+      "story_id": "S-005-3",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-039/",
+      "created": "2026-04-17",
+      "updated": "2026-04-17T12:08:31.592891+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Research and design cost-aware model routing \u2014 define complexity thresholds (text length/item count \u2192 Haiku vs Sonnet) and prompt caching approach for system prompts >1024 tokens; produce a design doc and proposed CLAUDE.md additions.",
+        "niet_in_scope": [
+          "implementing automatic routing",
+          "agent YAML changes this sprint",
+          "LLM self-selection"
+        ],
+        "acceptatiecriteria": [
+          "Design doc covers threshold criteria with concrete examples per agent type",
+          "Prompt caching approach documented: which prompts qualify, expected cache hit rate",
+          "Estimated cost savings quantified (tokens/run delta)",
+          "Proposed CLAUDE.md rule additions ready for human review"
+        ],
+        "security_arch_impact": "None",
+        "no_external_deps": true,
+        "prerequisites": [],
+        "tests_required": "review doc for completeness; verify all active agents covered by threshold analysis",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "design doc + proposed CLAUDE.md rules committed in artefact"
+        ],
+        "rollback_plan": "artefact-only task \u2014 no production changes; discard artefact if rejected",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-040",
+      "title": "project_manager: Agent model usage audit \u2014 cost reduction opportunities (BL-099)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-005",
+      "story_id": "S-005-4",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-040/",
+      "created": "2026-04-17",
+      "updated": "2026-04-17T12:08:31.592891+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Audit all agent YAML model assignments and subagent spawns in skills/CLAUDE.md; identify downgrade opportunities (Sonnet\u2192Haiku or Opus\u2192Sonnet) and estimate savings.",
+        "niet_in_scope": [
+          "implementing model changes (report + recommendations only)"
+        ],
+        "acceptatiecriteria": [
+          "All .claude/agents/*.yaml reviewed; current model listed per agent",
+          "Each assignment rated: appropriate / could-downgrade / must-upgrade with rationale",
+          "Estimated token-cost savings per downgrade opportunity",
+          "Findings committed as a markdown report in artefact"
+        ],
+        "security_arch_impact": "None",
+        "no_external_deps": true,
+        "prerequisites": [],
+        "tests_required": "verify all agent YAMLs appear in report; verify recommendations section present",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "audit_report.md committed in artefact"
+        ],
+        "rollback_plan": "artefact-only task; no changes to apply this sprint",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-041",
+      "title": "project_manager: /pm-run plan-mode gate evaluation (BL-097)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-005",
+      "story_id": "S-005-5",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-041/",
+      "created": "2026-04-17",
+      "updated": "2026-04-17T12:08:31.592891+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Evaluate whether /pm-run's plan-mode gate adds value or friction; produce a recommendation and apply it if conclusion is 'remove' or 'make optional'.",
+        "niet_in_scope": [
+          "other skill redesign",
+          "changing pipeline execution order"
+        ],
+        "acceptatiecriteria": [
+          "Analysis doc covers: current behaviour, friction observed, 2+ alternative approaches",
+          "Clear recommendation: keep / remove / make optional \u2014 with rationale",
+          "If change recommended: pm-run.md updated accordingly"
+        ],
+        "security_arch_impact": "None",
+        "no_external_deps": true,
+        "prerequisites": [],
+        "tests_required": "if pm-run.md updated, read it and verify plan-mode instructions match decision",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Analysis doc committed; pm-run.md updated if recommendation was to change"
+        ],
+        "rollback_plan": "git revert pm-run.md \u2014 owner: Michel Maas. Est. time-to-restore: 1 min",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-042",
+      "title": "project_manager: Model version pins review and update (BL-098)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-005",
+      "story_id": "S-005-6",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-042/",
+      "created": "2026-04-17",
+      "updated": "2026-04-17T12:08:31.592891+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Audit model version pins in CLAUDE.md and agent YAMLs; decide and apply consistently: explicit 4.7 versions or family aliases.",
+        "niet_in_scope": [
+          "changing model tier assignments (Opus/Sonnet/Haiku split)"
+        ],
+        "acceptatiecriteria": [
+          "All pins audited across CLAUDE.md + all .claude/agents/*.yaml",
+          "Decision documented: explicit versions vs aliases, with rationale",
+          "All pins updated consistently in one commit",
+          "M-1 mirror verified: CLAUDE.md model policy matches all agent YAML model fields"
+        ],
+        "security_arch_impact": "None",
+        "no_external_deps": true,
+        "prerequisites": [],
+        "tests_required": "grep for old version strings; verify zero stale pins remain; M-1 count check",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "All model pins consistent; CLAUDE.md + YAMLs committed"
+        ],
+        "rollback_plan": "git revert \u2014 owner: Michel Maas. Est. time-to-restore: 2 min",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-043",
+      "title": "project_manager: Claude Code skills investigation \u2014 cross-project fit (BL-100)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-005",
+      "story_id": "S-005-7",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-043/",
+      "created": "2026-04-17",
+      "updated": "2026-04-17T12:08:31.592891+00:00",
+      "token_estimate": 6000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Research available Claude Code skills; evaluate fit across all managed projects (/opt/claude/*); propose top candidates for adoption as BL items.",
+        "niet_in_scope": [
+          "implementing new skills this sprint"
+        ],
+        "acceptatiecriteria": [
+          "Minimum 2 research rounds completed (mandatory per lessons \u2014 second pass required)",
+          "\u22655 skills evaluated with fit rating (high/medium/low) and rationale",
+          "Top 3 candidates proposed with per-project fit rationale (project_manager, pensieve, pi-homelab, ccas, etc.)",
+          "Each proposal registered as a new BL item in backlog.md"
+        ],
+        "security_arch_impact": "None",
+        "no_external_deps": true,
+        "prerequisites": [],
+        "tests_required": "verify second research round evidence in artefact; verify \u22653 new BL items created",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Research report + BL items committed"
+        ],
+        "rollback_plan": "artefact-only task; BL items can be archived if rejected",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
     }
   ]
 }
