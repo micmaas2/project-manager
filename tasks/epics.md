@@ -78,6 +78,20 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 ---
 
+## EPIC-005 — System Housekeeping & Cost Optimisation
+
+**Goal**: Reduce CLAUDE.md size, lower token/cost overhead, optimise model assignments, and improve system tooling quality.
+**Project**: project_manager
+**Status**: in_progress
+**MVP Phase**: MVP4
+
+### Stories
+
+| Story ID | Title | Queue Task | Status |
+|---|---|---|---|
+
+---
+
 ## Projects in Scope
 
 | Short name | Path | GitHub | Domain |
