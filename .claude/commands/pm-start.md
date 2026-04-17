@@ -11,7 +11,7 @@ Run `git fetch origin`.
 Run `git show origin/main:tasks/telegram-inbox.md` to read the live inbox.
 If items exist below the header line:
 - Read tasks/backlog.md to find the highest BL-NNN ID currently present; next ID = that number + 1.
-- For each inbox item: add a row to tasks/backlog.md — columns: next BL ID, EPIC-003, descriptive title, project_manager, P2, new, today's date (read from system clock as YYYY-MM-DD).
+- For each inbox item: add a row to tasks/backlog.md — columns: next BL ID, `—` (no epic; assigned during /pm-plan), descriptive title, project_manager, P2, new, today's date (read from system clock as YYYY-MM-DD).
 - Create a feature branch (`feature/promote-telegram-inbox-<YYYY-MM-DD>`), commit the backlog update and a cleared inbox (two-line header only), merge to develop.
 
 **3. Lessons**
