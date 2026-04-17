@@ -23,4 +23,4 @@
 **Target file**: `CLAUDE.md` — Architecture/research task Definition of Done  
 **Change**: Extend the existing "Architecture/research task Definition of Done" rule to add: "For tasks reviewing an external repo/course: minimum 2 research rounds; second round must fetch SKILL.md / agent source files, not just directory listings."  
 **Rationale**: Directory listings (tree view) give names but not content. The missed patterns (BL-092–095) were in SKILL.md files that required a second `WebFetch` call to raw content URLs.  
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
