@@ -132,6 +132,8 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 - `claude-md-management:claude-md-improver` — full CLAUDE.md audit (on demand); invoke via `Skill` tool
 - **Explore-type subagents cannot write files**: when DocUpdater/docs-readme-writer are spawned as `subagent_type: Explore`, they return proposed content but cannot apply edits. The parent agent must read the agent's output and apply the file changes directly — do not wait for the Explore agent to write.
 
+**Grep tool vs Bash grep**: use the `Grep` tool (not `grep` via Bash) when the search pattern contains backticks or special shell characters — Bash eval will fail with `unexpected EOF while looking for matching backtick`.
+
 **Shell script pre-submission check** (Builder must verify before handing off to Reviewer):
 - `bash -n <script>` must exit 0 — **for shell scripts only**; Python scripts use `python3 -m py_compile <script>` instead (`bash -n` cannot parse Python and will spuriously fail)
 - If cron/daemon: log guard, flock, SSH identity, logrotate — all present?
@@ -144,6 +146,8 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 **Opus advisor escalation**: For ambiguous arch/security decisions, spawn Opus sub-agent (model: claude-opus-4-6) with single `ADVISOR_CONSULT: <question>` + Context + Options. Note in `build_notes.md` under "Advisor Consults". Triggers: architecture tradeoff with no clear winner; security decision outside established patterns; scope ambiguity. Do NOT use for routine decisions.
 
 **Cross-file rule mirroring (M-1 pattern)**: Enumerated rules that appear in both CLAUDE.md and agent YAMLs can silently accumulate orphan entries. When editing either file, verify rule counts and text match in both directions. Tester must include a regression guard for any task that modifies mirrored content: (a) rule-count equality check across all copies, (b) absence check for any rule that was removed.
+
+**M-1 copy-paste rule**: when mirroring a definition across CLAUDE.md and agent YAMLs, copy-paste verbatim — never paraphrase. Unicode vs ASCII symbol variants (`≥` vs `>=`) and synonym substitutions ("issue" vs "defect") both silently break the M-1 verbatim-match contract.
 
 **Agent YAML policy schema**: the pre-commit hook enforces that every `.claude/agents/*.yaml` contains all 5 required policy fields (`allowed_tools`, `max_tokens_per_run`, `require_human_approval`, `audit_logging`, `external_calls_allowed`). A commit that adds or modifies an agent YAML without all 5 fields will be rejected.
 
@@ -247,6 +251,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
    - [ ] **Lessons**: Read `tasks/lessons.md`; state the 3 most recent rows before planning. Lessons govern tooling choices and approach — do not repeat captured mistakes.
    - [ ] **Catch-up SelfImprover**: For every `status: done` task in `tasks/queue.json`, verify `artefacts/<artefact_path>/improvement_proposals.md` exists. If absent (directory may not exist either), run SelfImprover for that task — it must create the directory and file from the task definition in queue.json.
    - [ ] **ExitPlanMode denial**: if the user denies ExitPlanMode, use AskUserQuestion to clarify intent before re-attempting — the user may be redirecting to a side task first, not rejecting the plan outright.
+   - [ ] **ExitPlanMode mid-skill recovery**: if plan mode activates unexpectedly during a PM skill run (e.g. /pm-propose), write a minimal plan file summarising remaining steps, call ExitPlanMode, then continue the skill after approval.
 
 1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Plans are written to `/root/.claude/plans/` (auto-managed by plan mode).
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
@@ -354,7 +359,7 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 
 **Python datetime**: use `datetime.now(datetime.UTC).isoformat()` not `datetime.utcnow()` — deprecated in Python 3.12+; system runs 3.13.5.
 
-**Logs**:
+**Logs** (`logs/` is gitignored — never `git add logs/`):
 - `logs/audit.jsonl` — append-only, one JSON object per line: `{timestamp, agent, task_id, action, status}`
 - `logs/token_log.jsonl` — per-run token accounting: `{timestamp, agent, task_id, token_estimate}`
   Every sub-agent (Builder, Reviewer, Tester, DocUpdater, SelfImprover) must write one entry per invocation — not just ProjectManager. This enables per-agent token observability and identifies highest-cost pipeline stages.
