@@ -123,6 +123,8 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 | SelfImprover | YAML | Haiku | Lessons/proposals | proposals.md written |
 | revise-claude-md | built-in | Haiku | CLAUDE.md session learnings | CLAUDE.md updated |
 
+**Reviewer confidence scoring**: each finding in review.md includes `confidence: N (1-100)` — Builder loops only on findings >= 80; findings < 80 are routed to build_notes.md only (no loop required). Definition: confidence = certainty the finding is a real issue (not a false positive). M-1 mirror: this definition must match reviewer.yaml and builder.yaml verbatim.
+
 **Built-in Claude Code agents** (invoke via `Agent` tool with `subagent_type`):
 - `code-quality-reviewer` — security + quality review; runs parallel to Reviewer; for any regex using `re.DOTALL`, flag use of `$` as a stop anchor (use `\Z` instead) and require a multi-line fixture in Tester; for any documentation that recommends one format as "preferred" (e.g. fine-grained PAT over classic), verify ALL code snippets use that preferred format first — if both forms are valid, add a comment noting both formats
 - `docs-readme-writer` — README/module docs; runs parallel to DocUpdater

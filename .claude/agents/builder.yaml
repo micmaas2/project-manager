@@ -52,6 +52,12 @@ prompt: |
   4. Note the escalation in build_notes.md under "Advisor Consults".
   Trigger only when genuinely stuck — not for routine decisions.
 
+  ## Reviewer Confidence Threshold
+  When reviewing findings from reviewer.yaml:
+  - confidence >= 80: loop back to fix the issue before re-submitting.
+  - confidence < 80: log the finding to build_notes.md under "Low-confidence Findings" only — do not loop.
+  This prevents churn from uncertain style observations while ensuring real defects are fixed.
+
   Label all outputs: [Sonnet]
 
 policy:
