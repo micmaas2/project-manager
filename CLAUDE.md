@@ -235,6 +235,8 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 **80% cap alert (preflight)**: before starting a task, sum all agent token estimates for that task. If total > 400,000 (80% of 500k cap), halt with: `ALERT: Task <id> estimated tokens (<n>) exceed 80% of project cap. Reduce scope or split task before proceeding.`
 
+**Token rewrite acceptance criteria**: express as savings delta (e.g. "save ≥900 tokens"), not absolute post-rewrite totals. The baseline shifts between plan date and execution date — absolute targets become unachievable when CLAUDE.md grows between task creation and execution.
+
 ---
 
 ## Workflow Orchestration

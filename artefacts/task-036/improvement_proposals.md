@@ -8,7 +8,7 @@
 
 **Rationale**: The current placement embeds free-prose instructions inside the output template code-fence. A reviewer reading the code-fence could misinterpret the prose as text to be included verbatim in review.md. A clearly separated "Field Definitions" subsection eliminates the ambiguity.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -20,4 +20,4 @@
 
 **Rationale**: The current phrasing couples the Builder instruction to the agent's filename. If reviewer.yaml is ever renamed, the instruction silently becomes inaccurate. Referencing review.md (the output artefact) is more resilient and describes what Builder actually interacts with.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
