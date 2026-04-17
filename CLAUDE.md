@@ -269,7 +269,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 0. **Session start — mandatory checklist (run in order before any task work)**:
    - [ ] **Fetch remote**: Run `git fetch origin` before reading any operational file. n8n commits go directly to `origin/main` via GitHub API — without fetching, inbox items are invisible.
-   - [ ] **Telegram inbox**: Run `git show origin/main:tasks/telegram-inbox.md` to read the live inbox (not the local checkout). If items exist below the header, promote each to `tasks/backlog.md` (next BL ID, EPIC-003, project_manager, P2, new, today), then clear: if local `tasks/telegram-inbox.md` is already the clean header, just `git push origin develop:main --force-with-lease`; otherwise commit the cleared file on a feature branch first, merge to develop, then push. **Deduplication**: before adding each item, check if a BL entry with the same title already exists (`grep -i "<keyword>" tasks/backlog.md`) — prior sessions may have promoted the item without clearing the inbox; skip duplicates.
+   - [ ] **Telegram inbox**: Run `git show origin/main:tasks/telegram-inbox.md` to read the live inbox (not the local checkout). If items exist below the header, promote each to `tasks/backlog.md` (next BL ID, EPIC-003, project_manager, P2, new, today), then clear: if local `tasks/telegram-inbox.md` is already the clean header, just `git push origin develop:main --force-with-lease`; otherwise commit the cleared file on a feature branch first, merge to develop, then push. **Deduplication**: before adding each item, check if a BL entry with the same title already exists (`grep -i "<keyword>" tasks/backlog.md`) — prior sessions may have promoted the item without clearing the inbox; skip duplicates. **Backlog routing prefix**: the n8n capture workflow matches exact prefix `BACKLOG: ` (uppercase, colon, trailing space) — `backlog` or `BACKLOG:item` are silently dropped; inform user if they report missing backlog items.
    - [ ] **Lessons**: Read `tasks/lessons.md`; state the 3 most recent rows before planning. Lessons govern tooling choices and approach — do not repeat captured mistakes.
    - [ ] **Catch-up SelfImprover**: For every `status: done` task in `tasks/queue.json`, verify `artefacts/<artefact_path>/improvement_proposals.md` exists. If absent (directory may not exist either), run SelfImprover for that task — it must create the directory and file from the task definition in queue.json.
    - [ ] **ExitPlanMode denial**: if the user denies ExitPlanMode, use AskUserQuestion to clarify intent before re-attempting — the user may be redirecting to a side task first, not rejecting the plan outright.
@@ -301,6 +301,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 10. **Explain with diagrams**: when explaining architecture or non-obvious decisions, prefer ASCII diagrams over prose where they add clarity.
 
 **PM Planning Session**: invoke ProjectManager with "planning" intent to review backlog, reprioritize, and onboard new projects. PM presents backlog and asks for user confirmation before queuing tasks. **Preflight**: run `ls artefacts/` before assigning any task ID — use a descriptive suffix (e.g. `task-007-gate/`) if the target path already exists.
+**Phase gate announcement rule**: when /pm-start detects a phase gate is reached, the announcement section must end with an explicit yes/no approval question before printing the queue summary — do not leave the user with a statement and no prompt.
 **MVP ordering gate**: During PM planning, check epics.md for any stories with status `planned` in lower MVP phases before queuing higher-phase work. All stories in a phase must be `done` before the next phase is prioritized.
 
 **Task tracking**:
@@ -474,8 +475,9 @@ ssh pi4 "docker restart n8n && sleep 5 && docker ps | grep n8n"
 
 **Quick health check** (verify active workflows + credentials):
 ```bash
-ssh pi4 "docker exec n8n n8n export:workflow --all --output=/home/node/wf.json && docker cp n8n:/home/node/wf.json /tmp/wf.json" && python3 -c "import json; [print(w['id'],'|',w['name'],'|',w.get('active')) for w in json.load(open('/tmp/wf.json'))]"
-ssh pi4 "docker exec n8n n8n export:credentials --all --output=/home/node/creds.json && docker cp n8n:/home/node/creds.json /tmp/creds.json" && python3 -c "import json; [print(c['id'],'|',c['name'],'|',c['type']) for c in json.load(open('/tmp/creds.json'))]"
+# Prefer piping stdout — n8n export:workflow --output writes inside the container; docker cp requires a second SSH hop that can fail silently
+ssh pi4 "docker exec n8n n8n export:workflow --all 2>/dev/null" > /tmp/wf.json && python3 -c "import json; [print(w['id'],'|',w['name'],'|',w.get('active')) for w in json.load(open('/tmp/wf.json'))]"
+ssh pi4 "docker exec n8n n8n export:credentials --all 2>/dev/null" > /tmp/creds.json && python3 -c "import json; [print(c['id'],'|',c['name'],'|',c['type']) for c in json.load(open('/tmp/creds.json'))]"
 ```
 **Note**: `n8n export:workflow --all` only exports **non-archived** (active or inactive-but-not-deleted) workflows. Workflows deleted via the REST API are soft-archived and excluded from the export — a reduced count after deletion is expected behaviour, not data loss.
 
@@ -503,6 +505,8 @@ drift), execute in `node:vm` with a mocked context (mock `require('fs')`, `requi
 `$()` helper). See `artefacts/task-009/test_gmail_workflow.js` as the canonical example.
 Run with: `/root/.nvm/versions/node/v24.12.0/bin/node artefacts/<task-id>/test_*.js`
 
+**n8n Code node module restrictions**: `require('path')` is disallowed in the n8n JS task runner (2.x) — use a manual `normalizePath()` function instead of `path.resolve()`. `require('fs')` is still allowed.
+
 **n8n HTTP Request timeout**: always set `"options": {"timeout": 10000}` on HTTP Request nodes calling internal APIs (Pi4 localhost). Default is 300s — a hung n8n API stalls the workflow for 5 min.
 
 **Timezone in n8n Code nodes**: use `Intl.DateTimeFormat('nl-NL', {timeZone: 'Europe/Amsterdam', hour: 'numeric', hour12: false})` to get Amsterdam local hour. Handles DST automatically. Avoid raw UTC offsets.
@@ -516,6 +520,7 @@ Run with: `/root/.nvm/versions/node/v24.12.0/bin/node artefacts/<task-id>/test_*
 - `continueOnFail: true` at node level handles 404s gracefully (e.g. GET a file that may not exist yet)
 - **n8n REST API `limit=N` is a hard cap**: if querying `/api/v1/workflows` or `/api/v1/executions` with `limit=N`, add a comment noting the assumption (e.g. `// assumes ≤100 active workflows`). If the instance may exceed N, check `nextCursor` in the response and loop until null. Document the pagination requirement in `deploy-notes.md`.
 - **Code node returning `[]` stops the downstream chain**: no IF/Switch node needed for guard conditions (e.g. night hours, empty results, length mismatch). Return `[]` to halt; return `[{json: {...}}]` to continue.
+- **Workflow self-exclusion: UUID primary, name fallback** — name-only exclusion breaks on rename; UUID is immutable post-deploy. Combine both: `w.id !== '<UUID>' && w.name !== '<Name>'`.
 
 **main/develop divergence**: n8n commits via GitHub API go directly to `main` (default branch, no hooks).
 Operational files written by n8n (e.g. `tasks/telegram-inbox.md`) must exist on `main`, not just `develop`.
