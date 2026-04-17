@@ -44,9 +44,16 @@ If on a feature/* branch:
 **5. Push develop**
 Run `git push origin develop`.
 
-**6. Delete feature branch**
-Run `git branch -d feature/<branch-name>`.
+**6. Delete feature branch(es)**
+Run `git branch -d feature/<branch-name>` (delete the current session's branch).
 Run `git branch -r | grep feature/<branch-name>` — if the remote branch still exists, run `git push origin --delete feature/<branch-name>`.
+
+Then sweep all remaining merged local feature branches in one pass:
+```
+git branch --merged develop | grep "feature/" | xargs -r git branch -d
+```
+Print the list of branches deleted, or "No stale merged feature branches found" if none.
+The `-r` flag in `xargs -r` makes this a no-op when no branches match.
 
 **7. Phase gate check**
 Read tasks/epics.md. Find the epic with status=in_progress. If all its stories have status=done: announce the phase gate has been reached and await explicit human approval before queuing any next-phase work.

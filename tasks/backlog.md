@@ -122,4 +122,15 @@ Items completed, rejected, or no longer relevant.
 | BL-081 | EPIC-003 | project_manager: AI-powered personal learning guide — research and prototype a system to help user learn effectively (avoid distraction, stay focused, beginner-to-understanding path) | project_manager | P2 | new | 2026-04-15 |
 | BL-082 | EPIC-003 | project_manager: Research MCP server usage with Playwright — feasibility and integration approach | project_manager | P3 | new | 2026-04-15 |
 | BL-083 | EPIC-003 | pensieve: Debug missing Obsidian md files since 2026-04-09 — investigate n8n vault write pipeline gap | pensieve | P1 | done | 2026-04-16 |
-| BL-084 | EPIC-003 | project_manager: Explore and integrate Claude Code optimization repo — 108 skills + 25 specialized agents + token optimization techniques | project_manager | P2 | in_progress | 2026-04-16 |
+| BL-084 | EPIC-004 | project_manager: Explore and integrate Claude Code optimization repo — 108 skills + 25 specialized agents + token optimization techniques | project_manager | P2 | done | 2026-04-16 |
+| BL-085 | — | project_manager: SelfImprover — add confidence score + project scope to lessons.md instinct model (continuous-learning-v2 pattern) | project_manager | P2 | new | 2026-04-16 |
+| BL-086 | — | project_manager: Context budget audit — MCP server tool schema overhead + agent frontmatter word counts (extends task-035 scope) | project_manager | P2 | new | 2026-04-16 |
+| BL-087 | — | project_manager: Agent eval harness — YAML task definitions + worktree isolation + grep judge for pipeline stage quality regression | project_manager | P2 | new | 2026-04-16 |
+| BL-088 | — | project_manager: Hooks-over-prompts audit — move top 3 must-always-follow CLAUDE.md behavioral rules to Stop/PostToolUse hooks | project_manager | P2 | new | 2026-04-16 |
+| BL-089 | — | project_manager: Silent-failure-hunter audit of scripts/ — one-off pass on all PM helper scripts for error propagation issues | project_manager | P3 | new | 2026-04-16 |
+| BL-090 | — | project_manager: pm-run loop-operator checkpoint + escalation logic (depends on BL-031 worktree investigation) | project_manager | P3 | new | 2026-04-16 |
+| BL-091 | — | project_manager: Hook profiles — minimal/standard/strict via env var in settings.json | project_manager | P3 | new | 2026-04-16 |
+| BL-092 | — | project_manager: Add strategic /compact calls at pm-run stage boundaries (Builder→Reviewer, Reviewer→Tester) to reduce context carry-over | project_manager | P2 | new | 2026-04-17 |
+| BL-093 | — | project_manager: Cost-aware model routing — complexity thresholds (text length/item count → Haiku vs Sonnet) + prompt caching for system prompts >1024 tokens | project_manager | P2 | new | 2026-04-17 |
+| BL-094 | — | project_manager: Agent introspection debugging protocol in CLAUDE.md — 4-phase structured self-debug (Failure Capture → Root-Cause Diagnosis → Contained Recovery → Introspection Report) | project_manager | P2 | new | 2026-04-17 |
+| BL-095 | — | project_manager: Structured codebase onboarding for new projects — 4-phase (Reconnaissance → Architecture Mapping → Convention Detection → Generate Artefacts) | project_manager | P3 | new | 2026-04-17 |
