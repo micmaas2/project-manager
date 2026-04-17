@@ -134,3 +134,4 @@ Items completed, rejected, or no longer relevant.
 | BL-093 | — | project_manager: Cost-aware model routing — complexity thresholds (text length/item count → Haiku vs Sonnet) + prompt caching for system prompts >1024 tokens | project_manager | P2 | new | 2026-04-17 |
 | BL-094 | — | project_manager: Agent introspection debugging protocol in CLAUDE.md — 4-phase structured self-debug (Failure Capture → Root-Cause Diagnosis → Contained Recovery → Introspection Report) | project_manager | P2 | new | 2026-04-17 |
 | BL-095 | — | project_manager: Structured codebase onboarding for new projects — 4-phase (Reconnaissance → Architecture Mapping → Convention Detection → Generate Artefacts) | project_manager | P3 | new | 2026-04-17 |
+| BL-096 | — | project_manager: CLAUDE.md size reduction — 41.3k chars exceeds 40k performance threshold; audit sections for duplication, move stable reference content to linked docs, target ≤35k | project_manager | P1 | new | 2026-04-17 |

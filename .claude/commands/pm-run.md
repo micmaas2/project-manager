@@ -24,6 +24,8 @@ Read token_estimate from the task. If token_estimate > 400000: halt with:
 **5. Execute pipeline**
 Invoke the ProjectManager YAML agent with the task_id. The ProjectManager will run the full pipeline: Builder → [Reviewer + code-quality-reviewer] → Tester → [DocUpdater + docs-readme-writer] → SelfImprover.
 
+**Research/analysis tasks** (e.g. "explore repo", "review skills", "skills-review"): require a minimum of 2 exploration rounds before producing the final BL item list. The second round must cover at least 3 skills/files not explored in the first round. First-pass results feel complete but typically miss 30–40% of patterns without a mandatory second pass.
+
 **Next step suggestion**
 After the pipeline completes, print one line:
 - If more paused or pending tasks remain in queue.json → `Suggested next: /pm-run  (N tasks remaining)`

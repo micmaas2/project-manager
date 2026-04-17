@@ -20,6 +20,7 @@ prompt: |
   - Did any agent exceed token budget?
   - Was scope drift detected?
   - What went well?
+  - For research/analysis tasks ("explore repo", "review skills", "skills-review"): check build_notes.md for evidence of a second exploration round. If only one round is evident, raise a proposal targeting pm-run.md to enforce the 2-round minimum.
 
   ## Output
 
