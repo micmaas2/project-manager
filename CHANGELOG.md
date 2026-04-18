@@ -64,6 +64,12 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ## [Unreleased]
 
+### task-037 — CLAUDE.md size reduction [2026-04-17]
+- Reduced CLAUDE.md from 39,310 to 29,830 chars (24% reduction, target was ≤35,000)
+- Moved n8n Pi4 deployment patterns to docs/n8n-deployment.md
+- Moved Python testing patterns to docs/python-testing.md
+- All operational rules preserved; pointer lines added in CLAUDE.md
+
 ### Added
 - `scripts/cross-kanban.py`: unified cross-project kanban view; reads queue.json, groups active tasks (paused/in_progress/review/test/pending) by project, outputs one `### project` section per project with status|task-id|title table; projects with no active tasks omitted; handles empty queue gracefully (task-017, S-003-3, BL-064, EPIC-003)
 - `.claude/commands/pm-status.md` step 3 updated to invoke `python3 scripts/cross-kanban.py` below the kanban
