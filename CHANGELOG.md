@@ -6,6 +6,13 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-039] — 2026-04-18
+### Added
+- artefacts/task-039/design-doc.md: cost-aware model routing design — Tester downgrade Sonnet→Haiku, PM prompt caching eligibility, complexity thresholds for future agents
+- artefacts/task-039/claude-md-additions.md: proposed CLAUDE.md rule additions pending human review
+
+---
+
 ## [task-035] — 2026-04-17
 
 ### Changed

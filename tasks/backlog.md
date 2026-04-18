@@ -131,7 +131,7 @@ Items completed, rejected, or no longer relevant.
 | BL-090 | — | project_manager: pm-run loop-operator checkpoint + escalation logic (depends on BL-031 worktree investigation) | project_manager | P3 | new | 2026-04-16 |
 | BL-091 | — | project_manager: Hook profiles — minimal/standard/strict via env var in settings.json | project_manager | P3 | new | 2026-04-16 |
 | BL-092 | — | project_manager: Add strategic /compact calls at pm-run stage boundaries (Builder→Reviewer, Reviewer→Tester) to reduce context carry-over | project_manager | P2 | in_progress | 2026-04-17 |
-| BL-093 | — | project_manager: Cost-aware model routing — complexity thresholds (text length/item count → Haiku vs Sonnet) + prompt caching for system prompts >1024 tokens | project_manager | P2 | in_progress | 2026-04-17 |
+| BL-093 | — | project_manager: Cost-aware model routing — complexity thresholds (text length/item count → Haiku vs Sonnet) + prompt caching for system prompts >1024 tokens | project_manager | P2 | done | 2026-04-17 |
 | BL-094 | — | project_manager: Agent introspection debugging protocol in CLAUDE.md — 4-phase structured self-debug (Failure Capture → Root-Cause Diagnosis → Contained Recovery → Introspection Report) | project_manager | P2 | new | 2026-04-17 |
 | BL-095 | — | project_manager: Structured codebase onboarding for new projects — 4-phase (Reconnaissance → Architecture Mapping → Convention Detection → Generate Artefacts) | project_manager | P3 | new | 2026-04-17 |
 | BL-096 | — | project_manager: CLAUDE.md size reduction — 41.3k chars exceeds 40k performance threshold; audit sections for duplication, move stable reference content to linked docs, target ≤35k | project_manager | P1 | done | 2026-04-17 |
