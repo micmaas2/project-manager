@@ -22,7 +22,27 @@ Read token_estimate from the task. If token_estimate > 400000: halt with:
 `ALERT: Task <id> estimated tokens (<n>) exceed 80% of project cap (500k). Reduce scope or split task before proceeding.`
 
 **5. Execute pipeline**
-Invoke the ProjectManager YAML agent with the task_id. The ProjectManager will run the full pipeline: Builder → [Reviewer + code-quality-reviewer] → Tester → [DocUpdater + docs-readme-writer] → SelfImprover.
+
+Run each stage in sequence. At the marked boundaries, call `/compact` to clear accumulated context before spawning the next stage.
+
+**5a. Builder**
+Spawn Builder with task_id and artefact_path. Wait for Builder to deliver its artefact (script, patch, or plan). Confirm the expected output file exists in artefact_path.
+
+**→ /compact** ← call here, after Builder artefact confirmed, before spawning Reviewer
+
+**5b. Reviewer + code-quality-reviewer** (parallel)
+Spawn Reviewer YAML agent and code-quality-reviewer built-in in parallel. Combine findings: Builder loops only on findings ≥80 confidence. If a Builder loop is needed, spawn Builder again and wait for fix. Confirm both reviews complete.
+
+**→ /compact** ← call here, after all Reviewer findings are resolved, before spawning Tester
+
+**5c. Tester**
+Spawn Tester with task_id. Wait for test_report.md with overall PASS verdict.
+
+**5d. DocUpdater + docs-readme-writer** (parallel)
+Spawn DocUpdater (owns CHANGELOG.md) and docs-readme-writer (owns README.md) in parallel. Wait for both.
+
+**5e. SelfImprover**
+Spawn SelfImprover with task_id. Wait for improvement_proposals.md.
 
 **Research/analysis tasks** (e.g. "explore repo", "review skills", "skills-review"): require a minimum of 2 exploration rounds before producing the final BL item list. The second round must cover at least 3 skills/files not explored in the first round. First-pass results feel complete but typically miss 30–40% of patterns without a mandatory second pass.
 

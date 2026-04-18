@@ -13,6 +13,12 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-038] — 2026-04-18
+### Changed
+- pm-run.md: expanded step 5 into explicit pipeline sub-steps (5a–5e) with /compact markers at Builder→Reviewer and Reviewer→Tester boundaries to reduce context carry-over between stages
+
+---
+
 ## [task-035] — 2026-04-17
 
 ### Changed
