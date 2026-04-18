@@ -313,6 +313,9 @@ logs/
   audit.jsonl                Append-only audit trail (agent, action, task, timestamp)
   token_log.jsonl            Token usage per agent per run
 docs/                        Architecture decision records; project-registry.md
+  project-registry.md        Authoritative registry of all managed projects and their artefacts
+  n8n-deployment.md          n8n Pi4 deployment patterns (Docker, import gotchas, workflow JSON)
+  python-testing.md          Python testing patterns (hyphenated filenames, Docker-only packages, root-path quirks)
 hooks/                       pre-commit + commit-msg hooks (symlinked to .git/hooks/)
 ```
 
