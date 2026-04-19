@@ -1,5 +1,7 @@
 # /pm-run — Execute Next Pending Task
 
+**Execution mode**: do not enter plan mode. This skill executes a task that is already planned and queued. Proceed directly to the Steps below without calling EnterPlanMode.
+
 Find and execute the next task through the full pipeline.
 
 ## Steps

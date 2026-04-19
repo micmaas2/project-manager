@@ -6,6 +6,15 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-041] — 2026-04-19
+### Changed
+- `.claude/commands/pm-run.md`: Added explicit plan-mode opt-out directive at line 3 — "do not enter plan mode. This skill executes a task that is already planned and queued. Proceed directly to the Steps below without calling EnterPlanMode." Prevents ambiguous plan-mode activation caused by the general CLAUDE.md "plan first" mandate conflicting with /pm-run's execution-only intent.
+
+### Added
+- `artefacts/task-041/analysis.md`: Evaluation of /pm-run plan-mode gate options. Documents root cause (no explicit gate existed; CLAUDE.md mandate caused false positive triggers), evaluates Option A (post-activation recovery) vs Option B (explicit opt-out preamble), and recommends Option B as the preventative solution.
+
+---
+
 ## [task-040] — 2026-04-19
 ### Added
 - `artefacts/task-040/audit_report.md`: Full agent model usage audit across all 6 `.claude/agents/*.yaml` files and 4 built-in subagents. Key findings: (1) Tester→Haiku downgrade recommended ($0.0066/run savings, 73% Tester-stage cost reduction); (2) Reviewer and ProjectManager downgrades NOT recommended (reasoning complexity requirements documented); (3) Haiku version string inconsistency flagged — YAML pins `claude-haiku-4-5-20251001` while CLAUDE.md uses generic alias (housekeeping item). PM stage accounts for 89.3% of pipeline cost; primary lever is PM prompt efficiency, not model swaps.
