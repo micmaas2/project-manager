@@ -6,6 +6,12 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-040] — 2026-04-19
+### Added
+- `artefacts/task-040/audit_report.md`: Full agent model usage audit across all 6 `.claude/agents/*.yaml` files and 4 built-in subagents. Key findings: (1) Tester→Haiku downgrade recommended ($0.0066/run savings, 73% Tester-stage cost reduction); (2) Reviewer and ProjectManager downgrades NOT recommended (reasoning complexity requirements documented); (3) Haiku version string inconsistency flagged — YAML pins `claude-haiku-4-5-20251001` while CLAUDE.md uses generic alias (housekeeping item). PM stage accounts for 89.3% of pipeline cost; primary lever is PM prompt efficiency, not model swaps.
+
+---
+
 ## [task-039] — 2026-04-18
 ### Added
 - artefacts/task-039/design-doc.md: cost-aware model routing design — Tester downgrade Sonnet→Haiku, PM prompt caching eligibility, complexity thresholds for future agents
