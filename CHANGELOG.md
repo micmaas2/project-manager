@@ -6,6 +6,17 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-042] — 2026-04-19
+### Changed
+- `.claude/agents/tester.yaml`: Downgraded model from `claude-sonnet-4-6` to `claude-haiku-4-5-20251001`; Label line updated to `[Haiku]`. Tester (BugHunter) no longer requires Sonnet-level reasoning — structured test execution fits Haiku's capability profile.
+- `CLAUDE.md`: Model Policy table updated — Tester row now shows Haiku; Sonnet bullet "testing" removed; Haiku bullet expanded to include "Tester (BugHunter)"; Label bullet updated to reflect change. Complexity thresholds and prompt caching eligibility notes added from task-039 design doc.
+- All 6 `.claude/agents/*.yaml` files: Explicit version pin strategy locked — each YAML pins a full versioned model string (e.g. `claude-haiku-4-5-20251001`) rather than a generic alias. M-1 mirror verified: all 6 YAML model fields match CLAUDE.md policy table.
+
+### Added
+- `artefacts/task-042/decision.md`: Documents the explicit version pin strategy rationale, model assignments per agent, and M-1 mirror verification results.
+
+---
+
 ## [task-041] — 2026-04-19
 ### Changed
 - `.claude/commands/pm-run.md`: Added explicit plan-mode opt-out directive at line 3 — "do not enter plan mode. This skill executes a task that is already planned and queued. Proceed directly to the Steps below without calling EnterPlanMode." Prevents ambiguous plan-mode activation caused by the general CLAUDE.md "plan first" mandate conflicting with /pm-run's execution-only intent.

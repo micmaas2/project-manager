@@ -87,12 +87,17 @@ Areas: `ROLE`, `DOCS`, `TEST`, `FIX`, `REFACTOR`, `PLAYBOOK`, `JENKINS`, `INVENT
 
 ## Model Policy (Token Governance)
 
-- **Sonnet 4.6** — default for execution, building, testing, reviewing (80–90% of work)
+- **Sonnet 4.6** — default for execution, building, reviewing (80–90% of work)
 - **Opus 4.6** — only for ProjectManager (plan/scope), Architect (design), Security (risk analysis)
-- **Haiku 4.5** — DocUpdater, SelfImprover, revise-claude-md, and any agent doing templated/structured work with no complex reasoning required
-- **Pattern**: Opus plans, Sonnet executes, Haiku documents
+- **Haiku 4.5** — DocUpdater, SelfImprover, revise-claude-md, Tester (BugHunter), and any agent doing templated/structured work with no complex reasoning required
+- **Pattern**: Opus plans, Sonnet executes, Haiku documents and tests
 - **Default to Haiku** for any agent that does not require reasoning over complex context
-- **Label** all outputs and tool calls with `[Sonnet]` or `[Opus]`
+- **Complexity thresholds for model selection**:
+  - Haiku: mechanical/orchestration tasks; structured input/output; prompt ≤500 tokens; no trade-off analysis
+  - Sonnet: code generation; architectural judgment; confidence scoring; prompt 500–2,000 tokens
+  - Opus: system-wide prioritization with competing constraints; prompt >2,000 tokens; decisions affecting multiple downstream agents
+- **Prompt caching**: Anthropic automatically caches system prompts ≥1,024 tokens (90% discount on cached input tokens only; output tokens billed at standard rate). ProjectManager qualifies (~1,377 tokens). No code changes required — verify API tier supports caching before first production run.
+- **Label** all outputs and tool calls with `[Sonnet]`, `[Opus]`, or `[Haiku]`
 - **Token limits**: max 10,000 tokens per agent run; project cap 500k tokens/run (fail threshold)
 - **Artefact stop**: agents stop after delivering a plan, script, test report, or review — continuation requires explicit approval
 - **Preflight**: every task requires a token estimate before execution
@@ -111,7 +116,7 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 | Builder (ScriptBuilder / TaskAutomator / DeliveryOptimizer) | YAML | Sonnet | Code/impl | Script/patch |
 | Reviewer | YAML | Sonnet | Quality/arch-compliance | Approved review |
 | code-quality-reviewer | built-in | Sonnet | Security, quality, best-practices | Review report |
-| Tester (BugHunter) | YAML | Sonnet | Tests/regression | 90% pass |
+| Tester (BugHunter) | YAML | Haiku | Tests/regression | 90% pass |
 | DocUpdater | YAML | Haiku | Docs/changelog | Updated docs |
 | docs-readme-writer | built-in | Haiku | README/module docs | Docs written |
 | SelfImprover | YAML | Haiku | Lessons/proposals | proposals.md written |

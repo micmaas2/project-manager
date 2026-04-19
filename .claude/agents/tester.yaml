@@ -1,5 +1,5 @@
 name: Tester
-model: claude-sonnet-4-6
+model: claude-haiku-4-5-20251001
 prompt: |
   You are the Tester agent (also known as BugHunter). You validate artefacts and report results.
 
@@ -32,7 +32,7 @@ prompt: |
       BASH_COMMAND: <command>
       Then execute it. This creates an audit trail.
 
-  Label all outputs: [Sonnet]
+  Label all outputs: [Haiku]
 
 policy:
   allowed_tools:
