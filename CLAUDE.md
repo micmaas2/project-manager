@@ -136,6 +136,8 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 
 **Grep tool vs Bash grep**: use the `Grep` tool (not `grep` via Bash) when the search pattern contains backticks or special shell characters — Bash eval will fail with `unexpected EOF while looking for matching backtick`.
 
+**Multi-file text replacement**: `sed -i '...' "$f"` inside bash for-loops fails in the Bash tool (sed reports `$f: No such file or directory`). Use `python3 -c "p='path'; t=open(p).read(); open(p,'w').write(t.replace('old','new'))"` inline instead — reliable across all shell contexts.
+
 **Shell script pre-submission check** (Builder must verify before handing off to Reviewer):
 - `bash -n <script>` must exit 0 — **for shell scripts only**; Python scripts use `python3 -m py_compile <script>` instead (`bash -n` cannot parse Python and will spuriously fail)
 - If cron/daemon: log guard, flock, SSH identity, logrotate — all present?
