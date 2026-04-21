@@ -1,5 +1,5 @@
 # Project Dashboard
-_Last updated: 2026-04-17 11:15_
+_Last updated: 2026-04-21 09:00_
 
 ## Queue Status
 
@@ -10,7 +10,7 @@ _Last updated: 2026-04-17 11:15_
 | paused | 0 |
 | review | 0 |
 | test | 0 |
-| done | 35 |
+| done | 42 |
 
 ## Active Tasks
 
@@ -18,11 +18,11 @@ _No tasks currently in progress._
 
 ## Recently Completed
 
-- **task-036** project_manager: Add confidence scoring to Reviewer YAML output (BL-076) [2026-04-17]
-- **task-035** project_manager: Execute CLAUDE.md + agent YAML token reduction rewrites (BL-079) [2026-04-17]
-- **task-034** project_manager: Explore Claude Code optimization repo — 108 skills + 25 agents (BL-084) [2026-04-17]
-- **task-033** pensieve: Debug missing Obsidian md files since 2026-04-09 (BL-083) [2026-04-16]
-- **task-032** pensieve: PAT rotation runbook (BL-057) [2026-04-15]
+- **task-043** project_manager: Claude Code skills investigation — cross-project fit (BL-100) [2026-04-21]
+- **task-042** project_manager: Model version pins review and update (BL-098) [2026-04-19]
+- **task-041** project_manager: /pm-run plan-mode gate evaluation (BL-097) [2026-04-19]
+- **task-040** project_manager: Agent model usage audit — cost reduction opportunities (BL-099) [2026-04-19]
+- **task-039** project_manager: Cost-aware model routing design (BL-093) [2026-04-18]
 
 ## Next Up (Pending)
 
@@ -39,4 +39,3 @@ _No pending tasks._
 ## Top Backlog (P1, not yet queued)
 
 - BL-053: pensieve: Deploy gmail-capture.json workflow to n8n on Pi4 — built in task-009, deploy steps in artefacts/task-009/deploy-notes.md; requires Gmail OAuth credential + Pensieve label re-selection after import (arch-review pensieve-P1) [pensieve]
-- BL-096: project_manager: CLAUDE.md size reduction — 41.3k chars exceeds 40k performance threshold; audit sections for duplication, move stable reference content to linked docs, target ≤35k [project_manager]
