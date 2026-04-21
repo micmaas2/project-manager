@@ -23,7 +23,7 @@ with:
 ```
 
 **Rationale**: The audit found `doc-updater.yaml` and `self-improver.yaml` both use `claude-haiku-4-5-20251001` while CLAUDE.md only says `Haiku 4.5`. No pinning policy exists, so when a newer patch releases there is no guidance on what triggers an update or that both YAMLs must be updated together. Adding a one-line pinning strategy closes the documentation gap and prevents silent version drift.  
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -37,7 +37,7 @@ Add a note after the Tester row in the Agent Roles & Spawn Order table (or in a 
 In the table row for Tester, change the Model column from `Sonnet` to `Sonnet (→ Haiku, task-042)` to signal the pending downgrade is tracked and intentional — not an oversight.
 
 **Rationale**: The audit confirmed Tester is the only downgrade opportunity (P1, $0.0066/run). The implementation is deferred to task-042. Without a marker in the table, a future audit would re-examine the same question and reach the same conclusion redundantly. A brief annotation closes the loop without requiring task-042 to be completed first.  
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -53,4 +53,4 @@ Add a new bullet under Model Policy:
 ```
 
 **Rationale**: The audit process itself was not documented anywhere. The finding that built-in subagent models cannot be overridden (they are fixed by type) is audit-methodology knowledge that would be rediscovered from scratch on the next audit. Recording the methodology and the distinction between YAML agents vs built-ins saves future audit time and prevents the repeated mistake of treating built-ins as configurable.  
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

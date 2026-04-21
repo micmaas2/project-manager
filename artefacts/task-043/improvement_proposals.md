@@ -21,7 +21,7 @@ any time with no side effects.
 
 **Rationale**: `claude-automation-recommender` is uniquely positioned as the first step before any automation install because it is zero-install and non-mutating. Running it at onboarding time ensures each project gets a tailored automation roadmap without risk. This pattern was validated across all 7 managed projects in task-043 — all rated HIGH or MEDIUM fit. Without this rule in CLAUDE.md, the tool will be overlooked during onboarding (as it was for all existing projects).
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -40,4 +40,4 @@ entering the codebase; review-phase tools catch it after the fact. Use `security
 
 **Rationale**: task-043 deep-dive on `security-guidance` revealed that its exit-code-2 blocking mechanism is categorically stronger than post-write review. The existing security principles section focuses on code-level patterns but does not guide when to enforce via PreToolUse vs review. This distinction prevents future security tooling decisions from defaulting to review-only approaches when a blocking hook is available and appropriate.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

@@ -90,6 +90,7 @@ Areas: `ROLE`, `DOCS`, `TEST`, `FIX`, `REFACTOR`, `PLAYBOOK`, `JENKINS`, `INVENT
 - **Sonnet 4.6** — default for execution, building, reviewing (80–90% of work)
 - **Opus 4.6** — only for ProjectManager (plan/scope), Architect (design), Security (risk analysis)
 - **Haiku 4.5** — DocUpdater, SelfImprover, revise-claude-md, Tester (BugHunter), and any agent doing templated/structured work with no complex reasoning required
+  - Haiku uses a date-pinned ID (`claude-haiku-4-5-20251001`) because multiple Haiku 4.5 patch builds existed at release. Opus 4.6 and Sonnet 4.6 have single authoritative builds — no date suffix needed. Add a date suffix to any model field only when multiple patch builds for that version co-exist; update all affected YAMLs together.
 - **Pattern**: Opus plans, Sonnet executes, Haiku documents and tests
 - **Default to Haiku** for any agent that does not require reasoning over complex context
 - **Complexity thresholds for model selection**:
@@ -98,6 +99,8 @@ Areas: `ROLE`, `DOCS`, `TEST`, `FIX`, `REFACTOR`, `PLAYBOOK`, `JENKINS`, `INVENT
   - Opus: system-wide prioritization with competing constraints; prompt >2,000 tokens; decisions affecting multiple downstream agents
 - **Prompt caching**: Anthropic automatically caches system prompts ≥1,024 tokens (90% discount on cached input tokens only; output tokens billed at standard rate). ProjectManager qualifies (~1,377 tokens). No code changes required — verify API tier supports caching before first production run.
 - **Label** all outputs and tool calls with `[Sonnet]`, `[Opus]`, or `[Haiku]`
+- **Label update on model change**: when a YAML agent's model field is changed, update the `Label all outputs` line in that agent's YAML in the same commit — a stale label (e.g. `[Sonnet]` after downgrade to Haiku) silently breaks audit integrity
+- **Model audit cadence**: Run task-040-style audits whenever a new model version is released or after 10+ tasks are added. Audit methodology: (1) list all YAML agents + built-ins separately; (2) compare against current policy table; (3) use actual `logs/token_log.jsonl` data for cost projections — never assumed token counts.
 - **Token limits**: max 10,000 tokens per agent run; project cap 500k tokens/run (fail threshold)
 - **Artefact stop**: agents stop after delivering a plan, script, test report, or review — continuation requires explicit approval
 - **Preflight**: every task requires a token estimate before execution
@@ -144,7 +147,7 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 
 **Opus advisor escalation**: For ambiguous arch/security decisions, spawn Opus sub-agent (model: claude-opus-4-6) with single `ADVISOR_CONSULT: <question>` + Context + Options. Note in `build_notes.md` under "Advisor Consults". Triggers: architecture tradeoff with no clear winner; security decision outside established patterns; scope ambiguity. Do NOT use for routine decisions.
 
-**Cross-file rule mirroring (M-1 pattern)**: Enumerated rules that appear in both CLAUDE.md and agent YAMLs can silently accumulate orphan entries. When editing either file, verify rule counts and text match in both directions. Tester must include a regression guard for any task that modifies mirrored content: (a) rule-count equality check across all copies, (b) absence check for any rule that was removed.
+**Cross-file rule mirroring (M-1 pattern)**: Enumerated rules that appear in both CLAUDE.md and agent YAMLs can silently accumulate orphan entries. When editing either file, verify rule counts and text match in both directions. Also verify that the `Label all outputs:` directive in each agent YAML matches the tiers listed in the CLAUDE.md Label bullet (Model Policy section) — this is a second M-1 mirror that model-pin checks do not cover. Tester must include a regression guard for any task that modifies mirrored content: (a) rule-count equality check across all copies, (b) absence check for any rule that was removed.
 
 **M-1 copy-paste rule**: when mirroring a definition across CLAUDE.md and agent YAMLs, copy-paste verbatim — never paraphrase. Unicode vs ASCII symbol variants (`≥` vs `>=`) and synonym substitutions ("issue" vs "defect") both silently break the M-1 verbatim-match contract.
 
@@ -158,6 +161,7 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 - Every angle-bracket placeholder must include an explicit resolution instruction naming the source file and lookup pattern — do not assume the reader will infer where data lives.
 - Test all placeholders manually before committing: simulate a fresh session with no prior context and verify every `<placeholder>` can be resolved without ambiguity.
 - **Security filter ordering: inline, not post-hoc** — inspect for sensitive patterns (password, secret, api_key, etc.) per-item before appending to any buffer; a post-hoc filter is logically bypassed when the buffer already contains sensitive data.
+- **Execution-only preamble**: skills with no scope ambiguity (task already fully specified, deterministic pipeline) must include: `**Execution mode**: do not enter plan mode. This skill executes already-planned work. Proceed directly to the Steps below without calling EnterPlanMode.` Apply to pm-run, pm-close, and any future execution-only skill.
 
 Agent definitions live in `.claude/agents/[name].yaml`. Required fields: `name`, `prompt`, `policy`, `owner`, `incident_owner`.
 
@@ -211,6 +215,8 @@ Tests: unit/integration/regression
 Rollback plan: <steps + owner>
 Privacy DPIA: yes/no + note
 Cost estimate: EUR ...
+  - If cost estimate is based on caching: state lower bound (realistic hit rate) AND upper bound (100% hit rate); document cache TTL caveat (Anthropic: 5 min)
+  - If cost estimate involves token counts: state assumed input/output split explicitly (e.g. 3,500 input / 1,500 output per run)
 Definition of Done: <checklist>
 Incident owner: <Name / Role>
 ```
@@ -229,6 +235,8 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 - RBAC for agent spawn and policy changes
 - Prompt sanitization; adversarial tests for prompt injection
 - Runbook verification commands that read secret files: always pipe through `head -c N` or `grep -c`; add a warning note discouraging bare `cat` on recorded/shared terminals (shell history risk)
+
+**PreToolUse hooks for known-bad patterns**: for security patterns with no legitimate use in the codebase (e.g. eval, os.system, innerHTML, pickle), prefer a PreToolUse blocking hook over a review-phase finding. Blocking at edit time prevents the pattern from ever entering the codebase; review-phase tools catch it after the fact. Use `security-guidance` (BL-101) as the reference implementation.
 
 **Observability**:
 - Audit trail: who, agent, action, time, artefact
@@ -252,12 +260,18 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
    - [ ] **ExitPlanMode denial**: if the user denies ExitPlanMode, use AskUserQuestion to clarify intent before re-attempting — the user may be redirecting to a side task first, not rejecting the plan outright.
    - [ ] **ExitPlanMode mid-skill recovery**: if plan mode activates unexpectedly during a PM skill run (e.g. /pm-propose), write a minimal plan file summarising remaining steps, call ExitPlanMode, then continue the skill after approval.
 
-1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Plans are written to `/root/.claude/plans/` (auto-managed by plan mode).
+1. **Plan first (mandatory)**: ALWAYS enter plan mode before any non-trivial task (3+ steps or architectural decisions). Plans are written to `/root/.claude/plans/` (auto-managed by plan mode). **Exception**: PM skills that carry an explicit "Execution mode: do not enter plan mode" preamble are exempt — they execute already-planned and queued work.
 2. **Subagents**: offload research, exploration, and parallel analysis to keep main context clean — one task per subagent; pass only pointers (task_id, file paths), never embed full content.
 3. **Token minimization**: agents receive only task_id; they read their own context from files. No large context copied between invocations. Stop after each deliverable.
 4. **Verify before done**: never mark complete without proving it works. Ask: "Would a staff engineer approve this?"
    **Artefact minimum for git-only tasks**: even when no code is produced, create `artefacts/<task-id>/verification.md` capturing: commands run (e.g. `git log --oneline`, `ls` of key files), their output, and a PASS/FAIL verdict per acceptance criterion. Tasks with no artefact directory cannot be retrospected by SelfImprover.
    **Architecture/research task Definition of Done**: must include "all `NEW:` proposals in the review document are registered as BL items in `tasks/backlog.md`" — SelfImprover does not do this automatically; it is a required explicit step before marking done. For tasks reviewing an external repo/course: minimum 2 research rounds; second round must fetch SKILL.md / agent source files, not just directory listings.
+   **Content migration checklist** (when moving a section from CLAUDE.md to a linked doc):
+   1. Pre-move mapping: list every sentence in the source section
+   2. Destination verification: confirm each sentence appears in the destination doc
+   3. Source retention decision: mark each sentence "moved" or "kept" — no orphans
+   4. Pointer line: add `See \`docs/X.md\` for: topic1, topic2, ...` in CLAUDE.md
+   5. Final verification: `wc -c CLAUDE.md` and `grep -c "<critical_phrase>"` for rules that must remain present
 5. **Self-improvement**: SelfImprover runs after every pipeline PASS and appends to `tasks/lessons.md`. If a significant pattern is found it also writes `artefacts/<task_id>/improvement_proposals.md` (format below). After any correction: update CLAUDE.md so the mistake cannot recur; commit to git.
 6. **Always-on pipeline**: every task runs the full pipeline — no skipping:
    ```
@@ -279,6 +293,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 10. **Explain with diagrams**: when explaining architecture or non-obvious decisions, prefer ASCII diagrams over prose where they add clarity.
 
 **PM Planning Session**: invoke ProjectManager with "planning" intent to review, reprioritize, and onboard. PM asks for confirmation before queuing. **Preflight**: `ls artefacts/` before assigning IDs — use descriptive suffix if path exists.
+**Project onboarding automation scan**: when onboarding a new project or beginning a session on a project for the first time, invoke `claude-automation-recommender` (zero-install, read-only) to surface top hooks, MCP servers, skills, and subagent recommendations for the detected tech stack. Run before installing any hook or MCP server — its non-mutating design makes it safe at any time with no side effects.
 **Phase gate announcement rule**: when /pm-start detects a phase gate is reached, the announcement section must end with an explicit yes/no approval question before printing the queue summary — do not leave the user with a statement and no prompt.
 **MVP ordering gate**: During PM planning, check epics.md for any stories with status `planned` in lower MVP phases before queuing higher-phase work. All stories in a phase must be `done` before the next phase is prioritized.
 
@@ -350,7 +365,7 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 
 **Queue validation**: `tasks/queue.schema.json` enforces all field types. Key constraint: `artefact_path` must match `^artefacts/[a-zA-Z0-9_-]+/$` — no path traversal. Validate with any JSON Schema tool before adding tasks manually.
 
-**Artefact path assignment**: Before adding a new task to queue.json, run `ls artefacts/` to check if the target path already exists. If it does, use a descriptive suffix (e.g. `artefacts/task-008-laptop/`) rather than the bare ID.
+**Artefact path assignment**: Before adding a new task to queue.json, run `ls artefacts/` to check if the target path already exists. If it does, use a descriptive suffix (e.g. `artefacts/task-008-laptop/`) rather than the bare ID. This prevents accidental clobbering of prior task outputs and enables retrospective analysis by SelfImprover for both the old and new work.
 
 **`assigned_to` tracks pipeline stage**: update `assigned_to` at every stage transition alongside `status` (`builder` → `reviewer+code-quality-reviewer` → `tester` → `doc-updater+docs-readme-writer` → `self-improver`). For parallel stages set `assigned_to` to both agents: `"reviewer+code-quality-reviewer"` or `"doc-updater+docs-readme-writer"`.
 

@@ -19,7 +19,7 @@ Proposed addition after that sentence:
 
 **Rationale**: task-042 found that `tester.yaml` had `Label all outputs: [Sonnet]` while the CLAUDE.md Label bullet only listed `[Sonnet]` and `[Opus]` — Haiku agents were already labelling `[Haiku]` in practice but the governance rule omitted it. The M-1 pattern section calls out model-tier fields but is silent on Label directives. This addition closes the gap so future model-tier audits also check label consistency.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -40,4 +40,4 @@ Proposed addition (new sub-bullet or parenthetical):
 
 **Rationale**: `decision.md` documents this rationale, but it lives only in a task artefact. Future agents adding or upgrading model pins have no policy rule to follow — they may add spurious date suffixes to Sonnet/Opus or strip the Haiku pin. Surfacing the rule in CLAUDE.md Model Policy makes it discoverable at planning time.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

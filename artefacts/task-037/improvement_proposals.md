@@ -19,7 +19,7 @@ Silent content drops increase code-quality-reviewer rework cycles (confidence 97
 
 **Rationale**: The task-037 CQR review identified that 5 actionable instructions were removed and not added to the destination doc (Docker error messages, build time note, Pensieve branch instruction). A pre-move checklist makes this visible upfront and prevents rework. This pattern is specific enough to document in CLAUDE.md and will recur whenever a section is refactored into linked docs.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -37,4 +37,4 @@ prior task outputs and enables retrospective analysis by SelfImprover for both t
 
 **Rationale**: CLAUDE.md already documents the fix in step 7 of the PM planning session ("always audit `ls artefacts/` before assigning the next task ID"), but the lessons.md entry shows this instruction is not being followed at planning time. Moving the guidance to the queue schema section (step 2 of PM sessions, earlier in the workflow) makes it more discoverable — the PM reads task tracking rules before launching the planning session.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

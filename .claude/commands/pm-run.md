@@ -31,14 +31,19 @@ Run each stage in sequence. At the marked boundaries, call `/compact` to clear a
 Spawn Builder with task_id and artefact_path. Wait for Builder to deliver its artefact (script, patch, or plan). Confirm the expected output file exists in artefact_path.
 
 **→ /compact** ← call here, after Builder artefact confirmed, before spawning Reviewer
+> After /compact, re-read `tasks/queue.json` to confirm task_id and artefact_path before proceeding.
 
 **5b. Reviewer + code-quality-reviewer** (parallel)
 Spawn Reviewer YAML agent and code-quality-reviewer built-in in parallel. Combine findings: Builder loops only on findings ≥80 confidence. If a Builder loop is needed, spawn Builder again and wait for fix. Confirm both reviews complete.
 
 **→ /compact** ← call here, after all Reviewer findings are resolved, before spawning Tester
+> After /compact, re-read `tasks/queue.json` to confirm task_id and artefact_path before proceeding.
 
 **5c. Tester**
 Spawn Tester with task_id. Wait for test_report.md with overall PASS verdict.
+
+**→ /compact** ← call here, after Tester report confirmed, before spawning DocUpdater + docs-readme-writer
+> After /compact, re-read `tasks/queue.json` to confirm task_id and artefact_path before proceeding.
 
 **5d. DocUpdater + docs-readme-writer** (parallel)
 Spawn DocUpdater (owns CHANGELOG.md) and docs-readme-writer (owns README.md) in parallel. Wait for both.

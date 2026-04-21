@@ -15,7 +15,7 @@ Apply the same pattern after the second /compact marker (Reviewer→Tester bound
 
 **Rationale**: After /compact, the agent's working context is reset. The current task_id, artefact_path, and pipeline position are not automatically restored. A brief re-anchor prevents the next stage from starting in an ambiguous state. This was flagged by CQR as a valid UX concern (below threshold for this task's scope) and is now captured as a lesson.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -32,4 +32,4 @@ Apply the same pattern after the second /compact marker (Reviewer→Tester bound
 
 **Rationale**: The Tester stage produces a test report artefact that adds to accumulated context. Clearing context before the documentation stage prevents context-window pressure for longer pipelines. This boundary was identified as valid during review but excluded from task-038 scope (acceptatiecriteria named only 2 boundaries). Scheduling as a follow-up proposal rather than scope-creep into task-038.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
