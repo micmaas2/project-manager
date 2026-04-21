@@ -6,6 +6,13 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-043] — 2026-04-19
+### Added
+- `artefacts/task-043/research_report.md`: Two-round research across marketplace and built-in Claude Code skills (16+ skills evaluated). Top 3 candidates identified for cross-project adoption: `security-guidance` hook (BL-101), `claude-automation-recommender` (BL-102), and `skill-creator` evals for pm-* skills (BL-103).
+- `tasks/backlog.md`: BL-101 (security-guidance hook adoption), BL-102 (claude-automation-recommender cross-project rollout), BL-103 (skill-creator evals for pm-* skills).
+
+---
+
 ## [task-042] — 2026-04-19
 ### Changed
 - `.claude/agents/tester.yaml`: Downgraded model from `claude-sonnet-4-6` to `claude-haiku-4-5-20251001`; Label line updated to `[Haiku]`. Tester (BugHunter) no longer requires Sonnet-level reasoning — structured test execution fits Haiku's capability profile.
