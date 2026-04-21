@@ -1897,6 +1897,285 @@
         "privacy_dpia": "no",
         "cost_estimate": "EUR 0"
       }
+    },
+    {
+      "id": "task-044",
+      "title": "MAS: Upgrade LLM_PRIMARY_MODEL \u2192 claude-sonnet-4-6 (BL-061)",
+      "project": "pi-homelab",
+      "target_project_path": "/opt/mas/",
+      "epic_id": "EPIC-006",
+      "story_id": "S-006-1",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-044/",
+      "created": "2026-04-21",
+      "updated": "2026-04-21T07:26:57.630185+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Upgrade LLM_PRIMARY_MODEL from claude-3-5-sonnet-20240620 to claude-sonnet-4-6 in mas_personal_assistant config.",
+        "niet_in_scope": [
+          "Other model config changes",
+          "MAS infrastructure changes"
+        ],
+        "acceptatiecriteria": [
+          "LLM_PRIMARY_MODEL set to claude-sonnet-4-6 in config",
+          "Existing test suite passes with no regressions",
+          "Commit merged to mas_personal_assistant main"
+        ],
+        "security_arch_impact": "Config change only. No new HTTP endpoints, no secrets touched.",
+        "tests_required": "unit \u2014 run existing test suite; verify no model-string references broken",
+        "definition_of_done": [
+          "review.md APPROVED",
+          "test_report.md PASS",
+          "LLM_PRIMARY_MODEL = claude-sonnet-4-6 in committed config",
+          "CHANGELOG updated in mas_personal_assistant"
+        ],
+        "rollback_plan": "Revert config line to claude-3-5-sonnet-20240620; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-045",
+      "title": "MAS: Add hard budget enforcement to LLMClient.chat() (BL-062)",
+      "project": "pi-homelab",
+      "target_project_path": "/opt/mas/",
+      "epic_id": "EPIC-006",
+      "story_id": "S-006-2",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-045/",
+      "created": "2026-04-21",
+      "updated": "2026-04-21T07:26:57.630185+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Add hard budget enforcement to LLMClient.chat() \u2014 call check_budget() before each API call; raise BudgetExceededError and log if exceeded.",
+        "niet_in_scope": [
+          "Budget UI or admin panel",
+          "Multi-user budgets"
+        ],
+        "acceptatiecriteria": [
+          "check_budget() invoked before every LLMClient.chat() call",
+          "BudgetExceededError raised and logged when daily budget exceeded",
+          "Existing tests pass; 2+ new unit tests for enforcement logic"
+        ],
+        "security_arch_impact": "Budget threshold read from config (not user input) \u2014 no injection risk.",
+        "tests_required": "unit \u2014 BudgetExceededError on exceeded budget; no-op when under budget",
+        "definition_of_done": [
+          "review.md APPROVED",
+          "test_report.md PASS",
+          "BudgetExceededError class defined and tested",
+          "CHANGELOG updated"
+        ],
+        "rollback_plan": "Remove check_budget() call from LLMClient.chat(); owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-046",
+      "title": "MAS: Configure uptime monitoring for /health endpoint (BL-063)",
+      "project": "pi-homelab",
+      "target_project_path": "/opt/mas/",
+      "epic_id": "EPIC-006",
+      "story_id": "S-006-3",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-046/",
+      "created": "2026-04-21",
+      "updated": "2026-04-21T07:26:57.630185+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Configure external uptime monitoring for mas-backend /health endpoint with Telegram alert if non-200 for >5 min.",
+        "niet_in_scope": [
+          "Internal metrics",
+          "Log aggregation",
+          "Dashboard UI"
+        ],
+        "acceptatiecriteria": [
+          "Monitor configured on UptimeRobot (free tier) or Uptime-Kuma",
+          "Telegram alert fires on simulated downtime (manual test)",
+          "deploy-notes.md documents setup steps and alert config"
+        ],
+        "security_arch_impact": "No new code deployed; external service polls public /health endpoint only.",
+        "tests_required": "integration \u2014 simulate /health returning 503, verify Telegram alert received",
+        "definition_of_done": [
+          "review.md APPROVED",
+          "test_report.md PASS",
+          "Monitor active and verified",
+          "deploy-notes.md committed"
+        ],
+        "rollback_plan": "Delete monitor in UptimeRobot UI; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no \u2014 only pings public /health endpoint",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-047",
+      "title": "Install security-guidance PreToolUse hook in project_manager (BL-101)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-006",
+      "story_id": "S-006-4",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-047/",
+      "created": "2026-04-21",
+      "updated": "2026-04-21T07:26:57.630185+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Install the official security-guidance PreToolUse hook in project_manager; document extension procedure for MAS and pensieve.",
+        "niet_in_scope": [
+          "Customising hook rules",
+          "Deploying to all projects this task"
+        ],
+        "acceptatiecriteria": [
+          "Hook installed and active in project_manager",
+          "Hook verified to block eval, os.system, innerHTML, pickle patterns at edit time",
+          "Extension guide committed documenting how to deploy to MAS and pensieve"
+        ],
+        "security_arch_impact": "Hook is read-only inspection; no external calls; no secrets.",
+        "tests_required": "integration \u2014 attempt to write a file containing eval(); verify hook blocks it",
+        "definition_of_done": [
+          "review.md APPROVED",
+          "test_report.md PASS",
+          "Hook active in project_manager",
+          "Extension guide in artefacts/task-047/"
+        ],
+        "rollback_plan": "Remove hook entry from settings.json; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-048",
+      "title": "Run claude-automation-recommender across all managed projects (BL-102)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-006",
+      "story_id": "S-006-5",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-048/",
+      "created": "2026-04-21",
+      "updated": "2026-04-21T07:26:57.630185+00:00",
+      "token_estimate": 12000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Run claude-automation-recommender across all 7 managed projects; document top recommendations per project and record adoption decisions as BL items.",
+        "niet_in_scope": [
+          "Implementing any of the recommendations this task"
+        ],
+        "acceptatiecriteria": [
+          "Scan completed for all 7 projects (project_manager, CCAS, pi-homelab, pensieve, genealogie, performance_HPT, project1)",
+          "Per-project recommendation table in research_report.md (hook/MCP/skill/subagent)",
+          "Each recommendation marked adopt/defer/skip; adopt items registered as new BL entries"
+        ],
+        "security_arch_impact": "Tool is zero-install, read-only; no mutations.",
+        "tests_required": "verification \u2014 research_report.md exists with all 7 projects covered",
+        "definition_of_done": [
+          "review.md APPROVED",
+          "test_report.md PASS",
+          "All new BL items from adopt recommendations added to backlog.md"
+        ],
+        "rollback_plan": "No changes made; report only; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-049",
+      "title": "Hooks-over-prompts audit \u2014 implement top 3 rules as hooks (BL-088)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-006",
+      "story_id": "S-006-6",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-049/",
+      "created": "2026-04-21",
+      "updated": "2026-04-21T07:26:57.630185+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Identify the top 3 CLAUDE.md must-always-follow rules best enforced via Stop/PostToolUse hooks, and implement them.",
+        "niet_in_scope": [
+          "Full hooks-over-prompts rewrite",
+          "Removing rules from CLAUDE.md entirely"
+        ],
+        "acceptatiecriteria": [
+          "Top 3 rule candidates identified with rationale (why hook > prompt for each)",
+          "Hooks implemented in .claude/settings.json or hooks/",
+          "CLAUDE.md updated to reference hooks where applicable"
+        ],
+        "security_arch_impact": "Hooks run locally; no external calls; no secrets.",
+        "tests_required": "integration \u2014 trigger each hook's target pattern; verify it fires correctly",
+        "definition_of_done": [
+          "review.md APPROVED",
+          "test_report.md PASS",
+          "3 hooks active and tested",
+          "CLAUDE.md updated"
+        ],
+        "rollback_plan": "Remove hook entries from settings.json; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-050",
+      "title": "SelfImprover: add confidence score + project scope to lessons.md (BL-085)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-006",
+      "story_id": "S-006-7",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-050/",
+      "created": "2026-04-21",
+      "updated": "2026-04-21T07:26:57.630185+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Add confidence score (1-100) and project scope field to lessons.md entries, per the continuous-learning-v2 instinct model pattern.",
+        "niet_in_scope": [
+          "Retroactively scoring existing lessons",
+          "UI changes"
+        ],
+        "acceptatiecriteria": [
+          "self-improver.yaml updated to output confidence + project_scope per lesson row",
+          "lessons.md table schema updated with Confidence and Scope columns",
+          "Next SelfImprover run produces entries with both new fields"
+        ],
+        "security_arch_impact": "YAML and markdown changes only; no external calls.",
+        "tests_required": "unit \u2014 verify SelfImprover output format includes confidence + scope fields",
+        "definition_of_done": [
+          "review.md APPROVED",
+          "test_report.md PASS",
+          "self-improver.yaml updated",
+          "lessons.md schema updated"
+        ],
+        "rollback_plan": "Revert self-improver.yaml to prior version; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
     }
   ]
 }

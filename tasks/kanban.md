@@ -37,6 +37,13 @@ _(in queue.json with status: pending)_
 - **task-041** project_manager: /pm-run plan-mode gate evaluation (BL-097)
 - **task-042** project_manager: Model version pins review and update (BL-098)
 - **task-043** project_manager: Claude Code skills investigation — cross-project fit (BL-100)
+- **task-044** pi-homelab: MAS — Upgrade LLM_PRIMARY_MODEL → claude-sonnet-4-6 (BL-061)
+- **task-045** pi-homelab: MAS — Add hard budget enforcement to LLMClient.chat() (BL-062)
+- **task-046** pi-homelab: MAS — Configure uptime monitoring for /health endpoint (BL-063)
+- **task-047** project_manager: Install security-guidance PreToolUse hook (BL-101)
+- **task-048** project_manager: Run claude-automation-recommender across all projects (BL-102)
+- **task-049** project_manager: Hooks-over-prompts audit — implement top 3 rules as hooks (BL-088)
+- **task-050** project_manager: SelfImprover — add confidence score + project scope to lessons (BL-085)
 
 ---
 

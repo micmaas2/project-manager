@@ -99,6 +99,27 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 ---
 
+## EPIC-006 — MAS Hardening & project_manager Quick Wins
+
+**Goal**: Harden the MAS personal assistant (model upgrade, budget enforcement, uptime monitoring) and deliver fast-win improvements to the project_manager tooling (security hook, automation scan, hooks-over-prompts).
+**Project**: pi-homelab / project_manager
+**Status**: in_progress
+**MVP Phase**: MVP4
+
+### Stories
+
+| Story ID | Title | Queue Task | Status |
+|---|---|---|---|
+| S-006-1 | MAS: Upgrade LLM_PRIMARY_MODEL → claude-sonnet-4-6 | task-044 | in_progress |
+| S-006-2 | MAS: Add hard budget enforcement to LLMClient.chat() | task-045 | in_progress |
+| S-006-3 | MAS: Configure uptime monitoring for /health endpoint | task-046 | in_progress |
+| S-006-4 | Install security-guidance PreToolUse hook | task-047 | in_progress |
+| S-006-5 | Run claude-automation-recommender across all projects | task-048 | in_progress |
+| S-006-6 | Hooks-over-prompts audit — implement top 3 rules as hooks | task-049 | in_progress |
+| S-006-7 | SelfImprover: add confidence score + project scope to lessons | task-050 | in_progress |
+
+---
+
 ## Projects in Scope
 
 | Short name | Path | GitHub | Domain |
