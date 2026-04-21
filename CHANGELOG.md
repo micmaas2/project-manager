@@ -6,6 +6,15 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-044] — 2026-04-21
+### Changed
+- `mas/src/config.py`: Upgraded `LLM_PRIMARY_MODEL` default from `claude-3-5-sonnet-20240620` to `claude-sonnet-4-6` (Pydantic settings).
+- `mas/.env.example`, `mas/.env.production.example`: Updated model string to `claude-sonnet-4-6` in example env files.
+- `mas/src/cost_tracker.py`: Added pricing entries for `claude-sonnet-4-6` and `claude-haiku-4-5` (EUR per 1M tokens) to keep cost accounting current with deployed models.
+- Commits `fedcac5` + `c4cf82f` on branch `feature/task-021-bookworm-base` in `/opt/mas/`; Tester PASS (129/148, 0% regression).
+
+---
+
 ## [task-043] — 2026-04-19
 ### Added
 - `artefacts/task-043/research_report.md`: Two-round research across marketplace and built-in Claude Code skills (16+ skills evaluated). Top 3 candidates identified for cross-project adoption: `security-guidance` hook (BL-101), `claude-automation-recommender` (BL-102), and `skill-creator` evals for pm-* skills (BL-103).
