@@ -82,20 +82,20 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 **Goal**: Reduce CLAUDE.md size, lower token/cost overhead, optimise model assignments, and improve system tooling quality.
 **Project**: project_manager
-**Status**: in_progress
+**Status**: done
 **MVP Phase**: MVP4
 
 ### Stories
 
 | Story ID | Title | Queue Task | Status |
 |---|---|---|---|
-| S-005-1 | CLAUDE.md size reduction — target ≤35k chars | task-037 | in_progress |
-| S-005-2 | Add /compact calls at pm-run stage boundaries | task-038 | in_progress |
-| S-005-3 | Cost-aware model routing design | task-039 | in_progress |
-| S-005-4 | Agent model usage audit — cost reduction | task-040 | in_progress |
-| S-005-5 | /pm-run plan-mode gate evaluation | task-041 | in_progress |
-| S-005-6 | Model version pins review and update | task-042 | in_progress |
-| S-005-7 | Claude Code skills investigation — cross-project fit | task-043 | in_progress |
+| S-005-1 | CLAUDE.md size reduction — target ≤35k chars | task-037 | done |
+| S-005-2 | Add /compact calls at pm-run stage boundaries | task-038 | done |
+| S-005-3 | Cost-aware model routing design | task-039 | done |
+| S-005-4 | Agent model usage audit — cost reduction | task-040 | done |
+| S-005-5 | /pm-run plan-mode gate evaluation | task-041 | done |
+| S-005-6 | Model version pins review and update | task-042 | done |
+| S-005-7 | Claude Code skills investigation — cross-project fit | task-043 | done |
 
 ---
 
