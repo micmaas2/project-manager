@@ -23,12 +23,20 @@ from uptime_kuma_api import UptimeKumaApi, MonitorType, NotificationType
 
 KUMA_URL = "http://localhost:3001"
 ADMIN_USER = "admin"
-ADMIN_PASS = os.environ.get("KUMA_ADMIN_PASS", "changeme123!")
 
-# From /opt/mas/.env
-TELEGRAM_BOT_TOKEN = os.environ.get(
-    "TELEGRAM_BOT_TOKEN", "REDACTED_TELEGRAM_TOKEN"
-)
+# Required env vars — script exits immediately if absent (no hardcoded fallbacks)
+try:
+    ADMIN_PASS = os.environ["KUMA_ADMIN_PASS"]
+except KeyError:
+    print("ERROR: KUMA_ADMIN_PASS env var required (e.g. export KUMA_ADMIN_PASS='...')")
+    sys.exit(1)
+
+try:
+    TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+except KeyError:
+    print("ERROR: TELEGRAM_BOT_TOKEN env var required (copy from /opt/mas/.env on Pi4)")
+    sys.exit(1)
+
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "7761755508")
 
 # Internal Docker network URL — more reliable than external DNS (mas.femic.nl has no public record)

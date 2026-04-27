@@ -2,8 +2,10 @@
 # verify-health.sh — task-046: MAS backend /health endpoint verification
 #
 # Usage:
-#   ./verify-health.sh               # check https://mas.femic.nl/api/health (default)
+#   ./verify-health.sh               # check http://mas-backend:8000/health (default)
 #   HEALTH_URL=http://... ./verify-health.sh  # override URL for local testing
+#
+# Requires Docker network context (run inside mas network) or override HEALTH_URL
 #
 # Exit codes:
 #   0 — HTTP 200 received (endpoint healthy)
@@ -11,7 +13,8 @@
 
 set -euo pipefail
 
-HEALTH_URL="${HEALTH_URL:-https://mas.femic.nl/api/health}"
+# Requires Docker network context (run inside mas network) or override HEALTH_URL
+HEALTH_URL="${HEALTH_URL:-http://mas-backend:8000/health}"
 TIMEOUT=10
 
 echo "Checking MAS /health endpoint: ${HEALTH_URL}"

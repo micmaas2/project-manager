@@ -33,7 +33,7 @@
 |------|-----------|-------|
 | Deploy Uptime-Kuma container | YES | `docker run` with `--restart=unless-stopped` |
 | Connect to mas_mas-network | YES | `docker network connect` |
-| Create admin account | YES via script | `KUMA_ADMIN_PASS='MasAdmin2026!'` |
+| Create admin account | YES via script | `KUMA_ADMIN_PASS=<redacted — set via KUMA_ADMIN_PASS env var>` |
 | Configure Telegram notification | YES via script | Uses MAS bot token + chat_id |
 | Create HTTP monitor | YES via script | `http://mas-backend:8000/health`, 60s interval, 3 retries |
 | Verify monitor is UP | YES | `get_monitor_status(1)` returns `MonitorStatus.UP` |
@@ -42,7 +42,7 @@
 
 ## What is left manual
 
-1. **Access Uptime-Kuma UI**: `http://192.168.1.10:3001` — login with `admin` / `MasAdmin2026!`
+1. **Access Uptime-Kuma UI**: `http://192.168.1.10:3001` — login with `admin` / `<redacted — see KUMA_ADMIN_PASS env var>`
    - The admin password is stored only in the operator's memory; not committed to any file
 2. **Test Telegram alert**: manually stop mas-backend and wait ~3 minutes (see deploy-notes.md)
 3. **Kuma admin password change**: recommend changing after first login
@@ -60,3 +60,10 @@
 
 ## Advisor Consults
 None required — decision was straightforward.
+
+---
+
+## Fix Loop (Reviewer + CQR blocking findings)
+- F1/F2: Removed hardcoded credential fallbacks; script now fails fast if TELEGRAM_BOT_TOKEN or KUMA_ADMIN_PASS env vars are absent
+- F3: Redacted admin password from build_notes.md
+- F4: Fixed verify-health.sh default URL to http://mas-backend:8000/health

@@ -73,7 +73,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-060 | EPIC-003 | mas_agent: Add Telegram sender chat_id validation in telegram_listener.py — drop updates from unauthorized chat IDs with warning log (arch-review mas-P2) | pi-homelab | P1 | done | 2026-04-11 |
 | BL-061 | EPIC-003 | mas_agent: Upgrade LLM_PRIMARY_MODEL from claude-3-5-sonnet-20240620 to claude-sonnet-4-6 in mas_personal_assistant (arch-review mas-P3) | pi-homelab | P2 | done | 2026-04-11 |
 | BL-062 | EPIC-003 | mas_agent: Add hard budget enforcement to LLMClient.chat() — call check_budget() before each API call; raise BudgetExceededError and log if exceeded (arch-review mas-P4) | pi-homelab | P2 | done | 2026-04-11 |
-| BL-063 | EPIC-003 | mas_agent: Configure external uptime monitoring for mas-backend /health endpoint — UptimeRobot or Uptime-Kuma; Telegram alert if non-200 for >5 min (arch-review mas-P5) | pi-homelab | P2 | in_progress | 2026-04-11 |
+| BL-063 | EPIC-003 | mas_agent: Configure external uptime monitoring for mas-backend /health endpoint — UptimeRobot or Uptime-Kuma; Telegram alert if non-200 for >5 min (arch-review mas-P5) | pi-homelab | P2 | done | 2026-04-11 |
 | BL-064 | EPIC-003 | project_manager: Cross-project kanban view script — generate a unified markdown kanban across all managed projects from queue.json + project-registry.md; callable from /pm-status (S-003-3) | project_manager | P2 | done | 2026-04-11 |
 | BL-065 | EPIC-003 | mas_agent: Daily facts still incorrect wrt birth dates — regression or new bug after task-012 fix | pi-homelab | P1 | done | 2026-04-13 |
 | BL-066 | EPIC-003 | New project proposal: ActiveControl-like SAP change and transport management platform (AI-powered) | ccas | P2 | new | 2026-04-13 |
