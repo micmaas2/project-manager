@@ -110,8 +110,8 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 | Story ID | Title | Queue Task | Status |
 |---|---|---|---|
-| S-006-1 | MAS: Upgrade LLM_PRIMARY_MODEL → claude-sonnet-4-6 | task-044 | in_progress |
-| S-006-2 | MAS: Add hard budget enforcement to LLMClient.chat() | task-045 | in_progress |
+| S-006-1 | MAS: Upgrade LLM_PRIMARY_MODEL → claude-sonnet-4-6 | task-044 | done |
+| S-006-2 | MAS: Add hard budget enforcement to LLMClient.chat() | task-045 | done |
 | S-006-3 | MAS: Configure uptime monitoring for /health endpoint | task-046 | in_progress |
 | S-006-4 | Install security-guidance PreToolUse hook | task-047 | in_progress |
 | S-006-5 | Run claude-automation-recommender across all projects | task-048 | in_progress |
