@@ -362,6 +362,82 @@ used by the Tester independent of live system state.
 
 ---
 
+## Security Hooks
+
+A **PreToolUse** hook intercepts every `Edit`, `Write`, and `MultiEdit` tool call in Claude Code and blocks writes containing known-dangerous patterns before they reach the filesystem.
+
+### Script location
+
+```
+hooks/security_reminder_hook.py    Local patched copy (stable — used in settings.json)
+```
+
+The hook is registered in `.claude/settings.json`:
+
+```json
+"hooks": {
+  "PreToolUse": [
+    {
+      "matcher": "Edit|Write|MultiEdit",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 /opt/claude/project_manager/hooks/security_reminder_hook.py"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Patterns blocked
+
+| Pattern | Risk |
+|---|---|
+| `eval(` | Arbitrary code execution |
+| `os.system` / `from os import system` | Command injection |
+| `pickle` | Arbitrary code execution via deserialization |
+| `.innerHTML =` / `.innerHTML=` | XSS |
+| `dangerouslySetInnerHTML` | XSS (React) |
+| `document.write` | XSS |
+| `new Function` | Code injection |
+| `child_process.exec` | Command injection (Node.js) |
+| `.github/workflows/*.yml` path | GitHub Actions command injection |
+
+A match blocks the write (exit code 2) and prints a remediation message to stderr. Each pattern is blocked once per session per file; subsequent occurrences in the same session are allowed through (so legitimate fixes are not blocked). Set `ENABLE_SECURITY_REMINDER=0` to disable the hook for an entire session.
+
+**Patch note**: the local copy removes the broad `exec(` substring from the `child_process_exec` rule (present in the upstream plugin), keeping only the more specific `child_process.exec` and `execSync(` patterns. This prevents false positives on SQL `.execute(` calls and similar names.
+
+### Testing the hook
+
+Simulate a blocked write directly with a JSON payload on stdin:
+
+```bash
+HOOK="hooks/security_reminder_hook.py"
+
+# Should BLOCK (exit 2) — os.system pattern
+printf '{"session_id":"t1","tool_name":"Write","tool_input":{"file_path":"/tmp/t.py","content":"os.system(\"id\")"}}' \
+  | python3 "$HOOK"
+echo "Expected exit 2, got: $?"
+
+# Should ALLOW (exit 0) — clean content
+printf '{"session_id":"t2","tool_name":"Write","tool_input":{"file_path":"/tmp/t.py","content":"x = 1"}}' \
+  | python3 "$HOOK"
+echo "Expected exit 0, got: $?"
+```
+
+Debug log (written on errors only): `/tmp/security-warnings-log.txt`
+
+### Extending to other projects
+
+See `artefacts/task-047/extension-guide.md` for step-by-step deployment instructions for:
+- Other local projects (pensieve, pi-homelab, CCAS, genealogie)
+- Remote hosts (MAS on Pi4 at `192.168.1.10`)
+
+The extension guide includes the exact JSON snippet to add to any project's `.claude/settings.json` and a merge-safe Python one-liner for settings files that already have other keys.
+
+---
+
 ## Branching and Commit Format
 
 ```
