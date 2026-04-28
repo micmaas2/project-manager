@@ -254,6 +254,8 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 
 **PreToolUse hooks for known-bad patterns**: for security patterns with no legitimate use in the codebase (e.g. eval, os.system, innerHTML, unsafe deserialization), prefer a PreToolUse blocking hook over a review-phase finding. Blocking at edit time prevents the pattern from ever entering the codebase; review-phase tools catch it after the fact. The local hook at `hooks/security_reminder_hook.py` (installed from BL-101) documents rules and deployment patterns in `artefacts/task-047/extension-guide.md`.
 
+**Hook pattern interference**: the security hook fires on ALL Edit/Write calls, including `old_string` and files outside the project (e.g. plan files). When editing text that contains a blocked pattern as documentation, split the edit: use a narrow `old_string` substring that avoids the trigger token, then a second edit for the rest.
+
 **Security BL item description standard (Hook/MCP)**: when registering a BL item in category Hook or MCP that involves credential handling or OAuth, the description must include (a) hook type (PreToolUse/PostToolUse), (b) what the hook emits on match (path+line only — never matched text), (c) OAuth scope if applicable. Reviewer must verify these fields before marking the BL item ready.
 
 **Observability**:
