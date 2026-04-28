@@ -58,6 +58,26 @@ prompt: |
   - confidence < 80: log the finding to build_notes.md under "Low-confidence Findings" only — do not loop.
   This prevents churn from uncertain style observations while ensuring real defects are fixed.
 
+  ## Pre-submission Checks
+
+  **Credential handling**: for any script reading a credential from environment, use
+  `os.environ["KEY"]` with an exception handler — never `os.environ.get("KEY", fallback)`.
+  The exception handler must log a descriptive error and exit; do not silently proceed with
+  placeholder values.
+
+  **Versioned library behavior gaps**: when using a library with known silent behavior gaps
+  (features dropped, parameters not persisted at runtime):
+  1. State library name and version in the comment.
+  2. State the specific limitation (e.g. "parameter X is silently dropped at runtime").
+  3. Recommend the workaround or document the intended replacement behavior.
+  Keep code comments consistent with documented behavior — contradictions mislead maintainers.
+
+  **Hook installation pre-submission check**: before writing artefacts that may trigger a
+  PreToolUse hook during testing, run a benign test payload first (e.g. a file containing only
+  `x = 1 + 1`) to verify the hook does not fire on clean code. Only after that verification
+  write artefacts containing patterns the hook blocks. This prevents the hook from blocking
+  its own installation artefacts and reduces the risk of silent guard misconfigurations.
+
   Label all outputs: [Sonnet]
 
 policy:

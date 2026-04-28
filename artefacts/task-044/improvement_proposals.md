@@ -19,7 +19,7 @@
 
 **Rationale**: task-044 required a second commit solely to add `claude-sonnet-4-6` pricing after CQR caught a ~20× underestimate in cost accounting. The fix was two lines and caught only because CQR ran. Without this checklist item, a future model upgrade task could ship with silent cost corruption. The pattern is predictable and recurring: every model name upgrade creates a pricing-table gap. Making it a DoD item costs nothing and prevents a category of silent data corruption.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -38,7 +38,7 @@ not against 100%, to prove failures predate the task.
 
 **Rationale**: task-044 had 14/148 pre-existing test failures (expired OAuth, API mismatches, missing DB tables). The Tester correctly identified them as pre-existing, but required git log analysis to prove it. A stored baseline snapshot makes this comparison immediate and auditable. The pattern will recur on every Pi4 MAS or pensieve task — those repos have long-running technical debt visible in their test suites.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -58,4 +58,4 @@ technical impact assessment.
 
 **Rationale**: task-044 Reviewer rated the cost_tracker gap at confidence 45 (below the fix threshold) because it appeared to be a pre-existing gap — not a regression. CQR independently applied fallback-logic analysis and rated it confidence 92 (BLOCKING). Without CQR running in parallel, this fix would have been deferred to a future task, allowing ~20× cost underestimates to accumulate silently in the database. The lesson is not that Reviewer failed — it is that CQR provides a categorically different analysis lens (impact analysis vs. scope analysis) that cannot be substituted.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

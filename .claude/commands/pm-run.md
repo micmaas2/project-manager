@@ -4,6 +4,16 @@
 
 Find and execute the next task through the full pipeline.
 
+## Plan Mode Recovery
+
+If plan mode activates unexpectedly during skill execution:
+1. Write a checkpoint plan file at `/root/.claude/plans/pm-run-recovery-<task_id>.md` with:
+   - Current task_id and artefact_path
+   - Pipeline stage where interruption occurred
+   - Remaining stages to complete
+2. Call ExitPlanMode.
+3. After approval, re-read `tasks/queue.json` to confirm task state, then resume from the listed stage.
+
 ## Steps
 
 **1. Find next task**

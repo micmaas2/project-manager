@@ -16,7 +16,7 @@ PreToolUse hooks for known-bad patterns: for security patterns with no legitimat
 
 **Rationale**: Now that task-047 is complete with a working hook implementation and comprehensive extension guide, the generic "reference implementation" note should be updated to point to the actual local hook and its documentation. This makes the reference actionable rather than abstract.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -32,7 +32,7 @@ Hook installation pre-submission check (for PreToolUse hooks): Before writing ar
 
 **Rationale**: task-047 encountered a real operational issue: the security hook fired on the build_notes.md containing `exec(` during the Builder's own artefact creation, demonstrating that artefact files can trigger security guards. While the session handled this by bypassing and documenting the block, a future Builder installing a hook should test the hook with benign payloads first before writing content that matches the blocked patterns. This becomes a reusable pattern for any hook installation task.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -48,4 +48,4 @@ Hook installation pre-submission check (for PreToolUse hooks): Before writing ar
 
 **Rationale**: The "copy external dependency locally before patching" pattern emerged naturally from task-047's workflow and is reusable for any marketplace hook or utility. Documenting it in lessons.md makes it available for future Builder sessions that install similar marketplace tools.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

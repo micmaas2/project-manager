@@ -145,6 +145,7 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 - Log output sanitized (ANSI + control chars stripped) before writing to file?
 - If the script accepts file-path arguments (e.g. `--queue`, `--backlog`, `--config`): add a `_safe_path()` containment guard that resolves the path and asserts `_WORKSPACE_ROOT in path.parents` — exit 1 with a descriptive error if not. Document the workspace root as a module-level constant.
 - If any env var holds a secret (TOKEN, KEY, PASS, SECRET, CREDENTIAL): use the fail-fast pattern (`os.environ.get("VAR")` + explicit None-check + `sys.exit(1)`) — never supply a non-empty fallback default to `os.environ.get()`. A non-empty fallback silently uses a hardcoded credential when the env var is unset.
+- When config fields have defaults defined (e.g. `Field(default=10)`), do not use `or` short-circuit fallbacks at runtime — they silently break the zero-as-disable intent. Replace `budget_usd = config.value or 10` with `budget_usd = config.value if config.value is not None else 10`, or remove the fallback entirely if the config default is already correct.
 
 **Review doc redaction rule**: when a Reviewer documents the "original vulnerable code" in a finding, replace the actual credential value with `<REDACTED>` — never quote a live token, password, or key verbatim, even inside a code block. The vulnerable pattern can be reconstructed from git diff; an exposed live credential cannot be un-leaked.
 
@@ -214,6 +215,11 @@ Security/arch impact: <note>
   - If the task rotates a credential or secret (PAT, API key, token):
       - Rollback section must include "Estimated time-to-restore: N-M minutes"
       - Estimate covers worst-case manual steps (e.g. generate new token + 2 config updates)
+  - If the task implements a budget enforcement or rate-limiting gate: add a
+    "comment-at-call-site" checklist item ensuring all guard calls carry explicit notes
+    explaining why the guard must remain at the current scope level (e.g. outside try/except).
+    Maintenance traps where guards are inadvertently moved to a scope they do not protect
+    against are non-obvious failures.
 No external deps: true/false  (if true: stdlib/built-ins only; no pip/npm installs)
 Prerequisites: [tool >= version, ...]
 Tests: unit/integration/regression
@@ -223,6 +229,11 @@ Cost estimate: EUR ...
   - If cost estimate is based on caching: state lower bound (realistic hit rate) AND upper bound (100% hit rate); document cache TTL caveat (Anthropic: 5 min)
   - If cost estimate involves token counts: state assumed input/output split explicitly (e.g. 3,500 input / 1,500 output per run)
 Definition of Done: <checklist>
+  - If this task changes or adds an LLM model string: verify the model string appears in
+    cost_tracker (or equivalent pricing table); add the pricing entry before closing the task.
+  - [ ] No credentials or sensitive values are committed in artefact files. If a credential
+    (password, token, key) is mentioned in build_notes.md or other docs, redact it to
+    `<redacted — see ENV_VAR_NAME>` or `<set-via-env>`.
 Incident owner: <Name / Role>
 ```
 
@@ -241,7 +252,9 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 - Prompt sanitization; adversarial tests for prompt injection
 - Runbook verification commands that read secret files: always pipe through `head -c N` or `grep -c`; add a warning note discouraging bare `cat` on recorded/shared terminals (shell history risk)
 
-**PreToolUse hooks for known-bad patterns**: for security patterns with no legitimate use in the codebase (e.g. eval, os.system, innerHTML, pickle), prefer a PreToolUse blocking hook over a review-phase finding. Blocking at edit time prevents the pattern from ever entering the codebase; review-phase tools catch it after the fact. Use `security-guidance` (BL-101) as the reference implementation.
+**PreToolUse hooks for known-bad patterns**: for security patterns with no legitimate use in the codebase (e.g. eval, os.system, innerHTML, unsafe deserialization), prefer a PreToolUse blocking hook over a review-phase finding. Blocking at edit time prevents the pattern from ever entering the codebase; review-phase tools catch it after the fact. The local hook at `hooks/security_reminder_hook.py` (installed from BL-101) documents rules and deployment patterns in `artefacts/task-047/extension-guide.md`.
+
+**Security BL item description standard (Hook/MCP)**: when registering a BL item in category Hook or MCP that involves credential handling or OAuth, the description must include (a) hook type (PreToolUse/PostToolUse), (b) what the hook emits on match (path+line only — never matched text), (c) OAuth scope if applicable. Reviewer must verify these fields before marking the BL item ready.
 
 **Observability**:
 - Audit trail: who, agent, action, time, artefact
@@ -271,6 +284,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 4. **Verify before done**: never mark complete without proving it works. Ask: "Would a staff engineer approve this?"
    **Artefact minimum for git-only tasks**: even when no code is produced, create `artefacts/<task-id>/verification.md` capturing: commands run (e.g. `git log --oneline`, `ls` of key files), their output, and a PASS/FAIL verdict per acceptance criterion. Tasks with no artefact directory cannot be retrospected by SelfImprover.
    **Architecture/research task Definition of Done**: must include "all `NEW:` proposals in the review document are registered as BL items in `tasks/backlog.md`" — SelfImprover does not do this automatically; it is a required explicit step before marking done. For tasks reviewing an external repo/course: minimum 2 research rounds; second round must fetch SKILL.md / agent source files, not just directory listings.
+   **External repo baseline**: for tasks targeting an external repo (Pi4 /opt/mas/, /opt/claude/pensieve/, etc.), capture a baseline test run as the first artefact step and store it as `artefacts/<task-id>/baseline_test_run.txt`. The Tester compares against the baseline, not against 100%, to prove failures predate the task.
    **Content migration checklist** (when moving a section from CLAUDE.md to a linked doc):
    1. Pre-move mapping: list every sentence in the source section
    2. Destination verification: confirm each sentence appears in the destination doc
@@ -282,6 +296,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
    ```
    Builder
      → [Reviewer (YAML agent) + code-quality-reviewer (built-in)] — run IN PARALLEL; combine findings before looping Builder
+       (`code-quality-reviewer` must run for ALL task types, including config-only changes, model upgrades, and documentation migrations — silent corruption risks are invisible to scope-limited Reviewer analysis and only surface under CQR technical impact assessment)
      → Tester
      → [DocUpdater (YAML agent) + docs-readme-writer (built-in)]  — run IN PARALLEL
      → SelfImprover (YAML agent)
@@ -290,7 +305,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
    - `code-quality-reviewer` — security, quality, best-practices check on all new/modified code
    - `docs-readme-writer` — creates/updates README and module docs for code-producing tasks
 
-   **Doc stage file ownership**: when DocUpdater and docs-readme-writer run in parallel, assign ownership explicitly: DocUpdater → `CHANGELOG.md`; docs-readme-writer → `README.md`. This prevents overwrite conflicts when both agents target the same file.
+   **Doc stage file ownership**: when DocUpdater and docs-readme-writer run in parallel, assign ownership explicitly: DocUpdater → `CHANGELOG.md`; docs-readme-writer → `README.md`. This prevents overwrite conflicts when both agents target the same file. If docs-readme-writer does not confirm README.md was modified in its output, the parent agent must apply the README update directly before committing.
 6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval. After all proposals are resolved, invoke `revise-claude-md` via the `Skill` tool (not `Agent`) to bake session learnings into CLAUDE.md and commit the result. **Cross-file consistency check**: when a proposal introduces a format definition (e.g. improvement_proposals.md schema), verify the format is identical in both CLAUDE.md and the relevant agent YAML before presenting to the user. **Proposal response format**: user replies `APPROVE: P1, P3 / REJECT: P2` — apply all approved in one pass, log rejections. **SelfImprover dedup**: when running SelfImprover for multiple tasks in a session, collect all proposals before presenting — remove duplicates and proposals targeting text already present in the target file. **Scanning for pending proposals**: `find artefacts -name "improvement_proposals.md" | xargs grep -lE "^\*\*Status\*\*: REQUIRES_HUMAN_APPROVAL"` — `^` prevents false positives from body text quoting the pattern; do NOT use `grep -rl`. **pm-propose commit discipline**: after applying approved proposals that edit CLAUDE.md, immediately commit on the current feature branch before proceeding — do not leave session-learning edits unstaged across a context boundary.
 7. **Autonomous bug fixing**: when given a bug report, fix it — point at logs/errors, then resolve.
 8. **Demand elegance (balanced)**: pause and ask "Is there a more elegant way?" before finalising any non-trivial design. Skip for simple fixes — do not over-engineer.

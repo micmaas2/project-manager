@@ -43,6 +43,22 @@ if [[ -n "$STAGED" ]]; then
   done <<< "$STAGED"
 fi
 
+# 2b. Scan staged artefacts/ for credential patterns
+CRED_PATTERNS=(
+  '[0-9]{10}:[A-Za-z0-9_-]{35}'
+  'password[[:space:]]*[:=][[:space:]]*[A-Za-z0-9!@#$%^&*]{8,}'
+)
+STAGED_ARTEFACTS=$(echo "$STAGED" | grep '^artefacts/' || true)
+if [[ -n "$STAGED_ARTEFACTS" ]]; then
+  for pattern in "${CRED_PATTERNS[@]}"; do
+    MATCH=$(git diff --cached -- 'artefacts/*' 2>/dev/null | grep '^\+' | grep -v '^\+\+\+' | grep -v '<redact' | grep -E "$pattern" || true)
+    if [[ -n "$MATCH" ]]; then
+      printf "%b[pre-commit] ERROR: Credential pattern detected in staged artefacts. Redact and retry.%b\n" "$RED" "$NC"
+      exit 1
+    fi
+  done
+fi
+
 # 3. Agent YAML policy-schema consistency check (M-1 guard)
 # Every .claude/agents/*.yaml must have all required policy fields.
 REQUIRED_POLICY_FIELDS=("allowed_tools" "max_tokens_per_run" "require_human_approval" "audit_logging" "external_calls_allowed")
