@@ -6,6 +6,16 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-047] — 2026-04-28
+### Added
+- `hooks/security_reminder_hook.py`: PreToolUse hook blocking dangerous code patterns at edit time. Patterns guarded: eval, dynamic code execution, unsafe DOM operations, and dangerous serialization libraries. Patched: false-positive check removed; state files restricted to mode `0o600`.
+- `artefacts/task-047/extension-guide.md`: Guide for extending the hook with additional security patterns.
+
+### Changed
+- `.claude/settings.json`: Registered `security_reminder_hook.py` as a PreToolUse hook to enforce pattern blocking on every Edit operation.
+
+---
+
 ## [task-044] — 2026-04-21
 ### Changed
 - `mas/src/config.py`: Upgraded `LLM_PRIMARY_MODEL` default from `claude-3-5-sonnet-20240620` to `claude-sonnet-4-6` (Pydantic settings).
