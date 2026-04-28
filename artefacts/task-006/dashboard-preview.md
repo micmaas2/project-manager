@@ -1,12 +1,12 @@
 # Project Dashboard
-_Last updated: 2026-04-28 10:30_
+_Last updated: 2026-04-28 11:30_
 
 ## Queue Status
 
 | Status | Count |
 |---|---|
-| pending | 3 |
-| in_progress | 0 |
+| pending | 2 |
+| in_progress | 1 |
 | paused | 0 |
 | review | 0 |
 | test | 0 |
@@ -14,7 +14,7 @@ _Last updated: 2026-04-28 10:30_
 
 ## Active Tasks
 
-_No tasks currently in progress._
+- **task-048** [project_manager] Run claude-automation-recommender across all managed projects (BL-102) — builder
 
 ## Recently Completed
 
@@ -26,7 +26,6 @@ _No tasks currently in progress._
 
 ## Next Up (Pending)
 
-- **task-048** [project_manager] Run claude-automation-recommender across all managed projects (BL-102)
 - **task-049** [project_manager] Hooks-over-prompts audit — implement top 3 rules as hooks (BL-088)
 - **task-050** [project_manager] SelfImprover: add confidence score + project scope to lessons.md (BL-085)
 

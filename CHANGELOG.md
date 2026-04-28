@@ -6,6 +6,17 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-048] — 2026-04-28
+### Added
+- `artefacts/task-048/research_report.md`: Cross-project automation-recommender analysis covering all 7 managed projects (project_manager, CCAS, pi-homelab, pensieve, genealogie, performance_HPT, project1). Per-project recommendation tables categorized by hooks, MCPs, skills, and subagents.
+- `tasks/backlog.md`: Registered 10 new adopt items (BL-104 through BL-113) capturing recommended automations from analysis.
+
+### Changed
+- BL-107 (CCAS SAP credential hook): Upgraded hook trigger from post-commit to PreToolUse; scanner must emit path+line only, never matched credential text.
+- BL-111 (pensieve Gmail MCP): Scoped to `gmail.readonly` + keychain-based token storage (not plaintext MCP config).
+
+---
+
 ## [task-047] — 2026-04-28
 ### Added
 - `hooks/security_reminder_hook.py`: PreToolUse hook blocking dangerous code patterns at edit time. Patterns guarded: eval, dynamic code execution, unsafe DOM operations, and dangerous serialization libraries. Patched: false-positive check removed; state files restricted to mode `0o600`.
