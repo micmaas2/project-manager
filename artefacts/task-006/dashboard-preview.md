@@ -1,28 +1,28 @@
 # Project Dashboard
-_Last updated: 2026-04-28 11:30_
+_Last updated: 2026-04-28 15:30_
 
 ## Queue Status
 
 | Status | Count |
 |---|---|
 | pending | 2 |
-| in_progress | 1 |
+| in_progress | 0 |
 | paused | 0 |
 | review | 0 |
 | test | 0 |
-| done | 46 |
+| done | 47 |
 
 ## Active Tasks
 
-- **task-048** [project_manager] Run claude-automation-recommender across all managed projects (BL-102) — builder
+_No tasks currently in progress._
 
 ## Recently Completed
 
+- **task-048** Run claude-automation-recommender across all managed projects (BL-102) [2026-04-28]
 - **task-047** Install security-guidance PreToolUse hook in project_manager (BL-101) [2026-04-28]
 - **task-046** MAS: Configure uptime monitoring for /health endpoint (BL-063) [2026-04-27]
 - **task-045** MAS: Add hard budget enforcement to LLMClient.chat() (BL-062) [2026-04-27]
 - **task-044** MAS: Upgrade LLM_PRIMARY_MODEL → claude-sonnet-4-6 (BL-061) [2026-04-21]
-- **task-043** project_manager: Claude Code skills investigation — cross-project fit (BL-100) [2026-04-21]
 
 ## Next Up (Pending)
 
