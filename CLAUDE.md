@@ -144,6 +144,9 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 - If outbound git/SSH: auth path exported explicitly?
 - Log output sanitized (ANSI + control chars stripped) before writing to file?
 - If the script accepts file-path arguments (e.g. `--queue`, `--backlog`, `--config`): add a `_safe_path()` containment guard that resolves the path and asserts `_WORKSPACE_ROOT in path.parents` — exit 1 with a descriptive error if not. Document the workspace root as a module-level constant.
+- If any env var holds a secret (TOKEN, KEY, PASS, SECRET, CREDENTIAL): use the fail-fast pattern (`os.environ.get("VAR")` + explicit None-check + `sys.exit(1)`) — never supply a non-empty fallback default to `os.environ.get()`. A non-empty fallback silently uses a hardcoded credential when the env var is unset.
+
+**Review doc redaction rule**: when a Reviewer documents the "original vulnerable code" in a finding, replace the actual credential value with `<REDACTED>` — never quote a live token, password, or key verbatim, even inside a code block. The vulnerable pattern can be reconstructed from git diff; an exposed live credential cannot be un-leaked.
 
 **Prompt writing discipline**: All agent prompts MUST use imperative voice addressed to the agent itself ("You will", "Do not", "Stop if"). Never narrate what other agents do — instead state this agent's responsibility relative to other agents' outputs. Orchestration sequencing (waiting, parallelism) belongs in design docs, not embedded in agent prompts.
 

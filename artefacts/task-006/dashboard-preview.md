@@ -1,16 +1,16 @@
 # Project Dashboard
-_Last updated: 2026-04-21 09:00_
+_Last updated: 2026-04-28 10:30_
 
 ## Queue Status
 
 | Status | Count |
 |---|---|
-| pending | 0 |
+| pending | 3 |
 | in_progress | 0 |
 | paused | 0 |
 | review | 0 |
 | test | 0 |
-| done | 42 |
+| done | 46 |
 
 ## Active Tasks
 
@@ -18,15 +18,17 @@ _No tasks currently in progress._
 
 ## Recently Completed
 
+- **task-047** Install security-guidance PreToolUse hook in project_manager (BL-101) [2026-04-28]
+- **task-046** MAS: Configure uptime monitoring for /health endpoint (BL-063) [2026-04-27]
+- **task-045** MAS: Add hard budget enforcement to LLMClient.chat() (BL-062) [2026-04-27]
+- **task-044** MAS: Upgrade LLM_PRIMARY_MODEL → claude-sonnet-4-6 (BL-061) [2026-04-21]
 - **task-043** project_manager: Claude Code skills investigation — cross-project fit (BL-100) [2026-04-21]
-- **task-042** project_manager: Model version pins review and update (BL-098) [2026-04-19]
-- **task-041** project_manager: /pm-run plan-mode gate evaluation (BL-097) [2026-04-19]
-- **task-040** project_manager: Agent model usage audit — cost reduction opportunities (BL-099) [2026-04-19]
-- **task-039** project_manager: Cost-aware model routing design (BL-093) [2026-04-18]
 
 ## Next Up (Pending)
 
-_No pending tasks._
+- **task-048** [project_manager] Run claude-automation-recommender across all managed projects (BL-102)
+- **task-049** [project_manager] Hooks-over-prompts audit — implement top 3 rules as hooks (BL-088)
+- **task-050** [project_manager] SelfImprover: add confidence score + project scope to lessons.md (BL-085)
 
 ## Maintenance — Due Soon
 

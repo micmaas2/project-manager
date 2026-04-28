@@ -7,6 +7,7 @@ This hook checks for security patterns in file edits and warns about potential v
 import json
 import os
 import random
+import re
 import sys
 from datetime import datetime
 
@@ -126,6 +127,35 @@ Only use exec() if you absolutely need shell features and the input is guarantee
 ]
 
 
+REGEX_SECURITY_PATTERNS = [
+    {
+        "ruleName": "telegram_bot_token",
+        "pattern": re.compile(r"\b\d{8,10}:[A-Za-z0-9_\-]{35,36}\b"),
+        "reminder": """⛔ BLOCKED: Telegram bot token pattern detected.
+Tokens must never be written to files. Use environment variables and fail-fast:
+
+  TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+  if not TELEGRAM_BOT_TOKEN:
+      sys.exit("ERROR: TELEGRAM_BOT_TOKEN env var required")
+
+In review/doc files, replace the actual token with <REDACTED>.""",
+    },
+    {
+        "ruleName": "env_get_secret_default",
+        "pattern": re.compile(
+            r"""os\.environ\.get\(\s*['"][A-Z_]*(?:TOKEN|SECRET|KEY|PASS(?:WORD)?|CREDENTIAL|API_KEY)['"]\s*,\s*['"][^'"]{6,}['"]\s*\)"""
+        ),
+        "reminder": """⛔ BLOCKED: os.environ.get() with a non-empty fallback for a secret variable.
+Use the fail-fast pattern instead:
+
+  VALUE = os.environ.get("VAR_NAME")
+  if not VALUE:
+      print("ERROR: VAR_NAME env var required")
+      sys.exit(1)""",
+    },
+]
+
+
 def get_state_file(session_id):
     """Get session-specific state file path."""
     return os.path.expanduser(f"~/.claude/security_warnings_state_{session_id}.json")
@@ -196,6 +226,12 @@ def check_patterns(file_path, content):
             for substring in pattern["substrings"]:
                 if substring in content:
                     return pattern["ruleName"], pattern["reminder"]
+
+    # Regex patterns (content-only)
+    if content:
+        for rp in REGEX_SECURITY_PATTERNS:
+            if rp["pattern"].search(content):
+                return rp["ruleName"], rp["reminder"]
 
     return None, None
 

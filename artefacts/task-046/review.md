@@ -27,7 +27,7 @@ Both `ADMIN_PASS` and `TELEGRAM_BOT_TOKEN` fall back to hard-coded literal value
 ```python
 ADMIN_PASS = os.environ.get("KUMA_ADMIN_PASS", "changeme123!")
 TELEGRAM_BOT_TOKEN = os.environ.get(
-    "TELEGRAM_BOT_TOKEN", "REDACTED_TELEGRAM_TOKEN"
+    "TELEGRAM_BOT_TOKEN", "<REDACTED>"
 )
 ```
 
