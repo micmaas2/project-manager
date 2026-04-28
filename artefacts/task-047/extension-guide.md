@@ -173,3 +173,17 @@ echo "Expected exit 0, got: $?"
 | False positive on legitimate code | Pattern too broad (e.g. `eval(` matching other names) | Set `ENABLE_SECURITY_REMINDER=0` for that session |
 
 Hook debug log: `/tmp/security-warnings-log.txt` (written on errors only).
+
+**Hook not firing after plugin update**: the absolute plugin path (`/root/.claude/plugins/.../security_reminder_hook.py`) breaks if the plugin directory is moved, reinstalled, or updated. Use the local project copy (`hooks/security_reminder_hook.py`) instead — it is stable across plugin updates. Copy with:
+
+```bash
+cp /root/.claude/plugins/marketplaces/claude-plugins-official/plugins/security-guidance/hooks/security_reminder_hook.py hooks/security_reminder_hook.py
+```
+
+Then update `settings.json` to use the local path:
+
+```json
+"command": "python3 /opt/claude/project_manager/hooks/security_reminder_hook.py"
+```
+
+**False positives on `.execute(` SQL calls or function names containing `exec(`**: the upstream hook includes a broad `exec(` substring in the `child_process_exec` pattern. The local copy in this repo removes it, keeping only the more specific `child_process.exec` and `execSync(` patterns. If you see unexpected blocks, verify you are using the patched local copy at `hooks/security_reminder_hook.py`.

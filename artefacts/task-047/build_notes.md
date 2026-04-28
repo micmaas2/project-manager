@@ -76,7 +76,7 @@ The hook was confirmed active during installation. When the Write tool was calle
 
 ```bash
 # Test eval_injection pattern — expects exit code 2 + stderr warning
-echo '{"session_id":"test","tool_name":"Write","tool_input":{"file_path":"/tmp/test.py","content":"x = eval_call(\"1+1\")"}}' \
+echo '{"session_id":"test","tool_name":"Write","tool_input":{"file_path":"/tmp/test.py","content":"x = eval(\"1+1\")"}}' \
   | python3 /path/to/security_reminder_hook.py
 
 # Test clean file — expects exit code 0
