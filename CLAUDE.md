@@ -417,6 +417,14 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 SSH alias: `pi4` (192.168.1.10). n8n runs as Docker container `n8n`.
 GitHub PAT: `/opt/n8n/github-pat` on Pi4. See `docs/n8n-deployment.md` for: full deploy sequence, import gotchas, Pi4 Docker patterns, workflow JSON patterns.
 
+**MAS stack on Pi4**: docker-compose file is at `/opt/mas/docker/mas/docker-compose.production.yml` (not `/opt/mas/docker-compose.yml`). Use `docker compose` (v2, with space) — `docker-compose` (v1) is broken on this Pi4 (`ModuleNotFoundError: No module named 'compose'`).
+
+**`docker restart` does not reload `env_file`**: `env_file` values are baked in at container creation. To pick up changes to `/opt/mas/.env.production`, run `docker compose -f docker/mas/docker-compose.production.yml up -d <service>` from `/opt/mas` — not `docker restart`. Verify with `docker exec <container> env | grep <VAR>`.
+
+**MAS daily fact scheduler**: APScheduler job `daily_fact_delivery` runs at 10:00 `Europe/Amsterdam` inside `mas-backend`. If the scheduled message is missing, check `docker logs mas-backend` for `401 Unauthorized` (stale token) before investigating the scheduler itself.
+
+**grep alternation over SSH**: `ssh pi4 "... | grep 'a\|b'"` fails on Pi4 bash (`command not found`). Use `-E` flag instead: `grep -E 'a|b'`.
+
 **Vault location**: `/opt/obsidian-vault/` exists on Pi4 only — not on the local host.
 Explore agents run locally; always use `ssh pi4 "find /opt/obsidian-vault ..."` for vault state.
 
