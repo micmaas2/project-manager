@@ -10,6 +10,19 @@
           {
             "type": "command",
             "command": "python3 /opt/claude/project_manager/hooks/security_reminder_hook.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 /opt/claude/project_manager/hooks/workflow_guard_hook.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /opt/claude/project_manager/hooks/workflow_guard_hook.py"
           }
         ]
       }

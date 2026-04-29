@@ -6,6 +6,17 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-049] — 2026-04-29
+### Added
+- `hooks/workflow_guard_hook.py`: New PreToolUse hook enforcing two CLAUDE.md blocking rules: (1) blocks any Bash call containing `--no-verify` (no legitimate use); (2) blocks Write calls to `tasks/queue.json` that set `status: done` without a non-empty `artefact_path`.
+- `artefacts/task-049/`: Integration test suite (9/9 tests pass) covering all three guarded patterns.
+
+### Changed
+- `hooks/security_reminder_hook.py`: Added correlated `re.DOTALL + $` stop-anchor guard — blocks Python files where `re.compile()` uses `re.DOTALL` and `$` as a stop anchor in the same call; output emits `path:line` only, never matched text.
+- `.claude/settings.json`: Registered `workflow_guard_hook.py` as a second PreToolUse hook alongside the existing security hook.
+
+---
+
 ## [task-048] — 2026-04-28
 ### Added
 - `artefacts/task-048/research_report.md`: Cross-project automation-recommender analysis covering all 7 managed projects (project_manager, CCAS, pi-homelab, pensieve, genealogie, performance_HPT, project1). Per-project recommendation tables categorized by hooks, MCPs, skills, and subagents.

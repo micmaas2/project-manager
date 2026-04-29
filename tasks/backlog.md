@@ -126,7 +126,7 @@ Items completed, rejected, or no longer relevant.
 | BL-085 | — | project_manager: SelfImprover — add confidence score + project scope to lessons.md instinct model (continuous-learning-v2 pattern) | project_manager | P2 | in_progress | 2026-04-16 |
 | BL-086 | — | project_manager: Context budget audit — MCP server tool schema overhead + agent frontmatter word counts (extends task-035 scope) | project_manager | P2 | new | 2026-04-16 |
 | BL-087 | — | project_manager: Agent eval harness — YAML task definitions + worktree isolation + grep judge for pipeline stage quality regression | project_manager | P2 | new | 2026-04-16 |
-| BL-088 | — | project_manager: Hooks-over-prompts audit — move top 3 must-always-follow CLAUDE.md behavioral rules to Stop/PostToolUse hooks | project_manager | P2 | in_progress | 2026-04-16 |
+| BL-088 | — | project_manager: Hooks-over-prompts audit — move top 3 must-always-follow CLAUDE.md behavioral rules to Stop/PostToolUse hooks | project_manager | P2 | done | 2026-04-29 |
 | BL-089 | — | project_manager: Silent-failure-hunter audit of scripts/ — one-off pass on all PM helper scripts for error propagation issues | project_manager | P3 | new | 2026-04-16 |
 | BL-090 | — | project_manager: pm-run loop-operator checkpoint + escalation logic (depends on BL-031 worktree investigation) | project_manager | P3 | new | 2026-04-16 |
 | BL-091 | — | project_manager: Hook profiles — minimal/standard/strict via env var in settings.json | project_manager | P3 | new | 2026-04-16 |

@@ -129,6 +129,35 @@ Only use exec() if you absolutely need shell features and the input is guarantee
 
 REGEX_SECURITY_PATTERNS = [
     {
+        # NOTE: This rule's pattern matches the content of this file itself.
+        # When editing this rule, use narrow old_string splits to avoid self-triggering.
+        # See CLAUDE.md "Hook pattern interference" for the split-edit workaround.
+        "ruleName": "re_dotall_dollar_anchor",
+        "pattern": re.compile(
+            r're\.compile\s*\([^)]*(?:\$(?!\{)[^)]*re\.DOTALL|re\.DOTALL[^)]*\$(?!\{))',
+            re.DOTALL,
+        ),
+        "path_check": lambda path: path.endswith(".py"),
+        "content_check": lambda content: bool(re.search(
+            r're\.compile\s*\([^)]*(?:\$(?!\{)[^)]*re\.DOTALL|re\.DOTALL[^)]*\$(?!\{))',
+            content, re.DOTALL,
+        )),
+        "reminder": """⛔ BLOCKED: re.DOTALL combined with $ as a stop anchor detected in Python code.
+
+When re.DOTALL is active, $ matches end-of-line (not end-of-string) when used with lazy
+quantifiers, causing silent truncation of multi-line captures to their first line.
+
+CLAUDE.md rule: "for any regex using re.DOTALL, flag use of $ as a stop anchor (use \\Z instead)"
+
+Replace:
+  re.compile(r"...(.*?)(?=...|$)", re.DOTALL)
+
+With:
+  re.compile(r"...(.*?)(?=...|\\Z)", re.DOTALL)
+
+Or drop re.DOTALL and use re.MULTILINE if line-by-line matching is intended.""",
+    },
+    {
         "ruleName": "telegram_bot_token",
         "pattern": re.compile(r"\b\d{8,10}:[A-Za-z0-9_\-]{35,36}\b"),
         "reminder": """⛔ BLOCKED: Telegram bot token pattern detected.
@@ -154,6 +183,11 @@ Use the fail-fast pattern instead:
       sys.exit(1)""",
     },
 ]
+
+
+# Rules that must always block, even if previously shown in this session.
+# Deduplication is bypassed for these rule names.
+BLOCKING_RULE_NAMES = {"telegram_bot_token", "env_get_secret_default", "re_dotall_dollar_anchor"}
 
 
 def get_state_file(session_id):
@@ -227,10 +261,14 @@ def check_patterns(file_path, content):
                 if substring in content:
                     return pattern["ruleName"], pattern["reminder"]
 
-    # Regex patterns (content-only)
+    # Regex patterns (content-only or path+content)
     if content:
         for rp in REGEX_SECURITY_PATTERNS:
-            if rp["pattern"].search(content):
+            # If pattern has both path_check and content_check, both must match
+            if "path_check" in rp and "content_check" in rp:
+                if rp["path_check"](normalized_path) and rp["content_check"](content):
+                    return rp["ruleName"], rp["reminder"]
+            elif rp["pattern"].search(content):
                 return rp["ruleName"], rp["reminder"]
 
     return None, None
@@ -299,14 +337,36 @@ def main():
         # Load existing warnings for this session
         shown_warnings = load_state(session_id)
 
-        # Check if we've already shown this warning in this session
-        if warning_key not in shown_warnings:
-            # Add to shown warnings and save
-            shown_warnings.add(warning_key)
-            save_state(session_id, shown_warnings)
+        # Blocking rules always fire — deduplication is bypassed for them.
+        # Non-blocking (advisory) rules are suppressed after the first showing.
+        is_blocking_rule = rule_name in BLOCKING_RULE_NAMES
 
-            # Output the warning to stderr and block execution
-            print(reminder, file=sys.stderr)
+        if is_blocking_rule or warning_key not in shown_warnings:
+            if not is_blocking_rule:
+                # Only track dedup state for advisory (non-blocking) rules
+                shown_warnings.add(warning_key)
+                save_state(session_id, shown_warnings)
+
+            # Find the first line number where the pattern matches (best-effort)
+            line_number = None
+            if content:
+                for idx, line in enumerate(content.split("\n"), start=1):
+                    if any(
+                        (rp["pattern"].search(line) or (
+                            "path_check" in rp
+                            and rp["path_check"](file_path.lstrip("/"))
+                            and "content_check" in rp
+                            and rp["content_check"](line)
+                        ))
+                        for rp in REGEX_SECURITY_PATTERNS
+                        if rp["ruleName"] == rule_name
+                    ):
+                        line_number = idx
+                        break
+
+            # Emit path+line prefix per policy (never matched text)
+            location = f"{file_path}:{line_number}" if line_number else file_path
+            print(f"[{location}] {reminder}", file=sys.stderr)
             sys.exit(2)  # Block tool execution (exit code 2 for PreToolUse hooks)
 
     # Allow tool to proceed

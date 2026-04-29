@@ -405,6 +405,7 @@ The hook is registered in `.claude/settings.json`:
 | `new Function` | Code injection |
 | `child_process.exec` | Command injection (Node.js) |
 | `.github/workflows/*.yml` path | GitHub Actions command injection |
+| `re.compile(…re.DOTALL…$…)` (correlated) | `$` as stop anchor is bypassed by `re.DOTALL`; use `\Z` instead |
 
 A match blocks the write (exit code 2) and prints a remediation message to stderr. Each pattern is blocked once per session per file; subsequent occurrences in the same session are allowed through (so legitimate fixes are not blocked). Set `ENABLE_SECURITY_REMINDER=0` to disable the hook for an entire session.
 
@@ -429,6 +430,17 @@ echo "Expected exit 0, got: $?"
 ```
 
 Debug log (written on errors only): `/tmp/security-warnings-log.txt`
+
+### Workflow guard hook
+
+A second PreToolUse hook (`hooks/workflow_guard_hook.py`) enforces two CLAUDE.md must-always-follow rules at edit time:
+
+| Tool | Trigger | Block reason |
+|---|---|---|
+| `Bash` | command contains `--no-verify` | No legitimate use of hook-bypass in this codebase |
+| `Write` on `tasks/queue.json` | `"status": "done"` with empty `"artefact_path"` | Tasks cannot be closed without an artefact path (Write-only; Edit fragments are not checked) |
+
+Both hooks are registered in `.claude/settings.json` under `hooks.PreToolUse`.
 
 ### Extending to other projects
 
