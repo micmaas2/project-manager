@@ -19,7 +19,7 @@ Add the confidence scoring rubric (currently only in build_notes.md) directly in
 
 **Rationale**: The calibration rubric defined in build_notes.md is invisible to self-improver at runtime — the agent only reads its own prompt. Without the rubric, confidence scores will drift and become non-comparable across sessions. CQR (m-1) and Reviewer F3 (conf 48) both identified this gap. Embedding the rubric in the YAML prompt makes scoring consistent and auditable without any external reference.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -37,5 +37,5 @@ Add entry:
 
 **Rationale**: Reviewer F1 (conf 72) and CQR m-2 both flagged that 27+ existing rows in lessons.md now have 4 pipe-separated fields while the header specifies 6. This breaks Markdown table rendering and any future tooling that parses lessons.md by column index. The fix is a simple one-pass sed/python backfill — low effort, high traceability value. This is a repeated pattern: schema additions to append-only tables without backfill create silent structural drift. Queueing the backfill as a mandatory follow-up at build time prevents this debt from accumulating.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 

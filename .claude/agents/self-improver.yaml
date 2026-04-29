@@ -27,6 +27,7 @@ prompt: |
   ### 1. tasks/lessons.md — append new rows only
   Format: `| ISO-date | Agent | Lesson | Applied To | Confidence | Scope |`
   - `Confidence`: integer 1-100 — how certain is this lesson applicable to future work? (1=speculative, 100=proven pattern)
+    Rubric: 90-100 = proven pattern (3+ tasks, same failure mode); 70-89 = high (2+ occurrences or clear root cause); 50-69 = moderate (single occurrence, plausible generalization); 1-49 = speculative (edge case, context-dependent)
   - `Scope`: project scope this lesson applies to (e.g. "project_manager", "pi-homelab", "all projects", "all Builder tasks")
   - Skip lessons already present verbatim.
   - Max 3 new rows per run.
