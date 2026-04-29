@@ -21,7 +21,7 @@ content. Independent scans can match in unrelated locations and produce false po
 
 **Rationale**: task-049 CQR Finding 1 (conf 85) caught the independent-scan anti-pattern before shipping. The fix was non-trivial (required understanding regex grouping across call boundaries). This rule prevents future hook authors from repeating the same design mistake without guidance.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -40,7 +40,7 @@ false positives on valid multi-step edits.
 
 **Rationale**: Hook 3 required a Builder fix loop (CQR conf 88) specifically because this constraint was not documented. Future workflow-guard hooks will face the same ambiguity. The rule prevents a false-block pattern that is both non-obvious and high-friction (it breaks valid two-step edits).
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -60,4 +60,4 @@ regardless of dedup state.
 
 **Rationale**: CQR Finding 3 (conf 82) identified this gap in task-049. The dedup mechanism is correct for advisory warnings and silently wrong for blocking rules. Without an explicit policy note, future hook authors will copy the dedup pattern from advisory hooks and apply it to blocking hooks, creating a security regression.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
