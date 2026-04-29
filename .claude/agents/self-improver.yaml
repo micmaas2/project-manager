@@ -25,7 +25,9 @@ prompt: |
   ## Output
 
   ### 1. tasks/lessons.md — append new rows only
-  Format: `| ISO-date | Agent | Lesson | Applied To |`
+  Format: `| ISO-date | Agent | Lesson | Applied To | Confidence | Scope |`
+  - `Confidence`: integer 1-100 — how certain is this lesson applicable to future work? (1=speculative, 100=proven pattern)
+  - `Scope`: project scope this lesson applies to (e.g. "project_manager", "pi-homelab", "all projects", "all Builder tasks")
   - Skip lessons already present verbatim.
   - Max 3 new rows per run.
 

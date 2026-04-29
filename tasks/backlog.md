@@ -123,7 +123,7 @@ Items completed, rejected, or no longer relevant.
 | BL-082 | EPIC-003 | project_manager: Research MCP server usage with Playwright — feasibility and integration approach | project_manager | P3 | new | 2026-04-15 |
 | BL-083 | EPIC-003 | pensieve: Debug missing Obsidian md files since 2026-04-09 — investigate n8n vault write pipeline gap | pensieve | P1 | done | 2026-04-16 |
 | BL-084 | EPIC-004 | project_manager: Explore and integrate Claude Code optimization repo — 108 skills + 25 specialized agents + token optimization techniques | project_manager | P2 | done | 2026-04-16 |
-| BL-085 | — | project_manager: SelfImprover — add confidence score + project scope to lessons.md instinct model (continuous-learning-v2 pattern) | project_manager | P2 | in_progress | 2026-04-16 |
+| BL-085 | — | project_manager: SelfImprover — add confidence score + project scope to lessons.md instinct model (continuous-learning-v2 pattern) | project_manager | P2 | done | 2026-04-16 |
 | BL-086 | — | project_manager: Context budget audit — MCP server tool schema overhead + agent frontmatter word counts (extends task-035 scope) | project_manager | P2 | new | 2026-04-16 |
 | BL-087 | — | project_manager: Agent eval harness — YAML task definitions + worktree isolation + grep judge for pipeline stage quality regression | project_manager | P2 | new | 2026-04-16 |
 | BL-088 | — | project_manager: Hooks-over-prompts audit — move top 3 must-always-follow CLAUDE.md behavioral rules to Stop/PostToolUse hooks | project_manager | P2 | done | 2026-04-29 |

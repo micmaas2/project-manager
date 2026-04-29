@@ -335,7 +335,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 - Kanban view → `tasks/kanban.md`
 - Epics & stories → `tasks/epics.md`
 - Plan files → `/root/.claude/plans/` (registered in `docs/project-registry.md`)
-- Lessons → `tasks/lessons.md` (append-only table: `| Date | Agent | Lesson | Applied To |`)
+- Lessons → `tasks/lessons.md` (append-only table: `| Date | Agent | Lesson | Applied To | Confidence | Scope |`)
 - Improvement proposals → `artefacts/<task_id>/improvement_proposals.md` (one `## Proposal N` section per proposal, fields: **Target file**, **Change** (diff or description), **Rationale**, **Status:** `REQUIRES_HUMAN_APPROVAL` → `APPROVED` / `REJECTED: <reason>`)
 - **Artefact path required on done**: a task may not be set to `status: done` without a non-empty `artefact_path`. If no code was produced, set the path and create a `verification.md` (see step 4).
 - Mark items complete immediately as you go

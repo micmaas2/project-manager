@@ -6,6 +6,14 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-050] — 2026-04-29
+### Changed
+- `tasks/lessons.md`: Schema extended with two new columns — `Confidence` (1–100 integer, certainty the lesson is applicable to future work) and `Scope` (project name, e.g. "project_manager", "all projects"). Existing rows not backfilled (retroactive scoring is out of scope).
+- `.claude/agents/self-improver.yaml`: Output format updated to include both new fields; agent now writes `| Confidence | Scope |` in every lessons.md row it appends.
+- `CLAUDE.md`: Lessons format string updated to include `Confidence` and `Scope` columns (M-1 mirror fix — CLAUDE.md and self-improver.yaml now match verbatim).
+
+---
+
 ## [task-049] — 2026-04-29
 ### Added
 - `hooks/workflow_guard_hook.py`: New PreToolUse hook enforcing two CLAUDE.md blocking rules: (1) blocks any Bash call containing `--no-verify` (no legitimate use); (2) blocks Write calls to `tasks/queue.json` that set `status: done` without a non-empty `artefact_path`.
