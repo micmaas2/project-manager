@@ -103,7 +103,7 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 **Goal**: Harden the MAS personal assistant (model upgrade, budget enforcement, uptime monitoring) and deliver fast-win improvements to the project_manager tooling (security hook, automation scan, hooks-over-prompts).
 **Project**: pi-homelab / project_manager
-**Status**: in_progress
+**Status**: done
 **MVP Phase**: MVP4
 
 ### Stories
@@ -114,9 +114,9 @@ Each story maps to one or more entries in `tasks/queue.json`.
 | S-006-2 | MAS: Add hard budget enforcement to LLMClient.chat() | task-045 | done |
 | S-006-3 | MAS: Configure uptime monitoring for /health endpoint | task-046 | done |
 | S-006-4 | Install security-guidance PreToolUse hook | task-047 | done |
-| S-006-5 | Run claude-automation-recommender across all projects | task-048 | in_progress |
-| S-006-6 | Hooks-over-prompts audit — implement top 3 rules as hooks | task-049 | in_progress |
-| S-006-7 | SelfImprover: add confidence score + project scope to lessons | task-050 | in_progress |
+| S-006-5 | Run claude-automation-recommender across all projects | task-048 | done |
+| S-006-6 | Hooks-over-prompts audit — implement top 3 rules as hooks | task-049 | done |
+| S-006-7 | SelfImprover: add confidence score + project scope to lessons | task-050 | done |
 
 ---
 
