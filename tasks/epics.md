@@ -132,7 +132,7 @@ Each story maps to one or more entries in `tasks/queue.json`.
 | Story ID | Title | Queue Task | Status |
 |---|---|---|---|
 | S-007-1 | CCAS: Ansible lint + idempotency pre-commit hook (BL-106) | task-051 | done |
-| S-007-2 | CCAS: SAP credential PreToolUse blocking hook (BL-107) | task-052 | in_progress |
+| S-007-2 | CCAS: SAP credential PreToolUse blocking hook (BL-107) | task-052 | done |
 | S-007-3 | pi-homelab: HA YAML syntax + Lovelace pre-commit hook (BL-108) | task-053 | in_progress |
 | S-007-4 | pensieve: n8n JSON workflow syntax pre-commit hook (BL-110) | task-054 | in_progress |
 | S-007-5 | genealogie: Python lint (ruff/black) pre-commit hook (BL-112) | task-055 | in_progress |
