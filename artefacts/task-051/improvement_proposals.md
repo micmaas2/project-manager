@@ -23,7 +23,7 @@ Add a new bullet to the "Shell script pre-submission check" section:
 
 **Rationale**: task-051 Tester caught a bug where `ansible-lint` binary check ran before the empty-staged-files early exit. On a clean repo with no staged YAML files, the hook exited 1 with an installation error even though no lint was needed. The correct sequence — collect inputs, early-exit on empty, then check binary — was not in the Builder checklist and required a Tester-driven fix loop. Adding this ordering rule prevents the same mistake in any future hook or script that has optional-tool logic.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED (already present in CLAUDE.md)
 
 ---
 
@@ -45,7 +45,7 @@ Add a new bullet to the "Shell script pre-submission check" section:
 
 **Rationale**: task-051 Reviewer F1 (confidence 90) found that `EXIT_CODE=$?` after `ansible-lint` was dead code under `set -e` — the script terminated before the capture could run. The Reviewer correctly recommended `if ! ansible-lint ...; then`. This is a recurring shell scripting trap (the original Builder build also contained this pattern). Adding the rule to the pre-submission checklist ensures Builder self-checks for it before handing off to Reviewer.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED (already present in CLAUDE.md)
 
 ---
 
@@ -66,4 +66,4 @@ Add a note to the existing file-extension filter bullet (or add a new bullet):
 
 **Rationale**: task-051 CQR caught the `.yaml` extension omission (Reviewer rated it conf 72 — below the ≥80 fix loop threshold). The Reviewer noted 3 `.yaml` files in CCAS that would be silently skipped. The fix (`grep -E '\.(yml|yaml)'`) was applied in the Builder loop. For any shell hook filtering YAML files, both extensions should be the default unless explicitly excluded. Adding this to the pre-submission checklist prevents a silent lint gap on `.yaml`-named files.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED (already present in CLAUDE.md)

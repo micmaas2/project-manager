@@ -12,7 +12,7 @@
 
 **Rationale**: task-052 Reviewer F1 (conf 85) caught `sap_rfc_passwd` using a narrow character class that missed RFC passwords containing `.`, `/`, `:`. This is a recurring class of regex defect: the builder uses "likely" characters rather than the full set. A standing guidance in the pre-submission checklist prevents this without requiring a Reviewer loop.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -28,7 +28,7 @@
 
 **Rationale**: task-052 CQR F1 (conf 95) found that `sap_inline_password` and `sap_hdbuserstore_password` falsely blocked legitimate Ansible Vault references. The fix was applied, but the pattern (Vault-tag exclusion) applies to any future credential hook written for YAML-heavy repos (CCAS, pi-homelab). Documenting it in CLAUDE.md prevents the same false-positive loop on the next hook.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -44,7 +44,7 @@
 
 **Rationale**: task-052 CQR F2 (conf 90) caught `total = 12` hardcoded in the test file; TC-13 (the `!vault` regression test) was added but the counter was not updated. Dynamic counters derived from `len(TEST_CASES)` are maintenance-free and self-correct when tests are added or removed.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -60,4 +60,4 @@
 
 **Rationale**: task-052 CQR F3 (conf 85) flagged a bare `except` block with no comment. The fail-open pattern is correct for hooks, but must be explicitly documented at the call site or future maintainers may add logging, re-raise, or convert it to fail-closed. This is the same "comment-at-call-site" principle already applied to budget enforcement guards.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
