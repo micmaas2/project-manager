@@ -6,6 +6,16 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-052] CCAS SAP Credential PreToolUse Hook — 2026-04-30
+
+### Added
+- `hooks/sap_credential_hook.py` in CCAS workspace: PreToolUse hook blocking literal SAP credentials (hdbuserstore, RFC passwd=, BTP client_secret, named SAP password variables)
+- `.claude/settings.json` in CCAS workspace registering PreToolUse hook for Edit|Write|MultiEdit
+- BLOCKING_RULE_NAMES covers all 4 credential pattern families — dedup bypassed per policy
+- 13/13 unit tests in `artefacts/task-052/test_sap_credential_hook.py`
+
+---
+
 ## [task-051] — 2026-04-30
 ### Added
 - `CCAS/hooks/pre-commit`: New shared bash hook that runs `ansible-lint` on staged `.yml`/`.yaml` files and blocks commits on violations (check-only, no auto-fix).
