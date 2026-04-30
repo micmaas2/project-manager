@@ -339,6 +339,7 @@ This system is project-agnostic. Tasks specify a `target_project` path. 7 projec
 - CCAS BL-007/BL-008: `hana_os_users` Ansible role + SAP start/stop ordering implemented
 - CCAS task-003: `feature/hana-os-users` merged to develop, stale branch deleted
 - task-048 (BL-102): automation-recommender scan across all 7 projects; 10 adopt items registered (BL-104–BL-113) covering hooks, MCP servers, and skills; current highest BL ID: BL-113
+- CCAS task-051 (BL-106): ansible-lint pre-commit hook deployed to all 6 CCAS sub-repos via absolute symlink; blocks commits on playbook/role YAML violations
 
 **Blocked items requiring manual user steps:**
 - pi-homelab Pi 4: run `sudo passwd pi` and remove nopasswd sudoers entry
@@ -357,6 +358,7 @@ This system is project-agnostic. Tasks specify a `target_project` path. 7 projec
 | task-007 (S-002-4) | `self-improver.yaml` + CLAUDE.md | Human-gated improvement proposals: PM presents at session end (step 6b); user approves/rejects before application |
 | task-011 | `artefacts/task-011/pensieve-sync.sh` | Bash cron script that runs `git pull` on `/opt/obsidian-vault` (Pi4) every 15 minutes to keep the Obsidian vault in sync with `micmaas2/pensieve`. Deploy instructions in `artefacts/task-011/deploy-notes.md`. |
 | task-048 | `artefacts/task-048/research_report.md` | Cross-project automation-recommender scan across all 7 managed projects; 10 BL items registered (BL-104–BL-113) covering hooks, MCP servers, and skills recommendations per project. |
+| task-051 (BL-106) | `artefacts/task-051/` | CCAS: ansible-lint pre-commit hook (`hooks/pre-commit`) installed as absolute symlink across all 6 CCAS sub-repos; `scripts/install-pre-commit-hooks.sh` updated to use symlinks instead of file copies. |
 
 All artefacts passed the full 6-agent pipeline (Builder → Reviewer → Tester → DocUpdater → SelfImprover).
 Fixture-based testing is in place: each task's `artefacts/<id>/fixtures/` holds controlled inputs

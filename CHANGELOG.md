@@ -6,6 +6,17 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-051] — 2026-04-30
+### Added
+- `CCAS/hooks/pre-commit`: New shared bash hook that runs `ansible-lint` on staged `.yml`/`.yaml` files and blocks commits on violations (check-only, no auto-fix).
+- Absolute symlinks in all 6 CCAS sub-repo `.git/hooks/pre-commit` directories pointing to the shared hook script.
+- `artefacts/task-051/`: Build notes, review, test script, and test results for the hook installation.
+
+### Changed
+- `CCAS/ccas-main/scripts/install-pre-commit-hooks.sh`: Updated to use `ln -sf` (symlink) instead of `cp` (copy), so all sub-repos share a single hook source.
+
+---
+
 ## [task-050] — 2026-04-29
 ### Changed
 - `tasks/lessons.md`: Schema extended with two new columns — `Confidence` (1–100 integer, certainty the lesson is applicable to future work) and `Scope` (project name, e.g. "project_manager", "all projects"). Existing rows not backfilled (retroactive scoring is out of scope).
