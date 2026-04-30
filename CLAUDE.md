@@ -370,7 +370,7 @@ All agent work is tracked in `tasks/queue.json`. Schema:
       "id": "task_001",
       "title": "...",
       "project": "pensieve|ccas|pi-homelab|other",
-      "assigned_to": "builder|reviewer|tester",
+      "assigned_to": "builder|reviewer+code-quality-reviewer|tester|doc-updater+docs-readme-writer|self-improver",
       "status": "pending|in_progress|paused|review|test|done|failed",
       "artefact_path": "artefacts/task_001/",
       "created": "ISO8601",
