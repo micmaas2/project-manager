@@ -120,6 +120,26 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 ---
 
+## EPIC-007 — Cross-Project Hardening: Pre-Commit Hooks
+
+**Goal**: Install pre-commit hooks across all managed repos (CCAS, pi-homelab, pensieve, genealogie) to enforce syntax validation, credential blocking, and code style at edit time — preventing broken configs, style drift, and credential leaks from ever entering git history.
+**Project**: multi-project (ccas, pi-homelab, pensieve, genealogie)
+**Status**: in_progress
+**MVP Phase**: MVP4
+
+### Stories
+
+| Story ID | Title | Queue Task | Status |
+|---|---|---|---|
+| S-007-1 | CCAS: Ansible lint + idempotency pre-commit hook (BL-106) | task-051 | in_progress |
+| S-007-2 | CCAS: SAP credential PreToolUse blocking hook (BL-107) | task-052 | in_progress |
+| S-007-3 | pi-homelab: HA YAML syntax + Lovelace pre-commit hook (BL-108) | task-053 | in_progress |
+| S-007-4 | pensieve: n8n JSON workflow syntax pre-commit hook (BL-110) | task-054 | in_progress |
+| S-007-5 | genealogie: Python lint (ruff/black) pre-commit hook (BL-112) | task-055 | in_progress |
+| S-007-6 | genealogie: SQLite schema validator pre-commit hook (BL-113) | task-056 | in_progress |
+
+---
+
 ## Projects in Scope
 
 | Short name | Path | GitHub | Domain |

@@ -44,6 +44,12 @@ _(in queue.json with status: pending)_
 - **task-048** project_manager: Run claude-automation-recommender across all projects (BL-102)
 - **task-049** project_manager: Hooks-over-prompts audit — implement top 3 rules as hooks (BL-088)
 - **task-050** project_manager: SelfImprover — add confidence score + project scope to lessons (BL-085)
+- **task-051** ccas: Ansible lint + idempotency pre-commit hook (BL-106)
+- **task-052** ccas: SAP credential PreToolUse blocking hook (BL-107)
+- **task-053** pi-homelab: HA YAML syntax pre-commit hook (BL-108)
+- **task-054** pensieve: n8n JSON workflow syntax pre-commit hook (BL-110)
+- **task-055** genealogie: Python lint (ruff) pre-commit hook (BL-112)
+- **task-056** genealogie: SQLite schema validator pre-commit hook (BL-113)
 
 ---
 

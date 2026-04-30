@@ -2176,6 +2176,257 @@
         "privacy_dpia": "no",
         "cost_estimate": "EUR 0"
       }
+    },
+    {
+      "id": "task-051",
+      "title": "CCAS: Ansible lint + idempotency pre-commit hook (BL-106, S-007-1)",
+      "project": "ccas",
+      "target_project_path": "/opt/claude/CCAS",
+      "epic_id": "EPIC-007",
+      "story_id": "S-007-1",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-051/",
+      "created": "2026-04-30",
+      "updated": "2026-04-30T08:24:07.273468+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Install a pre-commit hook in all 6 CCAS sub-repos that runs ansible-lint on staged YAML playbook/role files and blocks commits if violations are found.",
+        "niet_in_scope": [
+          "Ansible module/integration testing",
+          "CI pipeline changes",
+          "Auto-fixing violations (hook is check-only)"
+        ],
+        "acceptatiecriteria": [
+          "hooks/pre-commit script exists at /opt/claude/CCAS/hooks/ and is executable",
+          ".git/hooks/pre-commit is symlinked in all 6 CCAS sub-repos (ccas-core-infrastructure, ccas-inventory, ccas-jenkins, ccas-main, ccas-platform, ccas-sap-applications)",
+          "Hook runs ansible-lint with workspace .ansible-lint config on staged .yml files; exits non-zero on violation; exits 0 (skip) when no .yml files staged",
+          "Hook fails with clear 'ansible-lint not installed \u2014 run pip install ansible-lint' message if binary absent",
+          "bash -n hooks/pre-commit exits 0; test with known-bad YAML confirms blocking"
+        ],
+        "security_arch_impact": "No outbound HTTP. No path construction from user input. Script operates on git-staged files only. _safe_path() not needed.",
+        "tests_required": "unit \u2014 test_pre_commit.sh: (a) staged valid YAML \u2192 exits 0, (b) staged invalid YAML \u2192 exits non-zero, (c) no YAML staged \u2192 exits 0, (d) ansible-lint absent (PATH trick) \u2192 exits non-zero with clear message",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "All 6 sub-repo .git/hooks/pre-commit symlinks verified with ls -la",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "rm .git/hooks/pre-commit in each sub-repo. Owner: Michel Maas.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no \u2014 processes only local YAML files, no personal data",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-052",
+      "title": "CCAS: SAP credential PreToolUse blocking hook (BL-107, S-007-2)",
+      "project": "ccas",
+      "target_project_path": "/opt/claude/CCAS",
+      "epic_id": "EPIC-007",
+      "story_id": "S-007-2",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-052/",
+      "created": "2026-04-30",
+      "updated": "2026-04-30T08:24:07.273468+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Install a Claude Code PreToolUse hook in the CCAS workspace that blocks Write/Edit calls containing SAP credential patterns (passwords, RFC connection strings, BTP OAuth secrets) at edit time.",
+        "niet_in_scope": [
+          "Git pre-commit scanning (separate concern)",
+          "Runtime credential vault or rotation",
+          "Detection of credentials already committed"
+        ],
+        "acceptatiecriteria": [
+          "hooks/sap_credential_hook.py exists at /opt/claude/CCAS/hooks/ and is executable",
+          ".claude/settings.json created at /opt/claude/CCAS/.claude/ with PreToolUse registration for Edit|Write|MultiEdit tools",
+          "Hook detects and blocks: hdbuserstore passwords, RFC destination passwd= patterns, BTP client_secret values, inline SAP passwords",
+          "Blocking output emits file_path:line_number only \u2014 never the matched credential value",
+          "Blocking rules bypass session dedup (BLOCKING_RULE_NAMES constant present)"
+        ],
+        "security_arch_impact": "No outbound HTTP. Hook operates on content passed by Claude Code harness (stdin JSON). Must never log matched text. Emit path:line only. Edit/MultiEdit: operate on new_string only; Write: full content.",
+        "tests_required": "unit \u2014 mock stdin JSON payloads: (a) Write with mock SAP passwd pattern \u2192 exit 2, (b) Edit with mock BTP client_secret \u2192 exit 2, (c) Write with benign YAML \u2192 exit 0. Use string concatenation for test payloads to avoid self-triggering security hook.",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          ".claude/settings.json committed to CCAS repo (not settings.local.json)",
+          "Extension guide documents SAP credential patterns detected",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "Remove PreToolUse entry from .claude/settings.json. Owner: Michel Maas.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no \u2014 processes code content, no personal data",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-053",
+      "title": "pi-homelab: HA YAML syntax pre-commit hook (BL-108, S-007-3)",
+      "project": "pi-homelab",
+      "target_project_path": "/opt/claude/pi-homelab",
+      "epic_id": "EPIC-007",
+      "story_id": "S-007-3",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-053/",
+      "created": "2026-04-30",
+      "updated": "2026-04-30T08:24:07.273468+00:00",
+      "token_estimate": 6000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Install a pre-commit hook in the pi-homelab repo that validates Home Assistant YAML syntax on staged .yaml files using Python's yaml stdlib before every commit.",
+        "niet_in_scope": [
+          "Home Assistant config semantic validation (hass --script check_config)",
+          "Lovelace card schema validation",
+          "ESPHome compilation checks"
+        ],
+        "acceptatiecriteria": [
+          "hooks/pre-commit script exists at /opt/claude/pi-homelab/hooks/, is executable, and .git/hooks/pre-commit symlinks to it",
+          "Hook validates all staged .yaml files using python3 yaml.safe_load()",
+          "Hook exits non-zero and reports offending file + parse error on YAML syntax failure",
+          "Hook exits 0 silently when no .yaml files are staged",
+          "bash -n hooks/pre-commit exits 0; test with malformed YAML confirms blocking"
+        ],
+        "security_arch_impact": "No outbound HTTP. No user-supplied path construction. stdlib yaml only.",
+        "tests_required": "(a) staged valid HA YAML \u2192 exits 0, (b) staged YAML with tab indentation \u2192 exits 1 with clear error, (c) no YAML staged \u2192 exits 0",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Symlink verified: ls -la /opt/claude/pi-homelab/.git/hooks/pre-commit"
+        ],
+        "rollback_plan": "rm .git/hooks/pre-commit in pi-homelab. Owner: Michel Maas.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-054",
+      "title": "pensieve: n8n JSON workflow syntax pre-commit hook (BL-110, S-007-4)",
+      "project": "pensieve",
+      "target_project_path": "/opt/claude/pensieve",
+      "epic_id": "EPIC-007",
+      "story_id": "S-007-4",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-054/",
+      "created": "2026-04-30",
+      "updated": "2026-04-30T08:24:07.273468+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Install a pre-commit hook in the pensieve repo that validates n8n workflow JSON files (workflows/*.json) for valid syntax before every commit.",
+        "niet_in_scope": [
+          "n8n workflow semantic validation (node types, credentials)",
+          "Workflow execution testing"
+        ],
+        "acceptatiecriteria": [
+          "hooks/pre-commit script exists at /opt/claude/pensieve/hooks/, is executable, and .git/hooks/pre-commit symlinks to it",
+          "Hook validates all staged .json files using python3 json.load()",
+          "Hook exits non-zero and reports offending file + parse error on JSON syntax failure",
+          "Hook exits 0 silently when no .json files are staged",
+          "bash -n hooks/pre-commit exits 0"
+        ],
+        "security_arch_impact": "No outbound HTTP. No path construction. stdlib json only.",
+        "tests_required": "(a) staged valid JSON \u2192 exits 0, (b) staged malformed JSON \u2192 exits 1 with error, (c) no JSON staged \u2192 exits 0",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS"
+        ],
+        "rollback_plan": "rm .git/hooks/pre-commit in pensieve. Owner: Michel Maas.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-055",
+      "title": "genealogie: Python lint (ruff) pre-commit hook (BL-112, S-007-5)",
+      "project": "genealogie",
+      "target_project_path": "/opt/claude/genealogie",
+      "epic_id": "EPIC-007",
+      "story_id": "S-007-5",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-055/",
+      "created": "2026-04-30",
+      "updated": "2026-04-30T08:24:07.273468+00:00",
+      "token_estimate": 6000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Install a pre-commit hook in the genealogie repo that runs ruff (lint + format check) on staged Python files before every commit, blocking on violations.",
+        "niet_in_scope": [
+          "Type checking (mypy)",
+          "Auto-fixing violations (hook is check-only)",
+          "Black (ruff format subsumes black)"
+        ],
+        "acceptatiecriteria": [
+          "hooks/pre-commit script exists at /opt/claude/genealogie/hooks/, is executable, and .git/hooks/pre-commit symlinks to it",
+          "Hook runs ruff check and ruff format --check on staged .py files",
+          "Hook exits non-zero if any ruff violation; prints offending file + rule",
+          "Hook fails with 'ruff not installed \u2014 run pip install ruff' if absent",
+          "Hook exits 0 when no .py files are staged"
+        ],
+        "security_arch_impact": "No outbound HTTP. No path construction from user input.",
+        "tests_required": "(a) staged valid Python \u2192 exits 0, (b) staged Python with unused import \u2192 exits 1, (c) ruff absent (PATH trick) \u2192 exits 1 with install message, (d) no .py staged \u2192 exits 0",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS"
+        ],
+        "rollback_plan": "rm .git/hooks/pre-commit in genealogie. Owner: Michel Maas.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0"
+      }
+    },
+    {
+      "id": "task-056",
+      "title": "genealogie: SQLite schema validator pre-commit hook (BL-113, S-007-6)",
+      "project": "genealogie",
+      "target_project_path": "/opt/claude/genealogie",
+      "epic_id": "EPIC-007",
+      "story_id": "S-007-6",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-056/",
+      "created": "2026-04-30",
+      "updated": "2026-04-30T08:24:07.273468+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Install a pre-commit hook in the genealogie repo that validates db.py migrations before every commit by checking Python syntax and doing a dry-run of init_db() against an in-memory SQLite database.",
+        "niet_in_scope": [
+          "Data migration rollback testing",
+          "Full integration tests with populated data",
+          "Validation of non-db.py Python files (covered by BL-112/task-055)"
+        ],
+        "acceptatiecriteria": [
+          "hooks/pre-commit script appended to /opt/claude/genealogie/hooks/pre-commit (shared with task-055), symlink already in place",
+          "When db.py is staged: hook runs python3 -m py_compile db.py AND dry-run of init_db() against :memory: SQLite DB; exits non-zero if either step raises an exception",
+          "When db.py is not staged: hook exits 0 silently",
+          "Dry-run isolation: DB_PATH patched to ':memory:' so no file written to disk"
+        ],
+        "security_arch_impact": "Hook executes db.py code (dry-run against :memory: DB). Builder must verify db.py has no side effects beyond sqlite3 calls before implementing dry-run. Alternative: static SQL extraction if side effects found.",
+        "tests_required": "(a) staged db.py with valid schema \u2192 exits 0, (b) staged db.py with syntax error \u2192 exits 1, (c) staged db.py with broken SQL in CREATE TABLE \u2192 exits 1, (d) db.py not staged \u2192 exits 0",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Dry-run DB_PATH patching verified (no file written to disk)"
+        ],
+        "rollback_plan": "Remove db.py validation block from hooks/pre-commit in genealogie. Owner: Michel Maas.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no \u2014 dry-run uses :memory: DB only, no personal data read",
+        "cost_estimate": "EUR 0"
+      }
     }
   ]
 }
