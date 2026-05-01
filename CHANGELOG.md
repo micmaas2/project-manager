@@ -6,6 +6,17 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-054] pensieve: n8n JSON Workflow Syntax Pre-Commit Hook — 2026-05-01
+
+### Added
+- `/opt/claude/pensieve/hooks/pre-commit`: New bash script (executable) that validates staged `.json` files for valid JSON syntax before every commit, using `git show ":$file"` to read from the git index.
+- Exits 0 silently when no `.json` files are staged; exits 1 with a descriptive error on parse failure.
+- Python stdlib `json.loads` used for validation (no external dependencies).
+- Symlink: `/opt/claude/pensieve/.git/hooks/pre-commit -> ../../hooks/pre-commit`.
+- 3/3 tests passed: valid JSON staged, malformed JSON staged, no JSON staged.
+
+---
+
 ## [task-053] pi-homelab: HA YAML Syntax Pre-Commit Hook — 2026-05-01
 
 ### Added
