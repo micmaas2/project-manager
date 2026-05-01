@@ -6,6 +6,18 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-053] pi-homelab: HA YAML Syntax Pre-Commit Hook — 2026-05-01
+
+### Added
+- `/opt/claude/pi-homelab/hooks/pre-commit`: New bash script (executable) that validates Home Assistant YAML syntax on all staged `.yaml`/`.yml` files before every commit.
+- PyYAML-based validation via `git show ":$file"` reads staged content (not working-tree), decoded as UTF-8 explicitly.
+- Wildcard multi-constructor registered on `SafeLoader` to silently accept HA custom tags (`!secret`, `!include`, `!env_var`, etc.) without parse errors.
+- Multi-document YAML support (`---` separator) using `list(yaml.safe_load_all(...))`.
+- Symlink: `/opt/claude/pi-homelab/.git/hooks/pre-commit -> ../../hooks/pre-commit`.
+- 6/6 tests passed: valid YAML, tab-indent error, no YAML staged, custom tags, multi-doc, UTF-8 content.
+
+---
+
 ## [task-052] CCAS SAP Credential PreToolUse Hook — 2026-04-30
 
 ### Added
