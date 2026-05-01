@@ -25,7 +25,7 @@ Add the following bullet under the **Shell script pre-submission check** block (
 
 **Rationale**: task-053 CQR and Reviewer both flagged `yaml.safe_load()` as incapable of handling HA custom tags and multi-document files at confidence 98 and 85 respectively. These are HA-specific patterns that any pi-homelab hook maintainer would hit immediately. Adding the pattern to the Builder pre-submission checklist prevents the initial broken version from being shipped and requiring a fix loop.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -52,7 +52,7 @@ Add the following bullet under the **Shell script pre-submission check** block (
 
 **Rationale**: task-053 Reviewer F2 (conf 90) and CQR (conf 99) both caught the stdlib misconception. The package is reliably present on Pi OS but the absence check prevents cryptic `ModuleNotFoundError` on fresh environments. Two independent review agents flagging the same issue at high confidence warrants a checklist rule.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -75,4 +75,4 @@ Add the following bullet under the **Shell script pre-submission check** block:
 
 **Rationale**: task-053 CQR Finding 3 (conf 95) identified this as a correctness bug — the hook validated the working-tree file, not what was actually being committed. This is the canonical correct approach for pre-commit hooks and should be a Builder checklist item to prevent the same mistake in future hook tasks.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

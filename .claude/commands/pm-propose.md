@@ -2,6 +2,8 @@
 
 Collect, deduplicate, present, and apply improvement proposals. Run at session end.
 
+**Execution mode**: do not enter plan mode. This skill executes already-planned work. Proceed directly to the Steps below without calling EnterPlanMode.
+
 ## Steps
 
 **1. Find pending proposals**
