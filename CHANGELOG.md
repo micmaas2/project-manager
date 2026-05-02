@@ -6,6 +6,16 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-056] genealogie: SQLite Schema Validator Pre-Commit Hook — 2026-05-02
+
+### Added
+- `/opt/claude/genealogie/hooks/pre-commit`: Appended `db.py` validation block that runs `validate_db.py` when `db.py` is staged before every commit.
+- `/opt/claude/genealogie/hooks/validate_db.py`: Python validator script that performs syntax check via `py_compile` and a dry-run `init_db()` call against an in-memory SQLite database (`:memory:`) with mocked imports, validating the schema without side effects.
+- Explicit `SystemExit` handling in the validator to catch `sys.exit()` calls from exec'd code without false failures.
+- 5/5 test cases passed: valid schema staged, syntax error in db.py, broken SQL in init_db, no db.py staged, SystemExit regression.
+
+---
+
 ## [task-055] genealogie: Python Lint (ruff) Pre-Commit Hook — 2026-05-01
 
 ### Added

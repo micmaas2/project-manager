@@ -360,6 +360,7 @@ This system is project-agnostic. Tasks specify a `target_project` path. 7 projec
 | task-048 | `artefacts/task-048/research_report.md` | Cross-project automation-recommender scan across all 7 managed projects; 10 BL items registered (BL-104–BL-113) covering hooks, MCP servers, and skills recommendations per project. |
 | task-051 (BL-106) | `artefacts/task-051/` | CCAS: ansible-lint pre-commit hook (`hooks/pre-commit`) installed as absolute symlink across all 6 CCAS sub-repos; `scripts/install-pre-commit-hooks.sh` updated to use symlinks instead of file copies. |
 | task-055 (BL-108) | `artefacts/task-055/` | genealogie: ruff lint + format pre-commit hook (`/opt/claude/genealogie/hooks/pre-commit`); blocks commits on Python lint/format violations; auto-format step included with re-stage instructions. |
+| task-056 (BL-109) | `artefacts/task-056/` | genealogie: SQLite schema validator pre-commit hook; `hooks/validate_db.py` runs `py_compile` syntax check + `init_db()` dry-run against `:memory:` SQLite; appended as a validation block in `/opt/claude/genealogie/hooks/pre-commit`. |
 
 All artefacts passed the full 6-agent pipeline (Builder → Reviewer → Tester → DocUpdater → SelfImprover).
 Fixture-based testing is in place: each task's `artefacts/<id>/fixtures/` holds controlled inputs
