@@ -6,6 +6,16 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-055] genealogie: Python Lint (ruff) Pre-Commit Hook — 2026-05-01
+
+### Added
+- `/opt/claude/genealogie/hooks/pre-commit`: New bash script (executable) that runs `ruff check` and `ruff format --check` on staged `.py` files before every commit, using `git show ":$file"` to read from the git index.
+- Exits 0 silently when no `.py` files are staged; exits 1 with descriptive errors on lint or format violations.
+- Symlink: `/opt/claude/genealogie/.git/hooks/pre-commit -> ../../hooks/pre-commit`.
+- 4/4 acceptance criteria tests passed: valid Python staged, lint violation staged, format violation staged, no Python staged.
+
+---
+
 ## [task-054] pensieve: n8n JSON Workflow Syntax Pre-Commit Hook — 2026-05-01
 
 ### Added
