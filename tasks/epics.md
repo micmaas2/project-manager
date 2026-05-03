@@ -140,6 +140,22 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 ---
 
+## EPIC-008 — PM System Quality & Maintenance
+
+**Goal**: Audit and improve the PM system: review CLAUDE.md, agent YAMLs, and skills for gaps and stale content; reduce CLAUDE.md to ≤38 KB by migrating verbose sections to linked docs.
+**Project**: project_manager
+**Status**: in_progress
+**MVP Phase**: MVP4
+
+### Stories
+
+| Story ID | Title | Queue Task | Status |
+|---|---|---|---|
+| S-008-1 | PM system audit — CLAUDE.md, agent YAMLs, skills quality review (BL-078) | task-057 | planned |
+| S-008-2 | CLAUDE.md size reduction — migrate verbose sections to linked docs (BL-118) | task-058 | planned |
+
+---
+
 ## Projects in Scope
 
 | Short name | Path | GitHub | Domain |

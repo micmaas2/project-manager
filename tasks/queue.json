@@ -2427,6 +2427,96 @@
         "privacy_dpia": "no \u2014 dry-run uses :memory: DB only, no personal data read",
         "cost_estimate": "EUR 0"
       }
+    },
+    {
+      "id": "task-057",
+      "title": "project_manager: PM system audit \u2014 CLAUDE.md, agent YAMLs, skills quality review (BL-078)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-008",
+      "story_id": "S-008-1",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-057/",
+      "created": "2026-05-03",
+      "updated": "2026-05-03T11:14:35.020662+00:00",
+      "token_estimate": 10000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Audit CLAUDE.md, all .claude/agents/*.yaml, and .claude/commands/*.md skills for gaps, stale rules, M-1 mirror inconsistencies, and quality issues; produce a findings report with actionable BL items.",
+        "niet_in_scope": [
+          "Implementing any fixes (fixes become separate tasks)",
+          "Changing CLAUDE.md size/structure (that is BL-118 / task-058)",
+          "Adding new agents or skills"
+        ],
+        "acceptatiecriteria": [
+          "All .claude/agents/*.yaml audited: 5 policy fields present, model matches policy table, Label directive matches model tier, M-1 mirrors consistent with CLAUDE.md",
+          "All .claude/commands/*.md skills audited: execution-mode preamble where required, placeholder resolution instructions, security filter ordering",
+          "CLAUDE.md audited: stale task references, rules contradicting recent lessons, rules missing from last 3 sessions",
+          "audit_report.md produced with findings categorized Critical / Major / Minor + fix recommendation per finding",
+          "All NEW: findings registered as BL items in tasks/backlog.md before marking done"
+        ],
+        "security_arch_impact": "None \u2014 read-only audit; no outbound HTTP; no secrets",
+        "tests_required": "No unit tests (research task). Verification: grep confirms all Critical/Major findings have a BL-NNN entry in backlog.md.",
+        "definition_of_done": [
+          "audit_report.md exists in artefacts/task-057/",
+          "All Critical + Major findings have a BL item in backlog.md",
+          "No credentials or sensitive values committed in artefact files"
+        ],
+        "rollback_plan": "Read-only task \u2014 no rollback needed. If BL items were added in error, remove them. Owner: Michel Maas.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no \u2014 reads local config files only",
+        "cost_estimate": "EUR 0 (no external API spend)",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-058",
+      "title": "project_manager: CLAUDE.md size reduction \u2014 migrate verbose sections to linked docs (BL-118)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-008",
+      "story_id": "S-008-2",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-058/",
+      "created": "2026-05-03",
+      "updated": "2026-05-03T11:14:35.020662+00:00",
+      "token_estimate": 12000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Reduce CLAUDE.md from 47.4 KB to \u226438 KB by migrating the MVP template security checklist and shell pre-submission rules to linked docs under docs/, preserving all content with pointer lines in CLAUDE.md.",
+        "niet_in_scope": [
+          "Changing the meaning of any rule",
+          "Removing rules without migrating them",
+          "Updating agent YAMLs",
+          "Adding new content to CLAUDE.md"
+        ],
+        "acceptatiecriteria": [
+          "wc -c CLAUDE.md \u2264 38,000 bytes after migration",
+          "Every migrated sentence appears verbatim in its destination doc (content migration checklist: pre-move mapping \u2192 destination verify \u2192 pointer line)",
+          "CLAUDE.md contains pointer lines of the form \"See docs/X.md for: ...\" for each migrated section",
+          "Pre-commit hook passes on all changed files",
+          "No content orphaned \u2014 verification.md documents pre/post byte count + all pointer lines added"
+        ],
+        "security_arch_impact": "None \u2014 doc refactor; no outbound HTTP; no code changes",
+        "tests_required": "Verification-style: (1) wc -c CLAUDE.md \u2264 38000, (2) grep for each pointer line present, (3) grep -c for 3 critical phrases that must still appear in CLAUDE.md directly or via pointer",
+        "definition_of_done": [
+          "wc -c CLAUDE.md \u2264 38,000",
+          "verification.md documents pre/post size + pointer lines",
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "No content orphaned (all migrated content in linked docs, resolvable from CLAUDE.md)",
+          "No credentials or sensitive values committed in artefact files"
+        ],
+        "rollback_plan": "git revert the feature-branch commit; CLAUDE.md restored in <5 min. Owner: Michel Maas.",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no \u2014 documentation only",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
     }
   ]
 }

@@ -50,6 +50,8 @@ _(in queue.json with status: pending)_
 - **task-054** pensieve: n8n JSON workflow syntax pre-commit hook (BL-110)
 - **task-055** genealogie: Python lint (ruff) pre-commit hook (BL-112)
 - **task-056** genealogie: SQLite schema validator pre-commit hook (BL-113)
+- **task-057** project_manager: PM system audit — CLAUDE.md, agent YAMLs, skills quality review (BL-078)
+- **task-058** project_manager: CLAUDE.md size reduction — migrate verbose sections to linked docs (BL-118)
 
 ---
 
