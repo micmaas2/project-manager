@@ -124,7 +124,7 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 **Goal**: Install pre-commit hooks across all managed repos (CCAS, pi-homelab, pensieve, genealogie) to enforce syntax validation, credential blocking, and code style at edit time — preventing broken configs, style drift, and credential leaks from ever entering git history.
 **Project**: multi-project (ccas, pi-homelab, pensieve, genealogie)
-**Status**: in_progress
+**Status**: done
 **MVP Phase**: MVP4
 
 ### Stories
