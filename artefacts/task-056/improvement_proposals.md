@@ -10,4 +10,4 @@
 
 **Rationale**: CQR found this as a Major issue in task-056. The fix is non-obvious because `SystemExit` is not a subclass of `Exception` — it is a subclass of `BaseException`. An `except Exception` block that appears to "catch everything" silently lets `SystemExit` propagate uncaught (or, in an `exec()` context, propagates up to the hook wrapper and exits the hook with the module's exit code). This produces a false-pass when the tested module calls `sys.exit(0)`. Adding it to CLAUDE.md prevents the same gap in all future `exec()`-based validators.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

@@ -8,4 +8,6 @@
 
 **Fixture files for path-guarded scripts**: when writing tests for scripts that use `_safe_path()` workspace-root validation, place fixture files under `artefacts/<task-id>/_fixtures/` — not in `tmp_path` (which resolves to `/tmp`, outside the workspace root and therefore rejected by the path guard).
 
+**Installing non-stdlib test dependencies on Raspberry Pi OS**: `pip install <tool>` fails with a PEP 668 error on system Python. Use `pip install <tool> --break-system-packages` for hook-dependency tools (ruff, shellcheck, etc.) or note the correct install command in the test report prerequisites.
+
 **Task unit tests**: run with `python3 -m pytest artefacts/<task-id>/test_*.py -v`.
