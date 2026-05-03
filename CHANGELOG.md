@@ -6,6 +6,17 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-057] project_manager: PM System Audit (Agents, Skills, CLAUDE.md) — 2026-05-03
+
+### Audited (read-only)
+- All 6 agent YAMLs in `.claude/agents/` and all 7 skills in `.claude/commands/` reviewed against CLAUDE.md policy.
+- 2 Critical findings: `reviewer.yaml` and `doc-updater.yaml` have `require_human_approval: false` despite listing Write/Bash in `allowed_tools` (policy violation); `manager.yaml` invokes `revise-claude-md` via wrong tool type.
+- 7 Major findings: `pm-close.md` missing execution-mode preamble; `pm-start.md` missing 2 of 6 mandatory session-start checklist items; stale model labels, missing policy fields, and prompt-voice violations across multiple YAMLs.
+- 3 Minor findings: documentation gaps and non-critical style deviations in agent prompts.
+- 8 new backlog items registered: BL-122 through BL-129.
+
+---
+
 ## [task-056] genealogie: SQLite Schema Validator Pre-Commit Hook — 2026-05-02
 
 ### Added

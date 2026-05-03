@@ -2,6 +2,7 @@
 
 **v0.8.0** — Extended pipeline with built-in Claude Code agents. SelfImprover loop fully operational with enforcement gates.
 8 tasks delivered end-to-end. Cross-project management active across 7 sibling projects (MVP3 in progress).
+PM system audit (task-057) completed 2026-05-03: 14 findings (2 Critical, 7 Major, 5 Minor); 9 findings registered as BL-122–BL-129 for future fixing.
 
 A hierarchical multi-agent system that builds automations and scripts across projects.
 One orchestrator (ProjectManager, Opus 4.6) reads a task queue and spawns a six-stage
@@ -361,6 +362,7 @@ This system is project-agnostic. Tasks specify a `target_project` path. 7 projec
 | task-051 (BL-106) | `artefacts/task-051/` | CCAS: ansible-lint pre-commit hook (`hooks/pre-commit`) installed as absolute symlink across all 6 CCAS sub-repos; `scripts/install-pre-commit-hooks.sh` updated to use symlinks instead of file copies. |
 | task-055 (BL-108) | `artefacts/task-055/` | genealogie: ruff lint + format pre-commit hook (`/opt/claude/genealogie/hooks/pre-commit`); blocks commits on Python lint/format violations; auto-format step included with re-stage instructions. |
 | task-056 (BL-109) | `artefacts/task-056/` | genealogie: SQLite schema validator pre-commit hook; `hooks/validate_db.py` runs `py_compile` syntax check + `init_db()` dry-run against `:memory:` SQLite; appended as a validation block in `/opt/claude/genealogie/hooks/pre-commit`. |
+| task-057 (BL-078) | `artefacts/task-057/audit_report.md` | Read-only PM system audit: all 6 agent YAMLs, 7 PM skills, and CLAUDE.md reviewed. 14 findings (2 Critical, 7 Major, 5 Minor). 9 findings registered as BL-122–BL-129 (policy violations, M-1 mirror gaps, missing skill preambles). No code changed. |
 
 All artefacts passed the full 6-agent pipeline (Builder → Reviewer → Tester → DocUpdater → SelfImprover).
 Fixture-based testing is in place: each task's `artefacts/<id>/fixtures/` holds controlled inputs

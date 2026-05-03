@@ -1,12 +1,12 @@
 # Project Dashboard
-_Last updated: 2026-05-03 13:00_
+_Last updated: 2026-05-03 21:00_
 
 ## Queue Status
 
 | Status | Count |
 |---|---|
-| pending | 0 |
-| in_progress | 0 |
+| pending | 1 |
+| in_progress | 1 |
 | paused | 0 |
 | review | 0 |
 | test | 0 |
@@ -14,7 +14,7 @@ _Last updated: 2026-05-03 13:00_
 
 ## Active Tasks
 
-_No tasks currently in progress._
+- **task-057** [project_manager] project_manager: PM system audit — CLAUDE.md, agent YAMLs, skills quality review (BL-078) — builder
 
 ## Recently Completed
 
@@ -26,7 +26,7 @@ _No tasks currently in progress._
 
 ## Next Up (Pending)
 
-_No pending tasks._
+- **task-058** [project_manager] project_manager: CLAUDE.md size reduction — migrate verbose sections to linked docs (BL-118)
 
 ## Maintenance — Due Soon
 
