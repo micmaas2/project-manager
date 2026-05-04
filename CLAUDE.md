@@ -389,6 +389,7 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 **Python datetime**: use `datetime.now(datetime.UTC).isoformat()` not `datetime.utcnow()` — deprecated in Python 3.12+; system runs 3.13.5.
 
 **Logs** (`logs/` is gitignored — never `git add logs/`):
+Note: `logs/token_log.jsonl` is already tracked by git (predates the gitignore rule) — it will always appear as `modified` in `git status`. This is expected; do not stage or commit it.
 - `logs/audit.jsonl` — append-only, one JSON object per line: `{timestamp, agent, task_id, action, status}`
 - `logs/token_log.jsonl` — per-run token accounting: `{timestamp, agent, task_id, token_estimate}`
   Every sub-agent (Builder, Reviewer, Tester, DocUpdater, SelfImprover) must write one entry per invocation — not just ProjectManager. This enables per-agent token observability and identifies highest-cost pipeline stages.
