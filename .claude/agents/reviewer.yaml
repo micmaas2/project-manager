@@ -100,7 +100,7 @@ policy:
     - Glob
     - Grep
   max_tokens_per_run: 10000
-  require_human_approval: false
+  require_human_approval: true
   audit_logging: true
   external_calls_allowed: false
 

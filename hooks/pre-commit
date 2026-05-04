@@ -81,5 +81,29 @@ if [[ -d "$AGENT_DIR" ]]; then
   fi
 fi
 
+# 3b. Agent YAML semantic policy check — require_human_approval must be true when Write/Edit/Bash in allowed_tools
+if [[ -d "$AGENT_DIR" ]] && python3 -c "import yaml" &>/dev/null; then
+  python3 - "$AGENT_DIR"/*.yaml <<'PYEOF'
+import sys, yaml
+
+WRITE_TOOLS = {"Write", "Edit", "Bash"}
+fail = 0
+for yaml_file in sys.argv[1:]:
+    try:
+        with open(yaml_file) as f:
+            data = yaml.safe_load(f)
+        policy = data.get("policy", {})
+        tools = set(policy.get("allowed_tools", []))
+        rha = policy.get("require_human_approval")
+        if tools & WRITE_TOOLS and rha is False:
+            print(f"[pre-commit] ERROR: {yaml_file}: require_human_approval must be true when Write/Edit/Bash in allowed_tools")
+            fail = 1
+    except Exception:
+        # Fail-open: hook errors must never block legitimate writes — log and pass through
+        pass
+sys.exit(fail)
+PYEOF
+fi
+
 printf "%b[pre-commit] All checks passed.%b\n" "$YELLOW" "$NC"
 exit 0

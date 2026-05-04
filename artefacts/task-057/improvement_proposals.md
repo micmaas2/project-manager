@@ -26,7 +26,7 @@ if tools & WRITE_TOOLS and rha == False:
 
 **Rationale**: task-057 found two agent YAMLs (reviewer.yaml, doc-updater.yaml) with `require_human_approval: false` despite having Write/Edit/Bash tools. The pre-commit hook enforces 5-field schema presence but not value correctness. This is a silent drift path: the hook passes, the commit lands, and policy violations accumulate across audit cycles. Adding a semantic value check at commit time eliminates this class of violation without requiring audit cycles to catch them.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -40,7 +40,7 @@ if tools & WRITE_TOOLS and rha == False:
 
 **Rationale**: task-057 found manager.yaml still instructing `subagent_type=claude-md-management:revise-claude-md` long after CLAUDE.md documented that this invocation is broken. The root cause is a missing sync step: CLAUDE.md corrections are committed as a single file change without a mandatory grep-and-update pass over agent YAMLs. Adding this rule makes the sync step explicit and auditable.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -54,4 +54,4 @@ if tools & WRITE_TOOLS and rha == False:
 
 **Rationale**: task-057 found doc-updater.yaml and self-improver.yaml violating the imperative-voice rule introduced in a prior task. The rule was added to CLAUDE.md but only new YAMLs adopted it; existing YAMLs were never backfilled. This is the same pattern as M-1 mirror drift: a rule is introduced but not applied retroactively. Adding a retroactive-application mandate closes the backfill gap without requiring a separate audit task.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

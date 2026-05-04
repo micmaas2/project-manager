@@ -21,7 +21,7 @@ Add a byte-budget estimation step to the content migration checklist. After the 
 
 **Rationale**: task-058 pointer lines consumed 556 bytes (5.6% of the total reduction). The final byte count landed 26 bytes below the 38,000 target after a post-review M-001 fix extended one pointer. A per-task byte estimate during planning would surface tight margins early and prevent last-minute scope changes or overruns.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -41,7 +41,7 @@ Add a section-separator check step before "Pointer line" (step 4). Insert as new
 
 **Rationale**: CQR M-003 found that the new `## Pi4 Operational Notes` section was appended to `docs/n8n-deployment.md` without a `---` separator, inconsistent with every other section boundary in that file. This is a recurring risk whenever a Builder appends to an existing doc without checking its structural conventions. A pre-append separator check closes this gap.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -68,7 +68,7 @@ Proposed text:
 
 **Rationale**: The MVP template code block case in task-058 (CQR M-002) exposed a gap in the content migration checklist — it specifies backtick-quoted pointers as the standard, but does not address the case where the pointer must live inside a fenced code block. Without this exception, a Builder will either apply backticks inconsistently (renders badly inside code blocks) or omit topic keywords entirely (hurts discoverability). The exception rule makes both behaviors explicit.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -91,4 +91,4 @@ to a migration scope. If primary candidates alone fall short (removal − pointe
 
 **Rationale**: task-058 scoped 2 migrations at plan time but required a 3rd (n8n Pi4 notes) discovered during execution because the first two migrations with pointer overhead did not meet the byte target. Having a pre-identified reserve section avoids mid-execution scope changes and makes the byte budget explicit upfront.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED

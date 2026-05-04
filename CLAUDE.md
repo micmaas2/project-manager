@@ -144,15 +144,17 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 
 **Review doc redaction rule**: when a Reviewer documents the "original vulnerable code" in a finding, replace the actual credential value with `<REDACTED>` — never quote a live token, password, or key verbatim, even inside a code block. The vulnerable pattern can be reconstructed from git diff; an exposed live credential cannot be un-leaked.
 
-**Prompt writing discipline**: All agent prompts MUST use imperative voice addressed to the agent itself ("You will", "Do not", "Stop if"). Never narrate what other agents do — instead state this agent's responsibility relative to other agents' outputs. Orchestration sequencing (waiting, parallelism) belongs in design docs, not embedded in agent prompts.
+**Prompt writing discipline**: All agent prompts MUST use imperative voice addressed to the agent itself ("You will", "Do not", "Stop if"). Never narrate what other agents do — instead state this agent's responsibility relative to other agents' outputs. Orchestration sequencing (waiting, parallelism) belongs in design docs, not embedded in agent prompts. When this rule is added or updated, apply it retroactively to ALL existing agent YAMLs in the same commit — search for prompts that open with a noun phrase or passive construction (e.g. `"Update project documentation after..."`, `"Extract learnings from..."`) and rewrite to imperative voice (`"You are the X agent. You update..."`).
 
 **Opus advisor escalation**: For ambiguous arch/security decisions, spawn Opus sub-agent (model: claude-opus-4-6) with single `ADVISOR_CONSULT: <question>` + Context + Options. Note in `build_notes.md` under "Advisor Consults". Triggers: architecture tradeoff with no clear winner; security decision outside established patterns; scope ambiguity. Do NOT use for routine decisions.
 
 **Cross-file rule mirroring (M-1 pattern)**: Enumerated rules that appear in both CLAUDE.md and agent YAMLs can silently accumulate orphan entries. When editing either file, verify rule counts and text match in both directions. Also verify that the `Label all outputs:` directive in each agent YAML matches the tiers listed in the CLAUDE.md Label bullet (Model Policy section) — this is a second M-1 mirror that model-pin checks do not cover. Tester must include a regression guard for any task that modifies mirrored content: (a) rule-count equality check across all copies, (b) absence check for any rule that was removed.
 
+**Tool-invocation corrections must propagate to agent YAMLs in the same commit**: when CLAUDE.md is updated to correct a tool invocation pattern (e.g. "use Skill tool, not Agent tool for `claude-md-management:*`"), search all `.claude/agents/*.yaml` files for the old pattern and update the affected prompts in the same commit. A correction that lives only in CLAUDE.md leaves agent prompts generating broken instructions until the next audit cycle.
+
 **M-1 copy-paste rule**: when mirroring a definition across CLAUDE.md and agent YAMLs, copy-paste verbatim — never paraphrase. Unicode vs ASCII symbol variants (`≥` vs `>=`) and synonym substitutions ("issue" vs "defect") both silently break the M-1 verbatim-match contract.
 
-**Agent YAML policy schema**: the pre-commit hook enforces that every `.claude/agents/*.yaml` contains all 5 required policy fields (`allowed_tools`, `max_tokens_per_run`, `require_human_approval`, `audit_logging`, `external_calls_allowed`). A commit that adds or modifies an agent YAML without all 5 fields will be rejected.
+**Agent YAML policy schema**: the pre-commit hook enforces that every `.claude/agents/*.yaml` contains all 5 required policy fields (`allowed_tools`, `max_tokens_per_run`, `require_human_approval`, `audit_logging`, `external_calls_allowed`). A commit that adds or modifies an agent YAML without all 5 fields will be rejected. Additionally, if `allowed_tools` contains `Write`, `Edit`, or `Bash`, `require_human_approval` must be `true` — a semantic value check blocks the commit if it is `false`.
 
 **PM Skills** (`.claude/commands/`): `/pm-start` `/pm-run` `/pm-status` `/pm-plan` `/pm-propose` `/pm-close` `/pm-lessons` — and `skill-creator` (Marketplace, for new/revised PM skills).
 
@@ -277,8 +279,11 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
    1. Pre-move mapping: list every sentence in the source section
    2. Destination verification: confirm each sentence appears in the destination doc
    3. Source retention decision: mark each sentence "moved" or "kept" — no orphans
-   4. Pointer line: add `See \`docs/X.md\` for: topic1, topic2, ...` in CLAUDE.md
+   3b. Destination separator convention: if appending a new section to an existing doc, run `grep -n "^---$" <dest-doc>` to confirm whether `---` separators are used between sections. If yes, include `---` before the new heading.
+   4. Pointer line: add `See \`docs/X.md\` for: topic1, topic2, ...` in CLAUDE.md. Exception — pointer inside a fenced code block: backtick-quoting the path is not possible. Use a plain path but retain the topic keyword list: `See docs/X.md for: topic1, topic2, ...`
+   4a. Pointer byte estimate: before finalising migration scope, estimate pointer line sizes as (number of topics × ~40 bytes/keyword). Verify that (content_removed − pointer_overhead) meets the byte target. If margin < 500 bytes, add a reserve migration section or trim pointer keywords.
    5. Final verification: `wc -c CLAUDE.md` and `grep -c "<critical_phrase>"` for rules that must remain present
+   **Byte-count target verification**: always use `wc -c` (not Python `len()`) for byte-count acceptance criteria — encoding differences can cause a 100–300 byte discrepancy. Any edit applied after Reviewer approval on a byte-constrained task must be followed by `wc -c` before committing.
 5. **Self-improvement**: SelfImprover runs after every pipeline PASS and appends to `tasks/lessons.md`. If a significant pattern is found it also writes `artefacts/<task_id>/improvement_proposals.md` (format below). After any correction: update CLAUDE.md so the mistake cannot recur; commit to git.
 6. **Always-on pipeline**: every task runs the full pipeline — no skipping:
    ```
@@ -302,6 +307,7 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
 10. **Explain with diagrams**: when explaining architecture or non-obvious decisions, prefer ASCII diagrams over prose where they add clarity.
 
 **PM Planning Session**: invoke ProjectManager with "planning" intent to review, reprioritize, and onboard. PM asks for confirmation before queuing. **Preflight**: `ls artefacts/` before assigning IDs — use descriptive suffix if path exists.
+**CLAUDE.md size-reduction planning note**: when a byte-count target is specified, identify at plan time: (a) two primary migration candidates and (b) one "reserve" section — a small, self-contained section already partially referenced by an existing linked doc. Record estimated removal bytes and pointer overhead for all candidates before committing to a migration scope. If primary candidates alone fall short (removal − pointer overhead < target), activate the reserve section rather than discovering the gap during execution.
 **Project onboarding automation scan**: when onboarding a new project or beginning a session on a project for the first time, invoke `claude-automation-recommender` (zero-install, read-only) to surface top hooks, MCP servers, skills, and subagent recommendations for the detected tech stack. Run before installing any hook or MCP server — its non-mutating design makes it safe at any time with no side effects.
 **Phase gate announcement rule**: when /pm-start detects a phase gate is reached, the announcement section must end with an explicit yes/no approval question before printing the queue summary — do not leave the user with a statement and no prompt.
 **MVP ordering gate**: During PM planning, check epics.md for any stories with status `planned` in lower MVP phases before queuing higher-phase work. All stories in a phase must be `done` before the next phase is prioritized.
