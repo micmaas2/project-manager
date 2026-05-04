@@ -3,6 +3,7 @@
 **v0.8.0** — Extended pipeline with built-in Claude Code agents. SelfImprover loop fully operational with enforcement gates.
 8 tasks delivered end-to-end. Cross-project management active across 7 sibling projects (MVP3 in progress).
 PM system audit (task-057) completed 2026-05-03: 14 findings (2 Critical, 7 Major, 5 Minor); 9 findings registered as BL-122–BL-129 for future fixing.
+CLAUDE.md refactored (task-058): two sections extracted to linked docs (`docs/shell-presubmit.md`, `docs/mvp-template-checklist.md`); CLAUDE.md reduced from 47.4 KB to ~37.9 KB.
 
 A hierarchical multi-agent system that builds automations and scripts across projects.
 One orchestrator (ProjectManager, Opus 4.6) reads a task queue and spawns a six-stage
@@ -315,8 +316,10 @@ logs/
   token_log.jsonl            Token usage per agent per run
 docs/                        Architecture decision records; project-registry.md
   project-registry.md        Authoritative registry of all managed projects and their artefacts
-  n8n-deployment.md          n8n Pi4 deployment patterns (Docker, import gotchas, workflow JSON)
+  n8n-deployment.md          n8n Pi4 deployment patterns (Docker, import gotchas, workflow JSON, Pi4 operational notes)
   python-testing.md          Python testing patterns (hyphenated filenames, Docker-only packages, root-path quirks)
+  shell-presubmit.md         Shell script pre-submission checklist for Builder agents (syntax, cron guards, auth, secrets)
+  mvp-template-checklist.md  MVP template security/arch impact conditions — full list of conditions requiring a non-trivial entry
 hooks/                       pre-commit + commit-msg hooks (symlinked to .git/hooks/)
 ```
 

@@ -6,6 +6,21 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-058] project_manager: CLAUDE.md Size Reduction — Migrate 3 Sections to Linked Docs — 2026-05-04
+
+### Changed
+- `CLAUDE.md`: Reduced from 47,409 to 37,974 bytes (~20% reduction / 9,435 bytes removed).
+- Shell pre-submission checklist section replaced with pointer line: `See docs/shell-presubmit.md`.
+- MVP template security/arch impact conditions replaced with pointer line: `See docs/mvp-template-checklist.md`.
+- Pi4 / n8n operational notes replaced with pointer line: `See docs/n8n-deployment.md`.
+
+### Added
+- `docs/shell-presubmit.md`: Full shell pre-submission checklist (16 rules) extracted from CLAUDE.md.
+- `docs/mvp-template-checklist.md`: MVP template security/arch impact conditions extracted from CLAUDE.md.
+- `docs/n8n-deployment.md`: Extended with Pi4 operational notes section; all previously inline content preserved.
+
+---
+
 ## [task-057] project_manager: PM System Audit (Agents, Skills, CLAUDE.md) — 2026-05-03
 
 ### Audited (read-only)

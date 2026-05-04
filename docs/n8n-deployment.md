@@ -112,3 +112,28 @@ Run with: `/root/.nvm/versions/node/v24.12.0/bin/node artefacts/<task-id>/test_*
 - **REST API `limit=N` is a hard cap**: add a comment noting the assumption (e.g. `// assumes ≤100 active workflows`). Check `nextCursor` in the response and loop until null for large instances. Document the pagination requirement in `deploy-notes.md`.
 - **Code node returning `[]` stops the downstream chain**: no IF/Switch node needed for guard conditions. Return `[]` to halt; return `[{json: {...}}]` to continue.
 - **Workflow self-exclusion: UUID primary, name fallback** — name-only exclusion breaks on rename; UUID is immutable post-deploy. Combine both: `w.id !== '<UUID>' && w.name !== '<Name>'`.
+
+---
+
+## Pi4 Operational Notes
+
+**MAS stack on Pi4**: docker-compose file is at `/opt/mas/docker/mas/docker-compose.production.yml` (not `/opt/mas/docker-compose.yml`). Use `docker compose` (v2, with space) — `docker-compose` (v1) is broken on this Pi4 (`ModuleNotFoundError: No module named 'compose'`).
+
+**`docker restart` does not reload `env_file`**: `env_file` values are baked in at container creation. To pick up changes to `/opt/mas/.env.production`, run `docker compose -f docker/mas/docker-compose.production.yml up -d <service>` from `/opt/mas` — not `docker restart`. Verify with `docker exec <container> env | grep <VAR>`.
+
+**MAS daily fact scheduler**: APScheduler job `daily_fact_delivery` runs at 10:00 `Europe/Amsterdam` inside `mas-backend`. If the scheduled message is missing, check `docker logs mas-backend` for `401 Unauthorized` (stale token) before investigating the scheduler itself.
+
+**grep alternation over SSH**: `ssh pi4 "... | grep 'a\|b'"` fails on Pi4 bash (`command not found`). Use `-E` flag instead: `grep -E 'a|b'`.
+
+**Vault location**: `/opt/obsidian-vault/` exists on Pi4 only — not on the local host.
+Explore agents run locally; always use `ssh pi4 "find /opt/obsidian-vault ..."` for vault state.
+
+**Pensieve repo active branch**: always run `git -C /opt/claude/pensieve branch --show-current` before committing to the pensieve repo — it may be on a long-lived feature branch (e.g. `feature/task-029-capture-subworkflow`) rather than `main`. Doc commits intended for `main` must target the correct branch.
+
+**dashboard-preview.md**: cron-updated every 15 min on Pi4 — commit on feature branch before pm-close (timestamp + done count only).
+
+**GitHub API commits (stdlib)**: read: `GET /repos/{repo}/contents/{path}?ref={branch}` → `base64.b64decode(resp["content"])`; write: `PUT /repos/{repo}/contents/{path}` + `{"content": base64.b64encode(...).decode(), "sha": <sha_or_omit>, "branch": ...}`. Use `urllib.request`.
+
+**main/develop divergence**: n8n commits via GitHub API go directly to `main` (default branch, no hooks).
+Operational files written by n8n (e.g. `tasks/telegram-inbox.md`) must exist on `main`, not just `develop`.
+When creating such files locally, also push them to `main` via the GitHub API or a fast-track merge.

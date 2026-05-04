@@ -140,23 +140,7 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 
 **Append-only table schema additions**: when a task adds columns to an append-only markdown table (lessons.md, backlog.md, etc.), Builder must queue a backfill backlog item at build time — existing rows become structurally mismatched and break table rendering. Do not leave the backfill for SelfImprover to propose.
 
-**Shell script pre-submission check** (Builder must verify before handing off to Reviewer):
-- `bash -n <script>` must exit 0 — **for shell scripts only**; Python scripts use `python3 -m py_compile <script>` instead (`bash -n` cannot parse Python and will spuriously fail)
-- If cron/daemon: log guard, flock, SSH identity, logrotate — all present?
-- If outbound git/SSH: auth path exported explicitly?
-- Log output sanitized (ANSI + control chars stripped) before writing to file?
-- If the script accepts file-path arguments (e.g. `--queue`, `--backlog`, `--config`): add a `_safe_path()` containment guard that resolves the path and asserts `_WORKSPACE_ROOT in path.parents` — exit 1 with a descriptive error if not. Document the workspace root as a module-level constant.
-- If any env var holds a secret (TOKEN, KEY, PASS, SECRET, CREDENTIAL): use the fail-fast pattern (`os.environ.get("VAR")` + explicit None-check + `sys.exit(1)`) — never supply a non-empty fallback default to `os.environ.get()`. A non-empty fallback silently uses a hardcoded credential when the env var is unset.
-- When config fields have defaults defined (e.g. `Field(default=10)`), do not use `or` short-circuit fallbacks at runtime — they silently break the zero-as-disable intent. Replace `budget_usd = config.value or 10` with `budget_usd = config.value if config.value is not None else 10`, or remove the fallback entirely if the config default is already correct.
-- If the script checks for a required binary AND has an early-exit path that bypasses the binary entirely: place the early-exit BEFORE the binary check. Order: (1) collect inputs, (2) exit 0 if inputs empty, (3) check binary present. Reversed order causes false failures on clean environments where the tool is not installed.
-- Under `set -euo pipefail`, never capture `EXIT_CODE=$?` after a bare command — `set -e` terminates before `$?` is reached. Use `if ! command ...; then` instead (the `if !` construct suppresses `set -e` for the tested command, letting the failure branch execute).
-- If the script filters files by extension using grep: include both `.yml` AND `.yaml` variants by default — use `grep -E '\.(yml|yaml)$'`. If one extension is intentionally excluded, document it in a comment.
-- If the hook validates YAML files from a project using custom tags (e.g. Home Assistant `!secret`, `!include`, `!env_var`): register a wildcard multi-constructor on SafeLoader before any load call: `yaml.add_multi_constructor('', _ignore_unknown_tags, Loader=yaml.SafeLoader)`. Without this, every valid custom-tag file raises ConstructorError and blocks the commit — a blanket false positive. Also use `list(yaml.safe_load_all(...))` instead of `yaml.safe_load(...)` to parse multi-document YAML streams without raising on `---` separators.
-- If the hook uses `import yaml` (PyYAML / `python3-yaml`): add an explicit availability guard after the `python3` binary check — PyYAML is NOT stdlib: `if ! python3 -c "import yaml" &>/dev/null; then echo "ERROR: PyYAML not found — install with: sudo apt install python3-yaml" >&2; exit 1; fi`. Do not document it as "no external dependencies required" in script comments — PyYAML is a system/PyPI package. Correct comment: "Uses PyYAML (python3-yaml) — pre-installed on Raspberry Pi OS."
-- If the hook validates file content: read the staged index version via `git show ":$file"` piped to the validator via stdin — do NOT open the working-tree file directly. Reading from disk means on-disk edits after `git add` cause false passes or false failures depending on timing. Pass the filename as a separate `sys.argv` argument for error message context only. Replace `[ -f "$file" ]` disk-existence guards with `git ls-files --error-unmatch "$file"` to check the index. Do NOT add `--` before the `:$file` index refspec — `git show -- ":$file"` treats `:$file` as a working-tree pathspec and returns commit metadata instead of staged file contents, causing false-positive failures on all valid commits. The `:filename` syntax is self-disambiguating.
-- When writing credential-detection regex patterns that match free-form password values (e.g. RFC passwords, HDBUSERSTORE keys): use `\S+` or a broad character class rather than a narrow ASCII subset. SAP RFC passwords, database keys, and API tokens routinely contain `.`, `/`, `:`, `@`, and other non-alphanumeric characters. Narrow patterns like `[A-Za-z0-9!@#$%]` silently miss valid credentials and create a false sense of coverage. Default to `\S+` (any non-whitespace) for password captures; narrow only when the credential format is documented and fixed (e.g. a UUID, a 40-hex-char hash).
-- If a test file counts tests with a hardcoded total (e.g. `total = 12`): replace with a dynamic count derived from the test list itself (e.g. `total = len(TEST_CASES)`). Hardcoded totals silently under-count when new test cases are appended — the count passes green while coverage is incomplete. Only use a hardcoded total when the test suite is intentionally fixed and the count is asserted as an invariant.
-- If a validator uses `exec()` to run repo code: catch `SystemExit` explicitly before `except Exception` — `SystemExit` inherits from `BaseException` and bypasses `except Exception`, causing silent false-pass when tested code calls `sys.exit()` at module level.
+**Shell script pre-submission check** (Builder must verify before handing off to Reviewer): See `docs/shell-presubmit.md` for the full checklist (syntax check, cron/daemon guards, path containment, secret env vars, exit order, pipefail patterns, staged index reading, YAML custom tags, credential regex, dynamic test counts, SystemExit handling).
 
 **Review doc redaction rule**: when a Reviewer documents the "original vulnerable code" in a finding, replace the actual credential value with `<REDACTED>` — never quote a live token, password, or key verbatim, even inside a code block. The vulnerable pattern can be reconstructed from git diff; an exposed live credential cannot be un-leaked.
 
@@ -203,34 +187,7 @@ Acceptatiecriteria: 1) ... 2) ... 3) ...
 SLOs: latency < X ms; tests >= 90%
 max_tokens_per_run: 8000
 Security/arch impact: <note>
-  - If outbound HTTP: private IP ranges blocked (localhost, 127.x, 10.x, 192.168.x, 172.16-31.x)?
-  - If outbound HTTP: request timeout set?
-  - If any user-controlled value (topic, category, tag, filename) is used in a file path:
-      - Validate against allowlist or strict regex (e.g. [a-z0-9-]+) before path construction
-      - Assert finalPath.startsWith(ALLOWED_ROOT) after construction (use path.resolve to collapse ..)
-  - If LLM output is used as a structured field (slug, enum, filename): prompt character-set
-    constraint and validation regex in code must be identical — document both in the artefact
-  - If any field value from external data (email headers, API responses, user input) is
-    interpolated into YAML/JSON/Markdown: escape strings before interpolation (e.g. replace
-    " with \" in YAML double-quoted scalars; strip ASCII control chars 0x00-0x1F, not just \n)
-  - If any free-text field from an external API (description, extract, title, etc.) is embedded
-    in an LLM prompt: strip ASCII control chars 0x00–0x1F (excluding \t and \n) — apply to ALL
-    fields passed to the prompt, not only to those written to files
-  - If an external ID (e.g. message ID, record ID) is passed to a downstream step: validate
-    it is non-null/non-empty at point of use; throw a descriptive error if absent
-  - If the script runs under cron or systemd (no interactive terminal):
-      - Log writability guard: verify/create log file before first write; exit to stderr if unwritable
-      - Concurrency lock: use `flock -n` on a lock file at startup; skip (exit 0) if lock held
-      - SSH/auth identity: export `GIT_SSH_COMMAND` or equivalent explicitly — cron env has no agent
-      - Log rotation: document logrotate config as a **required** deploy step, not optional
-  - If the task rotates a credential or secret (PAT, API key, token):
-      - Rollback section must include "Estimated time-to-restore: N-M minutes"
-      - Estimate covers worst-case manual steps (e.g. generate new token + 2 config updates)
-  - If the task implements a budget enforcement or rate-limiting gate: add a
-    "comment-at-call-site" checklist item ensuring all guard calls carry explicit notes
-    explaining why the guard must remain at the current scope level (e.g. outside try/except).
-    Maintenance traps where guards are inadvertently moved to a scope they do not protect
-    against are non-obvious failures.
+  See docs/mvp-template-checklist.md for the full Security/arch impact conditions.
 No external deps: true/false  (if true: stdlib/built-ins only; no pip/npm installs)
 Prerequisites: [tool >= version, ...]
 Tests: unit/integration/regression
@@ -435,28 +392,7 @@ All agent work is tracked in `tasks/queue.json`. Schema:
 ## n8n Workflow Deployment (Pi4)
 
 SSH alias: `pi4` (192.168.1.10). n8n runs as Docker container `n8n`.
-GitHub PAT: `/opt/n8n/github-pat` on Pi4. See `docs/n8n-deployment.md` for: full deploy sequence, import gotchas, Pi4 Docker patterns, workflow JSON patterns.
-
-**MAS stack on Pi4**: docker-compose file is at `/opt/mas/docker/mas/docker-compose.production.yml` (not `/opt/mas/docker-compose.yml`). Use `docker compose` (v2, with space) — `docker-compose` (v1) is broken on this Pi4 (`ModuleNotFoundError: No module named 'compose'`).
-
-**`docker restart` does not reload `env_file`**: `env_file` values are baked in at container creation. To pick up changes to `/opt/mas/.env.production`, run `docker compose -f docker/mas/docker-compose.production.yml up -d <service>` from `/opt/mas` — not `docker restart`. Verify with `docker exec <container> env | grep <VAR>`.
-
-**MAS daily fact scheduler**: APScheduler job `daily_fact_delivery` runs at 10:00 `Europe/Amsterdam` inside `mas-backend`. If the scheduled message is missing, check `docker logs mas-backend` for `401 Unauthorized` (stale token) before investigating the scheduler itself.
-
-**grep alternation over SSH**: `ssh pi4 "... | grep 'a\|b'"` fails on Pi4 bash (`command not found`). Use `-E` flag instead: `grep -E 'a|b'`.
-
-**Vault location**: `/opt/obsidian-vault/` exists on Pi4 only — not on the local host.
-Explore agents run locally; always use `ssh pi4 "find /opt/obsidian-vault ..."` for vault state.
-
-**Pensieve repo active branch**: always run `git -C /opt/claude/pensieve branch --show-current` before committing to the pensieve repo — it may be on a long-lived feature branch (e.g. `feature/task-029-capture-subworkflow`) rather than `main`. Doc commits intended for `main` must target the correct branch.
-
-**dashboard-preview.md**: cron-updated every 15 min on Pi4 — commit on feature branch before pm-close (timestamp + done count only).
-
-**GitHub API commits (stdlib)**: read: `GET /repos/{repo}/contents/{path}?ref={branch}` → `base64.b64decode(resp["content"])`; write: `PUT /repos/{repo}/contents/{path}` + `{"content": base64.b64encode(...).decode(), "sha": <sha_or_omit>, "branch": ...}`. Use `urllib.request`.
-
-**main/develop divergence**: n8n commits via GitHub API go directly to `main` (default branch, no hooks).
-Operational files written by n8n (e.g. `tasks/telegram-inbox.md`) must exist on `main`, not just `develop`.
-When creating such files locally, also push them to `main` via the GitHub API or a fast-track merge.
+GitHub PAT: `/opt/n8n/github-pat` on Pi4. See `docs/n8n-deployment.md` for: full deploy sequence, import gotchas, Pi4 Docker patterns, workflow JSON patterns, MAS stack, docker restart env, daily scheduler, SSH grep, vault location, Pensieve branch, dashboard sync, GitHub API commits, main/develop divergence.
 
 ---
 
