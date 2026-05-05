@@ -52,6 +52,12 @@ _(in queue.json with status: pending)_
 - **task-056** genealogie: SQLite schema validator pre-commit hook (BL-113)
 - **task-057** project_manager: PM system audit — CLAUDE.md, agent YAMLs, skills quality review (BL-078)
 - **task-058** project_manager: CLAUDE.md size reduction — migrate verbose sections to linked docs (BL-118)
+- **task-059** project_manager: Fix manager.yaml — revise-claude-md invocation uses wrong tool (BL-122)
+- **task-060** project_manager: Fix builder.yaml — M-1 mirror gap confidence definition (BL-124)
+- **task-061** project_manager: Fix manager.yaml — add Bash to allowed_tools (BL-126)
+- **task-062** project_manager: Add execution-mode preamble to pm-close.md (BL-127)
+- **task-063** project_manager: Fix pm-start.md — 2 missing session checklist items (BL-128)
+- **task-064** project_manager: Fix CLAUDE.md — stale EPIC-003 reference in inbox promotion (BL-129)
 
 ---
 

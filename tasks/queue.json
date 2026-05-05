@@ -2517,6 +2517,242 @@
         "cost_estimate": "EUR 0",
         "prerequisites": []
       }
+    },
+    {
+      "id": "task-059",
+      "title": "Fix manager.yaml \u2014 revise-claude-md invocation uses wrong tool",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-009",
+      "story_id": "S-009-1",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-059/",
+      "created": "2026-05-05",
+      "updated": "2026-05-05T19:05:50.235159+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Change manager.yaml step 11 from Agent tool (subagent_type=claude-md-management:revise-claude-md) to Skill tool invocation, matching the CLAUDE.md correction.",
+        "niet_in_scope": [
+          "other manager.yaml changes",
+          "other YAML files"
+        ],
+        "acceptatiecriteria": [
+          "manager.yaml step 11 no longer references subagent_type=claude-md-management:revise-claude-md",
+          "Step 11 instructs use of Skill tool with skill name revise-claude-md",
+          "YAML is syntactically valid (yamllint passes)"
+        ],
+        "security_arch_impact": "none \u2014 docs/config change only",
+        "tests_required": "unit \u2014 grep confirms old pattern absent; grep confirms Skill tool pattern present; yamllint passes",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "YAML syntactically valid"
+        ],
+        "rollback_plan": "git revert commit; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-060",
+      "title": "Fix builder.yaml \u2014 M-1 mirror gap (confidence definition)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-009",
+      "story_id": "S-009-3",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-060/",
+      "created": "2026-05-05",
+      "updated": "2026-05-05T19:05:50.235159+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Add the verbatim M-1 confidence definition sentence to builder.yaml's Reviewer Confidence Threshold section so it matches CLAUDE.md exactly.",
+        "niet_in_scope": [
+          "other builder.yaml changes"
+        ],
+        "acceptatiecriteria": [
+          "builder.yaml contains verbatim: \"confidence = certainty the finding is a real issue (not a false positive)\"",
+          "Sentence appears in the Reviewer Confidence Threshold section",
+          "YAML syntactically valid"
+        ],
+        "security_arch_impact": "none \u2014 docs/config change only",
+        "tests_required": "unit \u2014 grep for verbatim sentence in builder.yaml; yamllint passes",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "YAML syntactically valid"
+        ],
+        "rollback_plan": "git revert; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-061",
+      "title": "Fix manager.yaml \u2014 add Bash to allowed_tools",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-009",
+      "story_id": "S-009-5",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-061/",
+      "created": "2026-05-05",
+      "updated": "2026-05-05T19:05:50.235159+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Add Bash to manager.yaml's allowed_tools so the policy matches the prompt's use of git and python3 commands; require_human_approval is already true.",
+        "niet_in_scope": [
+          "removing or changing existing tools",
+          "changing any other field"
+        ],
+        "acceptatiecriteria": [
+          "Bash present in manager.yaml allowed_tools list",
+          "require_human_approval remains true",
+          "YAML syntactically valid"
+        ],
+        "security_arch_impact": "low \u2014 Bash addition is gated by require_human_approval: true already set",
+        "tests_required": "unit \u2014 grep confirms Bash in allowed_tools; require_human_approval: true confirmed; yamllint passes",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "YAML syntactically valid"
+        ],
+        "rollback_plan": "git revert; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-062",
+      "title": "Add execution-mode preamble to pm-close.md",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-009",
+      "story_id": "S-009-6",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-062/",
+      "created": "2026-05-05",
+      "updated": "2026-05-05T19:05:50.235159+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Prepend the CLAUDE.md-required execution-mode preamble to pm-close.md so the skill is correctly marked as non-plan-mode.",
+        "niet_in_scope": [
+          "any other pm-close.md content changes"
+        ],
+        "acceptatiecriteria": [
+          "pm-close.md contains \"Execution mode: do not enter plan mode\" preamble after the title",
+          "Preamble wording matches CLAUDE.md skill authoring rules exactly",
+          "File renders correctly as markdown"
+        ],
+        "security_arch_impact": "none \u2014 skill authoring fix only",
+        "tests_required": "unit \u2014 grep for preamble string in pm-close.md; diff confirms no other content changed",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS"
+        ],
+        "rollback_plan": "git revert; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-063",
+      "title": "Fix pm-start.md \u2014 add 2 missing session checklist items",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-009",
+      "story_id": "S-009-7",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-063/",
+      "created": "2026-05-05",
+      "updated": "2026-05-05T19:05:50.235159+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Add ExitPlanMode denial recovery and ExitPlanMode mid-skill recovery items to the pm-start.md session checklist, matching the CLAUDE.md mandatory checklist spec.",
+        "niet_in_scope": [
+          "other pm-start.md changes",
+          "rewording existing items"
+        ],
+        "acceptatiecriteria": [
+          "pm-start.md checklist contains an ExitPlanMode denial recovery item",
+          "pm-start.md checklist contains an ExitPlanMode mid-skill recovery item",
+          "Both items match CLAUDE.md session start mandatory checklist wording"
+        ],
+        "security_arch_impact": "none \u2014 skill authoring fix only",
+        "tests_required": "unit \u2014 grep for both items in pm-start.md; diff confirms no regressions to other items",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS"
+        ],
+        "rollback_plan": "git revert; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-064",
+      "title": "Fix CLAUDE.md \u2014 stale EPIC-003 reference in inbox promotion checklist",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-009",
+      "story_id": "S-009-8",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-064/",
+      "created": "2026-05-05",
+      "updated": "2026-05-05T19:05:50.235159+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Replace the hardcoded EPIC-003 in the Telegram inbox promotion checklist item with \u2014 (no epic; assigned during /pm-plan) to match pm-start.md behaviour.",
+        "niet_in_scope": [
+          "other CLAUDE.md changes",
+          "changing any other reference to EPIC-003"
+        ],
+        "acceptatiecriteria": [
+          "The inbox promotion line no longer reads EPIC-003 in that context",
+          "Replacement is \u2014 per the current pm-start.md convention",
+          "No other EPIC-003 references broken"
+        ],
+        "security_arch_impact": "none \u2014 docs change only",
+        "tests_required": "unit \u2014 grep confirms EPIC-003 absent from Telegram inbox checklist line; grep confirms other EPIC-003 references in epics.md and backlog.md unaffected",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "wc -c confirms CLAUDE.md size unchanged +-50 bytes"
+        ],
+        "rollback_plan": "git revert; owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
     }
   ]
 }
