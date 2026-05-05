@@ -20,7 +20,7 @@ Append (new sentence):
 
 **Rationale**: task-060 fixed builder.yaml but missed reviewer.yaml; Reviewer Finding 1 (confidence 95) caught it. The existing M-1 rule explains the pattern but says nothing about task scoping. The gap is the absence of an explicit "all copies or none" commit contract. Adding this sentence closes the loophole without growing the rule into a new section.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
 
 ---
 
@@ -38,4 +38,4 @@ Append one sentence:
 
 **Rationale**: task-063's pm-start.md failure was a paraphrase of a CLAUDE.md recovery rule, not a YAML-to-CLAUDE.md mirror. The existing copy-paste rule targets "agent YAMLs" explicitly but does not mention skill markdown files. The Reviewer correctly applied the M-1 contract; adding skill files to the rule's stated scope prevents future ambiguity about whether skill markdown files are in scope.
 
-**Status**: REQUIRES_HUMAN_APPROVAL
+**Status**: APPROVED
