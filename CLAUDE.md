@@ -83,6 +83,8 @@ NEVER put message-format validation in `pre-commit` — it does not receive `$1`
 ```
 Areas: `ROLE`, `DOCS`, `TEST`, `FIX`, `REFACTOR`, `PLAYBOOK`, `JENKINS`, `INVENTORY`, `AGENT`
 
+**Merge/release commits must use `[DOCS]`** — `[RELEASE]` is not a valid area; the commit-msg hook will reject it. Use `[DOCS] merge feature/X into develop` for merge commits.
+
 ---
 
 ## Model Policy (Token Governance)
@@ -303,6 +305,8 @@ ProjectManager enforces all scope. Work outside MVP is rejected or backlogged.
    **Doc stage file ownership**: when DocUpdater and docs-readme-writer run in parallel, assign ownership explicitly: DocUpdater → `CHANGELOG.md`; docs-readme-writer → `README.md`. This prevents overwrite conflicts when both agents target the same file. If docs-readme-writer does not confirm README.md was modified in its output, the parent agent must apply the README update directly before committing.
    **DocUpdater CHANGELOG verification**: after DocUpdater writes CHANGELOG.md, spot-check the entry against the actual task scope — DocUpdater infers implementation details from artefacts and may fabricate steps that were explicitly out of scope (e.g. "existing rows backfilled"). Correct before committing.
 6b. **End-of-session proposal review (human gate)**: At the end of each PM session, read `artefacts/*/improvement_proposals.md` for all tasks completed this session. Present each pending proposal to the user as: target file, proposed change, rationale, APPROVE / REJECT. Apply only approved proposals immediately (edit file, commit). Log rejected proposals with reason in `tasks/lessons.md`. Never apply a proposal without explicit user approval. After all proposals are resolved, invoke `revise-claude-md` via the `Skill` tool (not `Agent`) to bake session learnings into CLAUDE.md and commit the result. **Cross-file consistency check**: when a proposal introduces a format definition (e.g. improvement_proposals.md schema), verify the format is identical in both CLAUDE.md and the relevant agent YAML before presenting to the user. **Proposal response format**: user replies `APPROVE: P1, P3 / REJECT: P2` — apply all approved in one pass, log rejections. **SelfImprover dedup**: when running SelfImprover for multiple tasks in a session, collect all proposals before presenting — remove duplicates and proposals targeting text already present in the target file. **Scanning for pending proposals**: `find artefacts -name "improvement_proposals.md" | xargs grep -lE "^\*\*Status\*\*: REQUIRES_HUMAN_APPROVAL"` — `^` prevents false positives from body text quoting the pattern; do NOT use `grep -rl`. **pm-propose commit discipline**: after applying approved proposals that edit CLAUDE.md, immediately commit on the current feature branch before proceeding — do not leave session-learning edits unstaged across a context boundary.
+**Batch same-file pending tasks into one pipeline run**: when multiple pending tasks target the same file, execute them together in a single Builder→Reviewer→Tester pass — running separate pipelines for each wastes review cycles on an unchanged file.
+
 7. **Autonomous bug fixing**: when given a bug report, fix it — point at logs/errors, then resolve.
 8. **Demand elegance (balanced)**: pause and ask "Is there a more elegant way?" before finalising any non-trivial design. Skip for simple fixes — do not over-engineer.
 9. **Minimal impact**: touch only what is strictly necessary; avoid side effects on untouched code or config. If you must change something adjacent, flag it explicitly.
