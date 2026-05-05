@@ -136,6 +136,8 @@ Spawn sequence: Manager → Architect/Security → Builder → [Reviewer + code-
 
 **Grep tool vs Bash grep**: use the `Grep` tool (not `grep` via Bash) when the search pattern contains backticks or special shell characters — Bash eval will fail with `unexpected EOF while looking for matching backtick`.
 
+**`xargs grep` exits 123 when find returns no files** — `find ... | xargs grep -lE "..."` returns exit code 123 (not 1) when find produces no results; append `|| true` (or `2>/dev/null` for stderr only) to prevent Bash tool error output. Code 123 means no input reached grep, not a failed match.
+
 **Multi-file text replacement**: `sed -i '...' "$f"` inside bash for-loops fails in the Bash tool (sed reports `$f: No such file or directory`). Use `python3 -c "p='path'; t=open(p).read(); open(p,'w').write(t.replace('old','new'))"` inline instead — reliable across all shell contexts.
 
 **Append-only table schema additions**: when a task adds columns to an append-only markdown table (lessons.md, backlog.md, etc.), Builder must queue a backfill backlog item at build time — existing rows become structurally mismatched and break table rendering. Do not leave the backfill for SelfImprover to propose.
