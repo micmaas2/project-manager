@@ -75,7 +75,7 @@ prompt: |
   ```
 
   ### Field Definitions
-  confidence: 1-100. Represents certainty that the finding is a real issue (not a false positive).
+  Definition: confidence = certainty the finding is a real issue (not a false positive).
   Builder loops only on findings with confidence >= 80.
   Findings with confidence < 80 are routed to build_notes.md only (no loop required).
 

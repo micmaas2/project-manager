@@ -167,14 +167,14 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 | Story ID | Title | Queue Task | Status |
 |---|---|---|---|
-| S-009-1 | Fix manager.yaml — revise-claude-md invocation uses wrong tool (BL-122) | task-059 | in_progress |
+| S-009-1 | Fix manager.yaml — revise-claude-md invocation uses wrong tool (BL-122) | task-059 | done |
 | S-009-2 | Fix reviewer.yaml — require_human_approval (BL-123) | — | done |
-| S-009-3 | Fix builder.yaml — M-1 mirror gap confidence definition (BL-124) | task-060 | in_progress |
+| S-009-3 | Fix builder.yaml — M-1 mirror gap confidence definition (BL-124) | task-060 | done |
 | S-009-4 | Fix doc-updater.yaml — require_human_approval (BL-125) | — | done |
-| S-009-5 | Fix manager.yaml — add Bash to allowed_tools (BL-126) | task-061 | in_progress |
-| S-009-6 | Add execution-mode preamble to pm-close.md (BL-127) | task-062 | in_progress |
-| S-009-7 | Fix pm-start.md — 2 missing session checklist items (BL-128) | task-063 | in_progress |
-| S-009-8 | Fix CLAUDE.md — stale EPIC-003 reference in inbox promotion (BL-129) | task-064 | in_progress |
+| S-009-5 | Fix manager.yaml — add Bash to allowed_tools (BL-126) | task-061 | done |
+| S-009-6 | Add execution-mode preamble to pm-close.md (BL-127) | task-062 | done |
+| S-009-7 | Fix pm-start.md — 2 missing session checklist items (BL-128) | task-063 | done |
+| S-009-8 | Fix CLAUDE.md — stale EPIC-003 reference in inbox promotion (BL-129) | task-064 | done |
 
 ---
 

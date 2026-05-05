@@ -25,7 +25,11 @@ Read tasks/queue.json.
 **5. Phase gate check**
 Read tasks/epics.md. Find the epic with status=in_progress. Check if all its stories have status=done. If yes: announce phase gate reached and await human approval before queuing next phase work.
 
-**6. Summary**
+**6. ExitPlanMode guard**
+- If the user denies ExitPlanMode, use AskUserQuestion to clarify intent before re-attempting — the user may be redirecting to a side task first, not rejecting the plan outright.
+- If plan mode activates unexpectedly during a PM skill run (e.g. /pm-start), write a minimal plan file summarising remaining steps, call ExitPlanMode, then continue the skill after approval.
+
+**7. Summary**
 Present: inbox items promoted (count), top 3 lessons, paused tasks, catch-up needed, phase status.
 Await user confirmation before executing any task work.
 

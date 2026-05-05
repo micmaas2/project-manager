@@ -6,6 +6,18 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-059–task-064] project_manager: EPIC-009 Config/Docs Fixes (BL-122, BL-124, BL-126–BL-129) — 2026-05-05
+
+### Fixed
+- `task-059` (BL-122): `.claude/agents/manager.yaml` step 11 now invokes `revise-claude-md` via the Skill tool instead of the Agent tool / `subagent_type` (broken invocation path corrected).
+- `task-060` (BL-124): `.claude/agents/builder.yaml` and `.claude/agents/reviewer.yaml` — added verbatim M-1 confidence-definition sentence to both prompts so the definition is identical across CLAUDE.md, builder, and reviewer.
+- `task-061` (BL-126): `.claude/agents/manager.yaml` — added `Bash` to `allowed_tools` (was missing despite manager requiring shell commands).
+- `task-062` (BL-127): `.claude/commands/pm-close.md` — added execution-mode preamble (`Execution mode: do not enter plan mode`) as required by CLAUDE.md skill-authoring rules.
+- `task-063` (BL-128): `.claude/commands/pm-start.md` — added ExitPlanMode guard step (step 6) to session-start checklist.
+- `task-064` (BL-129): `CLAUDE.md` — replaced stale `EPIC-003` reference with `—` in the Telegram inbox session-start checklist.
+
+---
+
 ## [task-058] project_manager: CLAUDE.md Size Reduction — Migrate 3 Sections to Linked Docs — 2026-05-04
 
 ### Changed

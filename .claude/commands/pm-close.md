@@ -1,5 +1,7 @@
 # /pm-close — Sprint / MVP Close Procedure
 
+**Execution mode**: do not enter plan mode. This skill executes already-planned work. Proceed directly to the Steps below without calling EnterPlanMode.
+
 Run at end of every sprint and at every MVP phase gate. Execute steps in order.
 
 ## Steps

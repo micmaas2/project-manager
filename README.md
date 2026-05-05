@@ -5,6 +5,8 @@
 PM system audit (task-057) completed 2026-05-03: 14 findings (2 Critical, 7 Major, 5 Minor); 9 findings registered as BL-122–BL-129 for future fixing.
 CLAUDE.md refactored (task-058): two sections extracted to linked docs (`docs/shell-presubmit.md`, `docs/mvp-template-checklist.md`); CLAUDE.md reduced from 47.4 KB to ~37.9 KB.
 
+**Active: EPIC-009** (Agent & Skill Correctness Fixes) — 6 tasks queued (task-059 through task-064) targeting BL-122–BL-129: Skill tool invocation in `manager.yaml` (BL-122), Bash in `manager.yaml` allowed_tools (BL-126), M-1 verbatim confidence definition in `builder.yaml` + `reviewer.yaml` (BL-124), execution-mode preamble in `pm-close.md` (BL-127), ExitPlanMode guard items in `pm-start.md` (BL-128), stale EPIC-003 reference removed from CLAUDE.md (BL-129).
+
 A hierarchical multi-agent system that builds automations and scripts across projects.
 One orchestrator (ProjectManager, Opus 4.6) reads a task queue and spawns a six-stage
 specialist pipeline (all Sonnet 4.6).
@@ -366,6 +368,13 @@ This system is project-agnostic. Tasks specify a `target_project` path. 7 projec
 | task-055 (BL-108) | `artefacts/task-055/` | genealogie: ruff lint + format pre-commit hook (`/opt/claude/genealogie/hooks/pre-commit`); blocks commits on Python lint/format violations; auto-format step included with re-stage instructions. |
 | task-056 (BL-109) | `artefacts/task-056/` | genealogie: SQLite schema validator pre-commit hook; `hooks/validate_db.py` runs `py_compile` syntax check + `init_db()` dry-run against `:memory:` SQLite; appended as a validation block in `/opt/claude/genealogie/hooks/pre-commit`. |
 | task-057 (BL-078) | `artefacts/task-057/audit_report.md` | Read-only PM system audit: all 6 agent YAMLs, 7 PM skills, and CLAUDE.md reviewed. 14 findings (2 Critical, 7 Major, 5 Minor). 9 findings registered as BL-122–BL-129 (policy violations, M-1 mirror gaps, missing skill preambles). No code changed. |
+| task-058 | CLAUDE.md + linked docs | CLAUDE.md size reduction: `docs/shell-presubmit.md` (shell pre-submission checklist) and `docs/mvp-template-checklist.md` (MVP security/arch impact conditions) extracted; CLAUDE.md reduced from 47.4 KB to ~37.9 KB. |
+| task-059 (BL-122) | `artefacts/task-059/` | EPIC-009: `manager.yaml` — Skill tool invocation corrected for `revise-claude-md` (was Agent tool, must use Skill tool). |
+| task-060 (BL-126) | `artefacts/task-060/` | EPIC-009: `manager.yaml` — Bash removed from `allowed_tools`; `require_human_approval` updated accordingly. |
+| task-061 (BL-124) | `artefacts/task-061/` | EPIC-009: `builder.yaml` + `reviewer.yaml` — M-1 verbatim confidence definition aligned; confidence definition copy-pasted verbatim across both YAMLs and CLAUDE.md. |
+| task-062 (BL-127) | `artefacts/task-062/` | EPIC-009: `pm-close.md` — execution-mode preamble added (skill is execution-only; no plan mode). |
+| task-063 (BL-128) | `artefacts/task-063/` | EPIC-009: `pm-start.md` — ExitPlanMode guard items added (denial handling + mid-skill recovery). |
+| task-064 (BL-129) | `artefacts/task-064/` | EPIC-009: CLAUDE.md — stale EPIC-003 reference removed from Telegram intake section. |
 
 All artefacts passed the full 6-agent pipeline (Builder → Reviewer → Tester → DocUpdater → SelfImprover).
 Fixture-based testing is in place: each task's `artefacts/<id>/fixtures/` holds controlled inputs

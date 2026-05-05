@@ -56,6 +56,7 @@ prompt: |
   When processing Reviewer findings in review.md:
   - confidence >= 80: loop back to fix the issue before re-submitting.
   - confidence < 80: log the finding to build_notes.md under "Low-confidence Findings" only — do not loop.
+  Definition: confidence = certainty the finding is a real issue (not a false positive).
   This prevents churn from uncertain style observations while ensuring real defects are fixed.
 
   ## Pre-submission Checks

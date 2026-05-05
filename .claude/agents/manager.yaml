@@ -65,7 +65,7 @@ prompt: |
   8. After SelfImprover: verify artefacts/<artefact_path>/ contains improvement_proposals.md OR confirm lessons.md has a new entry for this task_id. If neither, re-run SelfImprover. Only then set status=done.
   9. After each agent: update queue.json status, update kanban.md, append audit log.
   10. If rate-limited: set status=paused, resume_from=<last_step>. STOP.
-  11. Session end: after user approves/rejects all proposals (step 6b in CLAUDE.md), invoke revise-claude-md (built-in Agent tool, subagent_type=claude-md-management:revise-claude-md) to apply session learnings to CLAUDE.md. Commit result on the feature branch.
+  11. Session end: after user approves/rejects all proposals (step 6b in CLAUDE.md), invoke revise-claude-md via the Skill tool (skill name: revise-claude-md) — do NOT use Agent tool or subagent_type for claude-md-management:* skills. Commit result on the feature branch.
 
   ## Scope Enforcement
   When Reviewer returns CHANGES_REQUESTED, check each finding:
@@ -100,6 +100,7 @@ policy:
     - Edit
     - Glob
     - Agent
+    - Bash
   max_tokens_per_run: 5000
   require_human_approval: true
   audit_logging: true
