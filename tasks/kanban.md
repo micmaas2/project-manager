@@ -3,7 +3,7 @@
 Updated by ProjectManager after every task status change.
 Source of truth: `tasks/queue.json`. This board is a human-readable view.
 
-Last updated: 2026-04-17T12:06:44Z
+Last updated: 2026-05-06T14:00:00Z
 
 ---
 
@@ -18,7 +18,6 @@ _(items in backlog.md not yet in queue)_
 - BL-026 pi-homelab: Regular patching (P1 — blocked-ssh, depends on BL-012/013)
 - BL-035 school-ai: AI learning assistant new project (P2)
 - BL-038 project_manager: Mempalace-style memory investigation (P3)
-- BL-031 PM: git worktrees investigation (P3)
 - BL-033 New project: grocery price comparison (P3)
 
 ---
@@ -58,6 +57,15 @@ _(in queue.json with status: pending)_
 - **task-062** project_manager: Add execution-mode preamble to pm-close.md (BL-127)
 - **task-063** project_manager: Fix pm-start.md — 2 missing session checklist items (BL-128)
 - **task-064** project_manager: Fix CLAUDE.md — stale EPIC-003 reference in inbox promotion (BL-129)
+- **task-065** project_manager: Investigate git worktrees — parallel agent isolation (BL-031)
+- **task-066** project_manager: Evaluate hookify + 2–3 POC safety rules (BL-075)
+- **task-067** project_manager: Integrate pm-healthcheck.sh into /pm-start (BL-080)
+- **task-068** project_manager: Silent-failure-hunter audit of scripts/ (BL-089)
+- **task-069** project_manager: pm-run loop-operator checkpoint + escalation (BL-090)
+- **task-070** project_manager: Hook profiles — minimal/standard/strict (BL-091)
+- **task-071** project_manager: Structured 4-phase codebase onboarding (BL-095)
+- **task-072** project_manager: Commit-msg BL-ID correlation validator (BL-105)
+- **task-073** project_manager: Backfill lessons.md Confidence+Scope columns (BL-117)
 
 ---
 

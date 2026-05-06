@@ -11,7 +11,8 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 |---|---|---|---|
 | EPIC-001 | Multi-Agent System Foundation | project_manager | done |
 | EPIC-002 | Self-Improvement & Learning Loop | project_manager | done |
-| EPIC-003 | Multi-Project Coordination | project_manager | in_progress |
+| EPIC-003 | Multi-Project Coordination | project_manager | done |
+| EPIC-010 | PM System Operational Reliability | project_manager | in_progress |
 
 ---
 
@@ -42,7 +43,7 @@ Items move to `queue.json` when prioritized and assigned an MVP template.
 | BL-028 | EPIC-003 | project_manager: Merge Boris Cherny CLAUDE.md principles + archive original | project_manager | P2 | done | 2026-04-06 |
 | BL-029 | EPIC-003 | project_manager: Activity dashboard in Obsidian vault (auto-generated markdown, 15-min cron) | project_manager | P2 | done | 2026-04-06 |
 | BL-030 | EPIC-003 | pensieve: Phone backlog submission via Telegram BACKLOG: prefix → GitHub API commit | pensieve | P2 | done | 2026-04-06 |
-| BL-031 | EPIC-003 | project_manager: Investigate git worktrees as isolation mechanism for parallel agent runs | project_manager | P3 | new | 2026-04-06 |
+| BL-031 | EPIC-003 | project_manager: Investigate git worktrees as isolation mechanism for parallel agent runs | project_manager | P3 | in_progress | 2026-04-06 |
 | BL-033 | EPIC-003 | New project proposal: grocery price comparison across stores (requirements + plan first) | project_manager | P3 | new | 2026-04-06 |
 | BL-034 | EPIC-003 | project_manager: Add backlog and Pensieve capture from laptop (not only Telegram/phone) | project_manager | P2 | done | 2026-04-06 |
 | BL-035 | EPIC-003 | New project proposal: school-ai — AI learning assistant for primary school kids (helps learn, not do work) | school-ai | P2 | new | 2026-04-07 |
@@ -113,12 +114,12 @@ Items completed, rejected, or no longer relevant.
 | BL-032 | test backlog routing via telegram | Test entry — confirmed pipeline working | 2026-04-06 |
 | BL-073 | EPIC-003 | project_manager: Install session-report skill — wire into /pm-status to show last-7-day token usage summary (interactive HTML report from session transcripts) | project_manager | P2 | new | 2026-04-14 |
 | BL-074 | EPIC-003 | project_manager: Use skill-creator to audit and iterate on pm-run, pm-propose, pm-close skills — run evals, fix weaknesses, optimize trigger descriptions | project_manager | P2 | new | 2026-04-14 |
-| BL-075 | EPIC-003 | project_manager: Evaluate hookify for MAS safety rules — create 2-3 hookify rules as proof-of-concept (e.g. no direct develop commit, no grep -rl on artefacts) | project_manager | P3 | new | 2026-04-14 |
+| BL-075 | EPIC-003 | project_manager: Evaluate hookify for MAS safety rules — create 2-3 hookify rules as proof-of-concept (e.g. no direct develop commit, no grep -rl on artefacts) | project_manager | P3 | in_progress | 2026-04-14 |
 | BL-076 | EPIC-003 | project_manager: Add confidence scoring (1-100) to Reviewer YAML output format — Builder loops only on score >= 80 findings; low-confidence findings go to build_notes.md only | project_manager | P2 | in_progress | 2026-04-14 |
 | BL-077 | EPIC-003 | project_manager: Research — evaluate whether ProjectManager or task-queue processor should be rebuilt as a Claude Agent SDK app (Python); prototype with /new-sdk-app | project_manager | P3 | new | 2026-04-14 |
 | BL-078 | EPIC-003 | project_manager: Review project manager claude — audit CLAUDE.md, agent YAMLs, skills, and overall PM system for quality and gaps | project_manager | P2 | done | 2026-04-14 |
 | BL-079 | EPIC-003 | project_manager: Execute CLAUDE.md + agent YAML token reduction rewrites (from task-026 rewrite-plan.md, ~1,540 tokens savings across 6 targets) | project_manager | P2 | in_progress | 2026-04-14 |
-| BL-080 | EPIC-003 | project_manager: Integrate pm-healthcheck.sh into /pm-start — run automatically at session start (task-027 follow-up) | project_manager | P3 | new | 2026-04-14 |
+| BL-080 | EPIC-003 | project_manager: Integrate pm-healthcheck.sh into /pm-start — run automatically at session start (task-027 follow-up) | project_manager | P3 | in_progress | 2026-04-14 |
 | BL-081 | EPIC-003 | project_manager: AI-powered personal learning guide — research and prototype a system to help user learn effectively (avoid distraction, stay focused, beginner-to-understanding path) | project_manager | P2 | new | 2026-04-15 |
 | BL-082 | EPIC-003 | project_manager: Research MCP server usage with Playwright — feasibility and integration approach | project_manager | P3 | new | 2026-04-15 |
 | BL-083 | EPIC-003 | pensieve: Debug missing Obsidian md files since 2026-04-09 — investigate n8n vault write pipeline gap | pensieve | P1 | done | 2026-04-16 |
@@ -127,13 +128,13 @@ Items completed, rejected, or no longer relevant.
 | BL-086 | — | project_manager: Context budget audit — MCP server tool schema overhead + agent frontmatter word counts (extends task-035 scope) | project_manager | P2 | new | 2026-04-16 |
 | BL-087 | — | project_manager: Agent eval harness — YAML task definitions + worktree isolation + grep judge for pipeline stage quality regression | project_manager | P2 | new | 2026-04-16 |
 | BL-088 | — | project_manager: Hooks-over-prompts audit — move top 3 must-always-follow CLAUDE.md behavioral rules to Stop/PostToolUse hooks | project_manager | P2 | done | 2026-04-29 |
-| BL-089 | — | project_manager: Silent-failure-hunter audit of scripts/ — one-off pass on all PM helper scripts for error propagation issues | project_manager | P3 | new | 2026-04-16 |
-| BL-090 | — | project_manager: pm-run loop-operator checkpoint + escalation logic (depends on BL-031 worktree investigation) | project_manager | P3 | new | 2026-04-16 |
-| BL-091 | — | project_manager: Hook profiles — minimal/standard/strict via env var in settings.json | project_manager | P3 | new | 2026-04-16 |
+| BL-089 | — | project_manager: Silent-failure-hunter audit of scripts/ — one-off pass on all PM helper scripts for error propagation issues | project_manager | P3 | in_progress | 2026-04-16 |
+| BL-090 | — | project_manager: pm-run loop-operator checkpoint + escalation logic (depends on BL-031 worktree investigation) | project_manager | P3 | in_progress | 2026-04-16 |
+| BL-091 | — | project_manager: Hook profiles — minimal/standard/strict via env var in settings.json | project_manager | P3 | in_progress | 2026-04-16 |
 | BL-092 | — | project_manager: Add strategic /compact calls at pm-run stage boundaries (Builder→Reviewer, Reviewer→Tester) to reduce context carry-over | project_manager | P2 | done | 2026-04-17 |
 | BL-093 | — | project_manager: Cost-aware model routing — complexity thresholds (text length/item count → Haiku vs Sonnet) + prompt caching for system prompts >1024 tokens | project_manager | P2 | done | 2026-04-17 |
 | BL-094 | — | project_manager: Agent introspection debugging protocol in CLAUDE.md — 4-phase structured self-debug (Failure Capture → Root-Cause Diagnosis → Contained Recovery → Introspection Report) | project_manager | P2 | new | 2026-04-17 |
-| BL-095 | — | project_manager: Structured codebase onboarding for new projects — 4-phase (Reconnaissance → Architecture Mapping → Convention Detection → Generate Artefacts) | project_manager | P3 | new | 2026-04-17 |
+| BL-095 | — | project_manager: Structured codebase onboarding for new projects — 4-phase (Reconnaissance → Architecture Mapping → Convention Detection → Generate Artefacts) | project_manager | P3 | in_progress | 2026-04-17 |
 | BL-096 | — | project_manager: CLAUDE.md size reduction — 41.3k chars exceeds 40k performance threshold; audit sections for duplication, move stable reference content to linked docs, target ≤35k | project_manager | P1 | done | 2026-04-17 |
 | BL-097 | — | project_manager: Review /pm-run design — should it start in plan mode? Evaluate: /pm-run is task execution (not planning), so plan mode may be redundant; assess whether explicit plan-mode gate adds value or just friction for well-defined queued tasks | project_manager | P2 | done | 2026-04-17 |
 | BL-098 | — | project_manager: Review model version pins in CLAUDE.md — currently pinned to Opus 4.6/Sonnet 4.6/Haiku 4.5; should these be explicit versions or just family names? Update to 4.7 if explicit pins preferred, or switch to family aliases | project_manager | P2 | done | 2026-04-17 |
@@ -143,7 +144,7 @@ Items completed, rejected, or no longer relevant.
 | BL-102 | — | project_manager: Run claude-automation-recommender at project onboarding — add claude-code-setup (claude-automation-recommender) scan as a mandatory step in PM project onboarding procedure; run for each managed project to surface top hooks/MCP/skills/subagent recommendations | project_manager | P2 | done | 2026-04-28 |
 | BL-103 | — | project_manager: Add skill-creator evals to pm-* skill library — use skill-creator to add formal eval test suites and description optimization to all 7 pm-* skills; reduces triggering failures and establishes eval baseline for future skill authoring | project_manager | P2 | new | 2026-04-19 |
 | BL-104 | — | project_manager: PostToolUse artefact quality checklist hook — enforce required artefact fields and non-empty mvp_template before archival; complements PreToolUse security-guidance hook (BL-101) | project_manager | P2 | new | 2026-04-28 |
-| BL-105 | — | project_manager: Commit-msg BL-ID correlation validator — auto-validate that every feature-branch commit references a BL number; closes audit gaps in task tracking | project_manager | P3 | new | 2026-04-28 |
+| BL-105 | — | project_manager: Commit-msg BL-ID correlation validator — auto-validate that every feature-branch commit references a BL number; closes audit gaps in task tracking | project_manager | P3 | in_progress | 2026-04-28 |
 | BL-106 | EPIC-007 | CCAS: Ansible playbook syntax + idempotency pre-commit hook — enforce ansible-lint and validate roles are idempotent before push; linters exist but are not currently hooked | CCAS | P2 | done | 2026-04-28 |
 | BL-107 | EPIC-007 | CCAS: SAP credential PreToolUse blocking hook — block Write/Edit when SAP credential patterns detected at edit time; emit file path + line number only (never matched text); mirrors BL-101 security-guidance pattern; prevents credentials from ever entering git history | CCAS | P2 | done | 2026-04-28 |
 | BL-108 | EPIC-007 | pi-homelab: HA YAML syntax + Lovelace structure pre-commit hook — validate Home Assistant YAML and Lovelace config before push; prevents failed HA restarts from config errors | pi-homelab | P2 | done | 2026-04-28 |
@@ -155,7 +156,7 @@ Items completed, rejected, or no longer relevant.
 | BL-114 | — | project_manager: Research Guardrails-ai framework — evaluate fit for MAS/pensieve AI pipelines; reliable output validation, structured generation, and guardrails for LLM calls (https://github.com/guardrails-ai/guardrails) | project_manager | P2 | new | 2026-04-28 |
 | BL-115 | — | pensieve: Obsidian + Claude Code second brain — Claude legt verbanden tussen losse notities in vault; 200+ losse notities, surfacing connections and clustering themes; research + prototype | pensieve | P2 | new | 2026-04-28 |
 | BL-116 | — | pensieve: Source capture for original posts (LinkedIn etc.) — when saving a post to Obsidian, preserve the source URL/author/platform so it's traceable; currently difficult to find back the original | pensieve | P2 | new | 2026-04-28 |
-| BL-117 | — | project_manager: Backfill existing lessons.md rows with `| — | — |` placeholder values for Confidence and Scope columns — task-050 added 2 columns; 27+ pre-existing rows have 4 fields and break table rendering | project_manager | P3 | new | 2026-04-29 |
+| BL-117 | — | project_manager: Backfill existing lessons.md rows with `| — | — |` placeholder values for Confidence and Scope columns — task-050 added 2 columns; 27+ pre-existing rows have 4 fields and break table rendering | project_manager | P3 | in_progress | 2026-04-29 |
 | BL-118 | task-058 | project_manager: CLAUDE.md size reduction pass — file is 41.7 KB vs ≤35 k target from task-037; 6.7 KB of net growth from session learnings; migrate verbose sections (MVP template security checklist, shell pre-submission list) to linked docs; target ≤38 k | project_manager | P3 | done | 2026-04-30 |
 | BL-119 | — | project_manager: Orchestration efficiency audit — analyse the project_manager setup for improvement opportunities; evaluate: (1) subagent parallelism beyond current Reviewer+CQR and DocUpdater+docs-readme-writer pairs, (2) dedicated YAML agents vs built-in subagent_types for each pipeline stage, (3) skill extraction — which pm-* skills could be replaced by lighter YAML agents or remote triggers, (4) context window usage per stage — where is main context polluted unnecessarily, (5) whether the current pm-run skill loop is the right execution model or if a separate orchestrator agent would be more efficient; deliverable: ranked list of efficiency proposals with estimated token/latency savings. **Usage data (2026-04-30, weekly)**: /pm-run skill = 12% of total usage; pm-run subagents = 21% → combined ~33% of all usage from this one skill. 85% of total usage is subagent-heavy sessions. Top subagents: pm-run 21%, general-purpose 3%, Explore 3%, docs-readme-writer 1%. | project_manager | P2 | new | 2026-04-30 |
 | BL-120 | — | pensieve: Perplexity chat not properly captured — n8n workflow saves info about Perplexity instead of actual chat content; investigate capture node logic and fix to extract real conversation content | pensieve | P2 | new | 2026-05-03 |

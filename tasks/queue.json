@@ -2753,6 +2753,407 @@
         "cost_estimate": "EUR 0",
         "prerequisites": []
       }
+    },
+    {
+      "id": "task-065",
+      "title": "Investigate git worktrees \u2014 parallel agent isolation (BL-031)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-010",
+      "story_id": "S-010-1",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-065/",
+      "created": "2026-05-06",
+      "updated": "2026-05-06T12:07:46.020817+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Investigate git worktrees as an isolation mechanism for parallel agent runs; produce a feasibility report and recommendation.",
+        "niet_in_scope": [
+          "Implementing worktree isolation",
+          "Changes to pm-run",
+          "BL-090 loop-operator (depends on this output)"
+        ],
+        "acceptatiecriteria": [
+          "Report covers: worktree behavior, isolation guarantees, conflict risks, cleanup strategy",
+          "Recommendation: use or skip worktrees for parallel agents",
+          "If recommended: sketch integration design for BL-090"
+        ],
+        "security_arch_impact": "Read-only research. No outbound HTTP; no LLM output. No risk.",
+        "tests_required": "grep key section headings in report",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Feasibility report in artefacts/task-065/",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "N/A \u2014 research task. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-066",
+      "title": "Evaluate hookify + 2\u20133 POC safety rules (BL-075)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-010",
+      "story_id": "S-010-2",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-066/",
+      "created": "2026-05-06",
+      "updated": "2026-05-06T12:07:46.020817+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Evaluate the hookify library as a hook authoring alternative and create 2\u20133 POC MAS safety rules to assess fit vs the current PreToolUse hook approach.",
+        "niet_in_scope": [
+          "Production migration of existing hooks to hookify",
+          "Rules beyond 2\u20133 POC"
+        ],
+        "acceptatiecriteria": [
+          "hookify installed and functional in project_manager",
+          "2\u20133 POC rules implemented (e.g. no-direct-develop-commit, no grep -rl on artefacts, token-budget warning)",
+          "Comparison report: hookify vs current PreToolUse approach (pros/cons/recommendation)"
+        ],
+        "security_arch_impact": "Hook code executes at edit time \u2014 must not shell-inject from filenames. No outbound HTTP. Low risk.",
+        "tests_required": "Unit tests for each POC rule; manual trigger test per rule",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "2\u20133 hookify POC rules committed to hooks/",
+          "Comparison report in artefacts/task-066/",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "Remove hookify from settings.json; POC files remain archived. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "hookify >= latest stable",
+          "python3 >= 3.13"
+        ]
+      }
+    },
+    {
+      "id": "task-067",
+      "title": "Integrate pm-healthcheck.sh into /pm-start auto-run (BL-080)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-010",
+      "story_id": "S-010-3",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-067/",
+      "created": "2026-05-06",
+      "updated": "2026-05-06T12:07:46.020817+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Wire pm-healthcheck.sh to run automatically at /pm-start, surfacing hook/schema/agent issues before any task work begins.",
+        "niet_in_scope": [
+          "New healthcheck items",
+          "Changes to pm-healthcheck.sh logic",
+          "Auto-fix of detected issues"
+        ],
+        "acceptatiecriteria": [
+          "pm-start.md calls pm-healthcheck.sh before queue summary",
+          "Failed healthcheck surfaced as WARNING (not blocking)",
+          "Output capped to \u226420 lines to avoid context pollution"
+        ],
+        "security_arch_impact": "No outbound HTTP; no LLM output; reads local files. Low risk.",
+        "tests_required": "Verify pm-start.md contains healthcheck invocation; integration: simulate broken hook symlink and confirm warning",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "pm-start.md updated with healthcheck invocation step",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "Revert pm-start.md; healthcheck.sh untouched. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "pm-healthcheck.sh exists in scripts/"
+        ]
+      }
+    },
+    {
+      "id": "task-068",
+      "title": "Silent-failure-hunter audit of scripts/ error propagation (BL-089)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-010",
+      "story_id": "S-010-4",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-068/",
+      "created": "2026-05-06",
+      "updated": "2026-05-06T12:07:46.020817+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Audit all scripts in scripts/ for silent error propagation issues (missing set -e/pipefail, unchecked exits, misleading exit 0 on failure paths).",
+        "niet_in_scope": [
+          "Auditing hooks/ or artefacts/",
+          "Rewriting scripts beyond minimal fixes",
+          "Adding new functionality"
+        ],
+        "acceptatiecriteria": [
+          "All .sh and .py files in scripts/ audited against docs/shell-presubmit.md checklist",
+          "All HIGH-severity silent-failure issues fixed",
+          "Audit report lists each file + findings + severity + status",
+          "All modified scripts pass bash -n / python3 -m py_compile"
+        ],
+        "security_arch_impact": "No outbound HTTP; no LLM output; script edits only. Low risk.",
+        "tests_required": "bash -n on all modified .sh; python3 -m py_compile on all modified .py; manual review of audit report",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Audit report in artefacts/task-068/",
+          "No HIGH-severity issues remaining",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "Git revert of script changes. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "bash",
+          "python3 >= 3.13"
+        ]
+      }
+    },
+    {
+      "id": "task-069",
+      "title": "pm-run loop-operator checkpoint + escalation logic (BL-090)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-010",
+      "story_id": "S-010-5",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-069/",
+      "created": "2026-05-06",
+      "updated": "2026-05-06T12:07:46.020817+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [
+        "Depends on task-065 (BL-031 git worktrees investigation) \u2014 do not start until task-065 is done"
+      ],
+      "mvp_template": {
+        "doel": "Add checkpoint + escalation logic to the pm-run loop-operator for long-running or stalled pipelines.",
+        "niet_in_scope": [
+          "Worktree isolation implementation (see task-065 output)",
+          "New pm-run pipeline stages"
+        ],
+        "acceptatiecriteria": [
+          "pm-run skill updated with checkpoint logic at configurable stage boundary",
+          "Escalation triggers after N consecutive failed stages (configurable, default N=2)",
+          "Escalation emits structured alert with task_id, stage, and failure reason",
+          "Integration with worktree design from task-065 if recommended"
+        ],
+        "security_arch_impact": "No outbound HTTP; no LLM output. Checkpoint logic must not silently discard in-flight task state. Low risk.",
+        "tests_required": "unit tests: checkpoint fires on stage failure; escalation triggers after N failures; non-failure path unaffected",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "task-065 artefact reviewed and referenced",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "Revert pm-run.md to pre-task version. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "task-065 done"
+        ]
+      }
+    },
+    {
+      "id": "task-070",
+      "title": "Hook profiles \u2014 minimal/standard/strict via env var (BL-091)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-010",
+      "story_id": "S-010-6",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-070/",
+      "created": "2026-05-06",
+      "updated": "2026-05-06T12:07:46.020817+00:00",
+      "token_estimate": 8000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Implement three hook activation profiles (minimal/standard/strict) selectable via HOOK_PROFILE env var in .claude/settings.json.",
+        "niet_in_scope": [
+          "New hooks",
+          "Changes to existing hook rules",
+          "Per-hook fine-grained control beyond profile level"
+        ],
+        "acceptatiecriteria": [
+          "HOOK_PROFILE env var defined in .claude/settings.json (values: minimal/standard/strict)",
+          "security_reminder_hook.py and workflow_guard_hook.py respect HOOK_PROFILE",
+          "minimal = advisory only; standard = current behavior (default); strict = block all, fail loudly",
+          "Missing/unset HOOK_PROFILE defaults to standard (fail-closed for blocking rules)",
+          "Profile behavior documented in docs/"
+        ],
+        "security_arch_impact": "Missing env var must default to standard \u2014 must not silently disable hooks. No outbound HTTP; no LLM output.",
+        "tests_required": "Unit tests for each profile level on each hook; verify unset HOOK_PROFILE defaults to standard",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "Profile behavior documented",
+          "Default behavior unchanged when HOOK_PROFILE unset",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "Remove HOOK_PROFILE from settings.json; hooks fall back to standard behavior. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "python3 >= 3.13"
+        ]
+      }
+    },
+    {
+      "id": "task-071",
+      "title": "Structured 4-phase codebase onboarding procedure for new projects (BL-095)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-010",
+      "story_id": "S-010-7",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-071/",
+      "created": "2026-05-06",
+      "updated": "2026-05-06T12:07:46.020817+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Document a 4-phase structured onboarding procedure (Reconnaissance \u2192 Architecture Mapping \u2192 Convention Detection \u2192 Generate Artefacts) for new projects in the PM system.",
+        "niet_in_scope": [
+          "Running onboarding on existing projects",
+          "Automation beyond the procedure definition"
+        ],
+        "acceptatiecriteria": [
+          "docs/project-onboarding.md created with all 4 phases (concrete steps, inputs, outputs, artefact targets)",
+          "CLAUDE.md updated to reference docs/project-onboarding.md",
+          "Procedure dry-run documented against one existing project (e.g. pensieve)"
+        ],
+        "security_arch_impact": "Doc task. No security impact.",
+        "tests_required": "grep confirms docs/project-onboarding.md has all 4 phase headings; CLAUDE.md contains pointer",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "docs/project-onboarding.md exists with all 4 phases",
+          "CLAUDE.md references new doc",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "Remove docs/project-onboarding.md; revert CLAUDE.md pointer. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "task-072",
+      "title": "Commit-msg BL-ID correlation validator for feature branches (BL-105)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-010",
+      "story_id": "S-010-8",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-072/",
+      "created": "2026-05-06",
+      "updated": "2026-05-06T12:07:46.020817+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Extend the commit-msg hook to warn when feature-branch commits lack a BL-NNN reference, closing task tracking audit gaps.",
+        "niet_in_scope": [
+          "Enforcement on main/develop branches",
+          "Historical backfill of missing BL IDs",
+          "Blocking behavior (warning-only in this task)"
+        ],
+        "acceptatiecriteria": [
+          "commit-msg hook extended: feature/* branches emit WARNING if no BL-NNN in subject or body",
+          "Non-feature branches (main, develop, bugfix/*) exempt",
+          "Warning non-blocking (exit 0)",
+          "CLAUDE.md commit format section notes BL-ID recommendation"
+        ],
+        "security_arch_impact": "Hook reads commit message only. No outbound HTTP; no LLM output. Low risk.",
+        "tests_required": "Unit tests: feature branch with/without BL ID; non-feature branch bypass; body-only reference; multiple BL IDs",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "hooks/commit-msg updated",
+          "CLAUDE.md commit format section updated",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "Revert hooks/commit-msg. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": [
+          "bash"
+        ]
+      }
+    },
+    {
+      "id": "task-073",
+      "title": "Backfill lessons.md pre-existing rows with Confidence+Scope placeholder values (BL-117)",
+      "project": "project_manager",
+      "target_project_path": "/opt/claude/project_manager",
+      "epic_id": "EPIC-010",
+      "story_id": "S-010-9",
+      "assigned_to": "builder",
+      "status": "pending",
+      "artefact_path": "artefacts/task-073/",
+      "created": "2026-05-06",
+      "updated": "2026-05-06T12:07:46.020817+00:00",
+      "token_estimate": 5000,
+      "resume_from": null,
+      "notes": [],
+      "mvp_template": {
+        "doel": "Add | \u2014 | \u2014 | placeholder values for the Confidence and Scope columns to all pre-existing lessons.md rows that predate the task-050 schema addition.",
+        "niet_in_scope": [
+          "Content changes to existing lessons",
+          "New lessons",
+          "Schema changes"
+        ],
+        "acceptatiecriteria": [
+          "All rows have exactly 6 columns (Date | Agent | Lesson | Applied To | Confidence | Scope)",
+          "No existing lesson content altered",
+          "Table renders without ragged rows"
+        ],
+        "security_arch_impact": "Doc-only task. No security impact.",
+        "tests_required": "python3 one-liner: parse table, assert every row has 6 fields",
+        "definition_of_done": [
+          "review.md contains APPROVED",
+          "test_report.md contains PASS",
+          "All lessons.md rows have 6 columns",
+          "No credentials committed in artefact files"
+        ],
+        "rollback_plan": "Git revert. Owner: Michel Maas",
+        "incident_owner": "Michel Maas",
+        "privacy_dpia": "no",
+        "cost_estimate": "EUR 0",
+        "prerequisites": []
+      }
     }
   ]
 }

@@ -178,6 +178,29 @@ Each story maps to one or more entries in `tasks/queue.json`.
 
 ---
 
+## EPIC-010 — PM System Operational Reliability
+
+**Goal**: Close operational gaps in the PM system — integrate health checks, add hook profiles, validate commit traceability, audit script error propagation, and improve project onboarding structure.
+**Project**: project_manager
+**Status**: in_progress
+**MVP Phase**: MVP4
+
+### Stories
+
+| Story ID | Title | Queue Task | Status |
+|---|---|---|---|
+| S-010-1 | Investigate git worktrees — parallel agent isolation (BL-031) | task-065 | planned |
+| S-010-2 | Evaluate hookify + 2–3 POC safety rules (BL-075) | task-066 | planned |
+| S-010-3 | Integrate pm-healthcheck.sh into /pm-start (BL-080) | task-067 | planned |
+| S-010-4 | Silent-failure-hunter audit of scripts/ (BL-089) | task-068 | planned |
+| S-010-5 | pm-run loop-operator checkpoint + escalation (BL-090) | task-069 | planned |
+| S-010-6 | Hook profiles — minimal/standard/strict (BL-091) | task-070 | planned |
+| S-010-7 | Structured 4-phase codebase onboarding (BL-095) | task-071 | planned |
+| S-010-8 | Commit-msg BL-ID correlation validator (BL-105) | task-072 | planned |
+| S-010-9 | Backfill lessons.md Confidence+Scope columns (BL-117) | task-073 | planned |
+
+---
+
 ## Projects in Scope
 
 | Short name | Path | GitHub | Domain |
