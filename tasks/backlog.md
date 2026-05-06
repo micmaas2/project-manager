@@ -170,3 +170,4 @@ Items completed, rejected, or no longer relevant.
 | BL-128 | EPIC-008 | project_manager: pm-start.md missing 2 of 6 CLAUDE.md mandatory session checklist items: (1) ExitPlanMode denial recovery, (2) ExitPlanMode mid-skill recovery; also catch-up SelfImprover step should run SelfImprover not just list gaps | project_manager | P2 | done | 2026-05-03 |
 | BL-129 | EPIC-008 | project_manager: Fix CLAUDE.md stale EPIC-003 reference in session checklist item 2 (Telegram inbox promotion) — replace hardcoded EPIC-003 with "—" (no epic; assigned during /pm-plan) to match pm-start.md behavior | project_manager | P2 | done | 2026-05-03 |
 | BL-130 | — | project_manager: project ai operated ops | project_manager | P2 | new | 2026-05-05 |
+| BL-131 | — | pensieve: Pensieve improvement (details TBD — from Telegram 2026-05-06) | pensieve | P2 | new | 2026-05-06 |
