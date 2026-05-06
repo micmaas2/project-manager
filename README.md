@@ -375,6 +375,7 @@ This system is project-agnostic. Tasks specify a `target_project` path. 7 projec
 | task-062 (BL-127) | `artefacts/task-062/` | EPIC-009: `pm-close.md` — execution-mode preamble added (skill is execution-only; no plan mode). |
 | task-063 (BL-128) | `artefacts/task-063/` | EPIC-009: `pm-start.md` — ExitPlanMode guard items added (denial handling + mid-skill recovery). |
 | task-064 (BL-129) | `artefacts/task-064/` | EPIC-009: CLAUDE.md — stale EPIC-003 reference removed from Telegram intake section. |
+| task-065 (BL-031) | `artefacts/task-065/feasibility_report.md` | Research: git worktree behavior and isolation guarantees documented. Verdict: RECOMMENDED for parallel agent isolation. Integration design sketch included for BL-090 (pm-run loop-operator). |
 
 All artefacts passed the full 6-agent pipeline (Builder → Reviewer → Tester → DocUpdater → SelfImprover).
 Fixture-based testing is in place: each task's `artefacts/<id>/fixtures/` holds controlled inputs

@@ -6,6 +6,13 @@ Format within each version: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ---
 
+## [task-065] project_manager: Git Worktree Feasibility Report (BL-031) — 2026-05-06
+
+### Added
+- **task-065** [project_manager] Git worktree feasibility report — RECOMMENDED for parallel agent isolation (BL-031)
+
+---
+
 ## [task-059–task-064] project_manager: EPIC-009 Config/Docs Fixes (BL-122, BL-124, BL-126–BL-129) — 2026-05-05
 
 ### Fixed
